@@ -1,0 +1,112 @@
+# Glossary
+`LAST_UPDATED: 2026-08-16` · Cross-linked term index. (→ page)
+
+- **LLM** — large language model; pretrained next-token model at LLM scale. → `Transformer/`
+- **Transformer** — the architecture (self-attention + FFN + residuals). → `Transformer/`
+- **Token** — the unit of text after tokenization (BPE/SentencePiece piece). → `Transformer/`
+- **Embedding** — a token's vector; the lookup table E [V, d]. → `Transformer/`
+- **Hidden size (d)** — width of the representation (e.g. 4096). → `Transformer/`
+- **Attention** — data-dependent pairwise mixing of positions. → `Attention/`
+- **Q / K / V** — query/key/value projections; A = softmax(QKᵀ/√d)V. → `Transformer/`
+- **MHA** — multi-head attention (one KV head pair per Q head). → `Model-Architectures/Attention-Head-Designs.md`
+- **MQA** — multi-query attention (one shared KV head). → same
+- **GQA** — grouped-query attention (KV head shared by a group of Q heads). → same
+- **MLA** — multi-head latent attention (compressed KV latent, DeepSeek). → same
+- **RoPE** — rotary positional embedding (relative position via rotations). → `Model-Architectures/Positional-Encodings.md`
+- **RMSNorm** — root-mean-square layer norm (no bias/mean centering). → `Transformer/`
+- **SwiGLU** — gated FFN (silu(xW1)·(xW2)·W3). → `Transformer/`
+- **MoE** — mixture of experts (routed sparse FFN). → `Model-Architectures/Mixture-of-Experts.md`
+- **KV cache** — stored K,V per position; the decode-era HBM consumer. → `KV-Cache/`
+- **PagedAttention** — block-based KV storage + block tables. → `KV-Cache/`
+- **Prefix caching** — reuse KV for shared prefixes (APC/RadixAttention). → `KV-Cache/`
+- **Prefill** — process the prompt in one parallel pass (compute-bound). → `Inference/The-Life-of-a-Token.md`
+- **Decode** — generate one token/step (bandwidth-bound). → same
+- **TTFT** — time to first token (prefill + queue). → `Inference/Inference-Metrics.md`
+- **ITL** — inter-token latency (decode). → same
+- **TPOT** — time per output token ≈ mean ITL. → same
+- **Continuous batching** — iteration-level admission/eviction of requests. → `Inference/Continuous-Batching.md`
+- **Chunked prefill** — prefill a long prompt in chunks interleaved with decode. → same
+- **P/D disaggregation** — separate prefill & decode GPU pools + KV transfer. → `Inference/Prefill-Decode-Disaggregation.md`
+- **Roofline** — performance = min(peak, BW × arithmetic intensity). → `Inference/Roofline.md`
+- **FLOPs** — floating-point operations; 2MNK per GEMM. → `Inference/Roofline.md`
+- **Arithmetic intensity** — FLOPs/byte; below the ridge = bandwidth-bound. → same
+- **HBM** — high-bandwidth GPU memory. → `Hardware/`
+- **Tensor Core** — mixed-precision FMA unit; the source of peak FLOPS. → `Hardware/`
+- **NVLink / NVSwitch** — intra-node GPU fabric. → `Hardware/`, `Networking/`
+- **InfiniBand / RoCE** — inter-node RDMA fabrics. → `Networking/`
+- **NCCL** — NVIDIA collective library (AllReduce/AllGather/AllToAll). → `Networking/`
+- **RDMA** — remote direct memory access. → `Networking/`
+- **GPUDirect** — GPU↔NIC memory without host bounce. → `Networking/`
+- **SHARP** — in-network collective reduction. → `Networking/`
+- **TP / PP / DP / EP / CP / SP** — tensor / pipeline / data / expert / context(sequence) parallelism. → `Distributed-Inference/`
+- **AllReduce / AllGather / ReduceScatter / AllToAll** — collective communication. → `Networking/`
+- **ZeRO / FSDP** — sharded data-parallel training (optimizer/grad/param states). → `Training/`
+- **Megatron-LM** — NVIDIA parallel-training toolkit lineage. → `Training/`
+- **Mixed precision / BF16 / FP16** — 16-bit training/inference with FP32 master. → `Training/`, `Quantization/`
+- **FP8 / NVFP4 / INT8 / INT4** — reduced-precision formats for inference. → `Quantization/`
+- **GPTQ / AWQ / SmoothQuant** — weight-only / W8A8 quantization methods. → `Quantization/`
+- **GGUF** — llama.cpp k-quant format (edge standard). → `Quantization/`
+- **KV quantization** — store K,V in 8-bit. → `KV-Cache/`
+- **Speculative decoding** — draft-verify inference; EAGLE/MTP. → `Speculative-Decoding/`
+- **Continuous/iteration-level scheduling** — Orca lineage. → `Inference/Continuous-Batching.md`
+- **Scaling law** — loss vs compute/params/data power laws; Chinchilla. → `Training/`
+- **Next-token prediction** — the pretraining objective. → `Transformer/`
+- **SFT** — supervised fine-tuning. → `Post-Training/`
+- **RLHF** — RL from human feedback (RM + PPO). → `Post-Training/`
+- **PPO** — proximal policy optimization. → `Post-Training/`
+- **DPO** — direct preference optimization. → `Post-Training/`
+- **GRPO** — group relative policy optimization (R1). → `Reasoning/`
+- **Constitutional AI / RLAIF** — AI-feedback alignment. → `Post-Training/`
+- **Distillation** — teacher→student transfer. → `Post-Training/`
+- **CoT** — chain of thought. → `Reasoning/`
+- **ToT** — tree of thoughts. → `Reasoning/`
+- **ReAct** — reason + act loop. → `Agents/`
+- **Test-time compute** — inference-time reasoning spend. → `Reasoning/`
+- **Reasoning model** — RL-trained long-CoT model (o1/R1-line). → `Reasoning/`
+- **Agent** — LLM + tools + memory + loop. → `Agents/`
+- **Tool calling / function calling** — structured tool use. → `Agents/`
+- **Multi-agent** — multiple models/agents cooperating. → `Agents/`
+- **Harness** — the scaffolding around the model. → `Harness-Engineering/`
+- **Harness engineering** — designing that scaffolding. → same
+- **Context engineering** — managing what fills the context window. → `Context-Engineering/`
+- **Prompt engineering** — crafting the instruction. → `Context-Engineering/`
+- **RAG** — retrieval-augmented generation. → `RAG/`
+- **Hybrid retrieval** — dense + sparse (BM25). → `RAG/`
+- **GraphRAG / Self-RAG / CRAG** — advanced RAG variants. → `RAG/`
+- **Lost-in-the-middle** — degraded middle-context attention. → `Context-Engineering/`
+- **Memory (agent)** — persistent state across steps/sessions. → `Agents/`
+- **Computer use** — acting on OS/browser via vision+actions. → `Agents/`
+- **MMLU / MMLU-Pro / GPQA / GSM8K / MATH / AIME** — knowledge/reasoning benchmarks. → `Benchmarks/`
+- **HumanEval / MBPP / SWE-bench / Terminal Bench** — code benchmarks. → `Benchmarks/`
+- **LiveBench / Arena / HLE** — live/frontier evals. → `Benchmarks/`
+- **OSWorld / WebArena / GAIA / τ³ / BrowseComp** — agent benchmarks. → `Benchmarks/`
+- **Benchmark contamination / saturation** — leak / ceiling effects. → `Evaluation/`
+- **Goodput** — SLO-conforming requests/sec. → `Inference/Inference-Metrics.md`
+- **P50/P95/P99** — latency percentiles. → `Inference/Inference-Metrics.md`
+- **Prefix (prompt) caching** — reuse cached KV for repeated prefixes; provider-level. → `Context-Engineering/`
+- **Semantic caching** — dedupe similar requests. → `Context-Engineering/`
+- **Attention sink** — initial tokens that accumulate attention mass. → `KV-Cache/Eviction.md`
+- **Sliding window** — attend only to the last W tokens. → `KV-Cache/Eviction.md`
+- **H2O / SnapKV / PyramidKV** — KV eviction methods. → `KV-Cache/Eviction.md`
+- **Ring attention / context parallel** — sequence-sharded attention across devices. → `Distributed-Inference/`
+- **Chunked prefill / in-flight batching** — see continuous batching. → `Inference/`
+- **FlashAttention (1/2/3)** — IO-aware exact attention kernels. → `Attention/`
+- **FlashInfer** — paged/ragged prefill+decode kernel library. → `Attention/`
+- **Paged KV / block table** — see PagedAttention. → `KV-Cache/`
+- **vLLM / SGLang / TensorRT-LLM / llama.cpp / TGI / MLC** — serving engines. → `Serving-Engines/`
+- **Dynamo / llm-d / Mooncake / DistServe / Splitwise** — disaggregated serving systems. → `Inference/Prefill-Decode-Disaggregation.md`
+- **World model** — learned interactive environment (Genie, SIMA, robotics). → `Multimodal/`
+- **VLM / omni model** — vision/multimodal LLM. → `Multimodal/`
+- **Open-weights / open-source model** — publicly released weights (license varies). → `Open-Source-Models/`
+- **Prompt injection / jailbreak** — safety threats. → `Safety/`
+- **Reward hacking** — exploiting RM artifacts. → `Post-Training/`
+- **Alignment tax** — capability lost to safety training (term). → `Post-Training/`
+- **Sandbox / sandboxing** — isolated execution for agent actions. → `Safety/`, `Harness-Engineering/`
+- **KV-aware routing/scheduling** — place requests where KV helps. → `Inference/Prefill-Decode-Disaggregation.md`
+- **Goodput / SLO** — see above. → `Inference/Inference-Metrics.md`
+- **MFU** — model FLOPs utilization (training efficiency). → `Training/`
+- **DGX / NVL72** — NVIDIA systems (72-GPU NVLink domain). → `Hardware/`
+- **GB10 / DGX Spark** — edge/superchip class (~273 GB/s). → `Hardware/`
+
+## Related
+Every section README.
