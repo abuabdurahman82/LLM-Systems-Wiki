@@ -100,7 +100,7 @@ Limitations → Why It Matters → Follow-ups → Related wiki pages
   **Related:** `Inference/Continuous-Batching.md`.
 
 ## 18. Zhong et al. — DistServe (OSDI'24, arXiv:2401.09670) / Patel et al. — Splitwise
-(ISCA'24, arXiv:2311.18698) / Mooncake (2024, arXiv:2407.00079) [F]
+(2024, arXiv:2311.18677) / Qin et al. — Mooncake (FAST'25 Best Paper, arXiv:2407.00079) [F]
 - **Category:** P/D disaggregation. **Core ideas:** separate prefill/decode SLOs;
   KV over fabric; production KV-aware "context pool" (Mooncake). **Related:**
   `Inference/Prefill-Decode-Disaggregation.md`.

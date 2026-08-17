@@ -63,7 +63,7 @@ LLM-Wiki/
 ├── Training/                  ← data, pretraining, scaling laws, distributed training, comms
 ├── Post-Training/             ← SFT, RLHF, PPO, DPO, GRPO, RLAIF, distillation
 ├── Reasoning/                 ← CoT, ToT, ReAct, process supervision, test-time compute, RL for reasoning
-├── Inference/                 ← The Life of a Token, Roofline, continuous batching, P/D disaggregation, metrics
+├── Inference/                 ← The Life of a Token, Roofline, continuous batching, P/D disaggregation (+ Deep-Dives/), metrics
 ├── KV-Cache/                  ← shapes, memory equation, PagedAttention, eviction, compression, offloading
 ├── Attention/                 ← attention taxonomy (architecture vs kernel vs memory strategy)
 ├── Quantization/              ← FP16/BF16/FP8/INT8/INT4/FP4, GPTQ/AWQ/SmoothQuant/GGUF/NVFP4
