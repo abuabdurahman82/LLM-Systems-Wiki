@@ -10,6 +10,10 @@
   - **Refuted (2):** (a) "70B Regime-1 rows wrong (1.84/1.16 → 0.46/0.29)" — evaluator computed 70B prefill at TP=1; draft explicitly uses TP=4, and at TP=4 the ratios are exactly 1.84/1.16; (b) "high-affinity = same-node" — the DistServe paper's §4.2 low-node-affinity algorithm *is* the same-node NVLink one; evaluator's reverse reading is wrong. Both documented in the deep-dive's §13 adjudication table.
 - **Status:** P/D disaggregation is now a first-class, quantitatively-grounded, adversarially-reviewed topic in the wiki. Residual gaps: H1–H7 are labelled unverified experimental hypotheses; MFU/TP-eff/line-rate/RTT are stated [A] assumptions; vendor benchmarks tagged vendor-reported.
 
+## 2026-08-18 — Inference-optimization content promoted into the wiki
+- Added `Inference/Inference-Optimization.md` (core page: measured ground-truth table, technique×effect summary, 7 workload profiles, evidence-challenged ladder, scorecard, TOP-5 experiments, limitations) and `Inference/Deep-Dives/inference-optimization-ladder-2026-08-17.md` (full 402-line two-pass-evaluated deliverable, copied from `~/inference-optimization-2026-08-17.md`).
+- `_sidebar.md`: new Inference sub-entries (Inference-Optimization + both deep dives); removed the temporary top-level deliverable symlink.
+
 ## 2026-08-17 — Inference-optimization research session (external doc)
 - Ran a live measurement suite against the local vLLM endpoint (DeepSeek-V4-Flash-0731, TP=2/2-nodes): prefill sweep 447→97k tokens, prefix-cache cold/warm pair, 12-concurrent throughput, 3×16k concurrent-prefill staircase, long-decode at 32k. Raw JSON: /tmp/infopt/results/ (session-scoped; kept out of the wiki per evidence hygiene).
 - Added `Labs/Lab 13` (executed prefix-cache causal-delta measurement, 2026-08-17): 8.7× TTFT cold→warm on an 8k identical prefix; cached-prefix processing ~17.6k tok/s vs ~2.0k cold.
