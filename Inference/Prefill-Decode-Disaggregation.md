@@ -103,6 +103,7 @@ transfer by (1−h): 70B @32k on 100 GbE: 0%→902 ms, 50%→451 ms, 90%→90 ms
 ## Related
 `Inference/Continuous-Batching.md` · `Networking/README.md` (RDMA, GPUDirect) ·
 `KV-Cache/README.md` · `Distributed-Inference/README.md` ·
+`Inference/Inference-Optimization.md` ·
 `Inference/Deep-Dives/pd-disaggregation-deep-dive-2026-08-17.md` (full report + evaluator adjudication)
 
 ## Key Takeaways

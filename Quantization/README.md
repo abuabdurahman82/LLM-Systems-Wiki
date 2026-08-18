@@ -65,7 +65,7 @@ decode speed until the compute ridge. Quantization is the cheapest "hardware upg
   distribution shift [I].
 
 ## Related
-`Inference/Roofline.md` · `Inference/The-Life-of-a-Token.md` · `Labs/Lab-4`.
+`Inference/Roofline.md` · `Inference/The-Life-of-a-Token.md` · `Inference/Inference-Optimization.md` · `Labs/Lab-4`.
 
 ## Key Takeaways
 Quantization is a **bandwidth/capacity** tool first, a **compute** tool second. NVFP4/FP8

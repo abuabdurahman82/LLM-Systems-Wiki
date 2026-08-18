@@ -60,7 +60,7 @@ Prefill/decode split ⇒ KV must **move** from prefill GPUs to decode GPUs: shar
 bottleneck; see `Inference/Prefill-Decode-Disaggregation.md` and `Networking/README.md`.
 
 ## Related
-`Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` ·
+`Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `Inference/Inference-Optimization.md` ·
 `Model-Architectures/Attention-Head-Designs.md` (GQA/MQA shrink h_kv) ·
 `Quantization/README.md` · `Labs/Lab-2` (observe KV growth).
 

@@ -48,7 +48,7 @@ serving GPUs stay busy.
 - Mixed prefill+decode steps have different optimal kernel choices.
 
 ## Related
-`Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `KV-Cache/README.md` ·
+`Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `Inference/Inference-Optimization.md` · `KV-Cache/README.md` ·
 `Serving-Engines/` · `Labs/Lab-5`.
 
 ## Key Takeaways

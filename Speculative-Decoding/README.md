@@ -61,7 +61,7 @@ theoretical property.
 - Acceptance is workload-dependent; measure per-workload, don't assume a fixed speedup.
 
 ## Related
-`Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `Labs/Lab-7`.
+`Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `Inference/Inference-Optimization.md` · `Labs/Lab-7`.
 
 ## Key Takeaways
 Speculative decoding is a **latency** tool (ITL), not a **throughput** tool. It's

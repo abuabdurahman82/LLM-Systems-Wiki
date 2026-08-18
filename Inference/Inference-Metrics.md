@@ -42,7 +42,7 @@ answers a different question; match the metric to the workload.
   different economics; report $/token where relevant.
 
 ## Related
-`Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `Inference/Continuous-Batching.md` ·
+`Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `Inference/Inference-Optimization.md` ·
 `Evaluation/` (benchmark methodology).
 
 ## Key Takeaways

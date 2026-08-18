@@ -63,7 +63,7 @@ LLM-Wiki/
 ├── Training/                  ← data, pretraining, scaling laws, distributed training, comms
 ├── Post-Training/             ← SFT, RLHF, PPO, DPO, GRPO, RLAIF, distillation
 ├── Reasoning/                 ← CoT, ToT, ReAct, process supervision, test-time compute, RL for reasoning
-├── Inference/                 ← The Life of a Token, Roofline, continuous batching, P/D disaggregation (+ Deep-Dives/), metrics
+├── Inference/                 ← The Life of a Token, Roofline, continuous batching, P/D disaggregation (+ Deep-Dives/), metrics, inference optimization
 ├── KV-Cache/                  ← shapes, memory equation, PagedAttention, eviction, compression, offloading
 ├── Attention/                 ← attention taxonomy (architecture vs kernel vs memory strategy)
 ├── Quantization/              ← FP16/BF16/FP8/INT8/INT4/FP4, GPTQ/AWQ/SmoothQuant/GGUF/NVFP4
@@ -91,7 +91,7 @@ LLM-Wiki/
 
 ## Reading guide
 - **Zero to hero:** start `Foundations/` → `Transformer/` → `Inference/The-Life-of-a-Token.md` → `KV-Cache/` → `Training/` → `Post-Training/` → `Reasoning/` → `Agents/` → `Latest-Research/`.
-- **Inference engineer:** `Inference/The-Life-of-a-Token.md` → `Inference/Roofline.md` → `Attention/` → `KV-Cache/` → `Serving-Engines/` → `Distributed-Inference/` → `Quantization/` → `Speculative-Decoding/`.
+- **Inference engineer:** `Inference/The-Life-of-a-Token.md` → `Inference/Roofline.md` → `Inference/Inference-Optimization.md` (what to apply FIRST, measured) → `Attention/` → `KV-Cache/` → `Serving-Engines/` → `Distributed-Inference/` → `Quantization/` → `Speculative-Decoding/`.
 - **Researcher:** `Research-Papers/` → `Research-Lineage/` → `Evaluation/` → `Latest-Research/` → open questions in each section.
 
 ## The ten questions this wiki must answer

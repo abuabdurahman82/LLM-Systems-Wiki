@@ -89,7 +89,7 @@ Infrastructure" [F: arXiv:2111.02534, MLSys] · Dao et al. 2022 (FlashAttention)
 Kwon et al. 2023 (vLLM/PagedAttention, SOSP'23).
 
 ## Related Topics
-`The-Life-of-a-Token.md` · `Inference/Inference-Metrics.md` · `Distributed-Inference/README.md`
+`The-Life-of-a-Token.md` · `Inference/Inference-Metrics.md` · `Inference/Inference-Optimization.md` · `Distributed-Inference/README.md`
 
 ## Key Takeaways
 1. Prefill = compute roof; decode = memory roof; the ridge is where batching lives.
