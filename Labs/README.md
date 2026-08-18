@@ -1,5 +1,5 @@
 # Hands-On Research Labs
-`LAST_UPDATED: 2026-08-16` · 12 labs. Each: hypothesis / setup / commands / metrics /
+`LAST_UPDATED: 2026-08-17` · 13 labs. Each: hypothesis / setup / commands / metrics /
 expected observations / interpretation. All runnable on a single GPU + one serving
 engine (vLLM shown; SGLang equivalents noted). Keep every lab's output in a
 reproducible folder; tag claims [E] (measured) vs [I] (inferred).
@@ -118,6 +118,28 @@ Common setup (assume a 24–96GB GPU):
 - **Expected:** (b) > (a) on correctness; (c) varies; record the deltas.
 - **Interpretation:** a data point for the model-vs-harness question
   (`Harness-Engineering/README.md`).
+
+## Lab 13 — Measure the causal delta of prefix caching (2026-08-17, executed)
+- **Hypothesis:** an identical shared prefix served from cache cuts TTFT by ~the ratio of
+  cached-prefix processing rate to cold prefill rate.
+- **Setup (executed on vLLM 0.25.2, DeepSeek-V4-Flash-0731, TP=2):** one 8,103-token prompt
+  submitted cold, then re-submitted warm; `stream_options.include_usage` +
+  `prompt_tokens_details.cached_tokens` as the oracle.
+- **Commands:** client streams `/v1/completions`, timestamps first delta (TTFT) and inter-delta
+  intervals (ITL); raw JSON per run kept under `/tmp/infopt/results/`.
+- **Metrics:** TTFT cold vs warm, cached_tokens, prefill rate cold vs cached.
+- **Observed [E]:** cold TTFT 3.92 s → warm 0.45 s = **8.7×**; cached prefix processed at
+  ~17.6k tok/s vs ~2.0k tok/s cold (8.8×). vLLM counters: 66,816 of 411,102 prompt tokens served
+  from local cache that session.
+- **Interpretation:** the delta scales with (prefix length × hit-rate). The clean signal is the
+  cold/warm *pair*, not the global hit-rate counter (the benchmark's own repeats inflate it).
+- **Same-session findings:** TTFT linear in prompt length up to 97k (rate ~1.9–2.1k tok/s, ~6%
+  deviation); ITL flat 62–68 ms across 0→98k context; DSpark k=5 acceptance 2.73 tokens/step
+  (pos 0–4: 84/67/52/40/30%); 3×16k concurrent prefills form an even TTFT staircase
+  (7.96/15.88/23.78 s, wall 24.3 s ≈ single-stream sum) — chunked prefill protects decoders but
+  does not raise aggregate prefill rate; 12-concurrent throughput 75.2 tok/s vs 15.4 tok/s B=1.
+  B=1 decode sits 5.1× (single-node BW reading) to 10.2× (2-node aggregate) below its bandwidth
+  ceiling → dispatch/comm-bound regime (pending E4 profiling to confirm).
 
 ## Conventions
 - Log: engine+model+quant version, GPU, clocks, concurrency, warm-up, sampling,
