@@ -104,7 +104,8 @@ transfer by (1−h): 70B @32k on 100 GbE: 0%→902 ms, 50%→451 ms, 90%→90 ms
 `Inference/Continuous-Batching.md` · `Networking/README.md` (RDMA, GPUDirect) ·
 `KV-Cache/README.md` · `Distributed-Inference/README.md` ·
 `Inference/Inference-Optimization.md` ·
-`Inference/Deep-Dives/pd-disaggregation-deep-dive-2026-08-17.md` (full report + evaluator adjudication)
+`Inference/Deep-Dives/pd-disaggregation-deep-dive-2026-08-17.md` (full report + evaluator adjudication) ·
+`Inference/Deep-Dives/llm-router-signals-deep-dive-2026-08-18.md` (the *routing* layer above P/D: five router signals, roofline-grounded scoring model, hand-computable routing example, three-pass evaluator adjudication)
 
 ## Key Takeaways
 Disaggregation = decoupling two roofline regimes + two SLOs. The split is easy; the hard

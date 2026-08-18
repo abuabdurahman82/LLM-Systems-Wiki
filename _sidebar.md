@@ -22,6 +22,7 @@
   - [The-Life-of-a-Token](/Inference/The-Life-of-a-Token.md)
   - [Deep-Dive: P/D disaggregation (2026-08-17)](/Inference/Deep-Dives/pd-disaggregation-deep-dive-2026-08-17.md)
   - [Deep-Dive: inference optimization ladder (2026-08-17)](/Inference/Deep-Dives/inference-optimization-ladder-2026-08-17.md)
+  - [Deep-Dive: LLM router signals (2026-08-18)](/Inference/Deep-Dives/llm-router-signals-deep-dive-2026-08-18.md)
 - **[KV-Cache](/KV-Cache/README.md)**
   - [Eviction](/KV-Cache/Eviction.md)
 - **[Labs](/Labs/README.md)**
