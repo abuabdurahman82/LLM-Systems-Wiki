@@ -10,6 +10,16 @@
   - **Refuted (2):** (a) "70B Regime-1 rows wrong (1.84/1.16 → 0.46/0.29)" — evaluator computed 70B prefill at TP=1; draft explicitly uses TP=4, and at TP=4 the ratios are exactly 1.84/1.16; (b) "high-affinity = same-node" — the DistServe paper's §4.2 low-node-affinity algorithm *is* the same-node NVLink one; evaluator's reverse reading is wrong. Both documented in the deep-dive's §13 adjudication table.
 - **Status:** P/D disaggregation is now a first-class, quantitatively-grounded, adversarially-reviewed topic in the wiki. Residual gaps: H1–H7 are labelled unverified experimental hypotheses; MFU/TP-eff/line-rate/RTT are stated [A] assumptions; vendor benchmarks tagged vendor-reported.
 
+## 2026-08-18 — LLM Wiki: alignment/RLHF deep-dive + citation corrections
+- New core page `Post-Training/Alignment-RLHF.md`: full SFT → reward-model → PPO-RLHF → DPO → RLAIF → RLVR lineage with the math (Bradley-Terry, closed-form DPO, GRPO), the 2024+ shift from human preferences to verifiable rewards, limitations (reward hacking / Goodhart, alignment tax, verifier dependence), and 12 verified primary-source citations (all arXiv IDs confirmed via title-search this session).
+- **Citation corrections** (verified against arXiv API, 2026-08-18):
+  - `Reasoning/README.md`: Tree-of-Thoughts arXiv ID `2305.10306` → **`2305.10601`** (the `…10306` ID was wrong).
+  - `Reasoning/README.md`: "Let's Verify Step by Step" (Lightman et al.) arXiv ID `2305.16896` → **`2305.20050`** (`…16896` is MultiTool-CoT, a different paper).
+  - Removed an unverified "Gold et al. 2024 (arXiv:2310.16789)" placeholder in the new alignment page; replaced with the verified `2406.02900` (Scaling Laws for RM Overoptimization in Direct Alignment Algorithms).
+- `_sidebar.md`: new `Post-Training → Alignment & RLHF` entry.
+- Cross-links: `Post-Training/README.md` ↔ `Alignment-RLHF.md` ↔ `Reasoning/README.md`.
+- **Audit:** full internal-link check (markdown + backticked path refs) — 0 broken `.md` links across the 52-page wiki.
+
 ## 2026-08-18 — Inference-optimization content promoted into the wiki
 - Added `Inference/Inference-Optimization.md` (core page: measured ground-truth table, technique×effect summary, 7 workload profiles, evidence-challenged ladder, scorecard, TOP-5 experiments, limitations) and `Inference/Deep-Dives/inference-optimization-ladder-2026-08-17.md` (full 402-line two-pass-evaluated deliverable, copied from `~/inference-optimization-2026-08-17.md`).
 - `_sidebar.md`: new Inference sub-entries (Inference-Optimization + both deep dives); removed the temporary top-level deliverable symlink.

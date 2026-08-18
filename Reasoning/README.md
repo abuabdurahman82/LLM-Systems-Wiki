@@ -13,9 +13,9 @@ size and data.
 |---|---|---|---|
 | 2022 | **Chain-of-Thought** (Wei et al., arXiv:2201.11903 [F]) | Few-shot prompting that elicits multi-step reasoning | needs CoT examples; unreliable |
 | 2022 | **Self-Consistency** (Wang et al., arXiv:2203.11171 [F]) | Sample multiple CoTs, majority-vote | cost ×N; still prompt-level |
-| 2023 | **Tree of Thoughts** (Yao et al., arXiv:2305.10306 [F]) | deliberate search over thought trees | expensive; needs value function |
+| 2023 | **Tree of Thoughts** (Yao et al., arXiv:2305.10601 [F]) | deliberate search over thought trees | expensive; needs value function |
 | 2022 | **ReAct** (Yao et al., arXiv:2210.03629 [F]) | interleaved reasoning + *tool* action | agent scaffold, not model capability |
-| 2023 | **Process supervision** (Lightman et al., arXiv:2305.16896 [F]) | reward the *steps*, not just the outcome | step-label data expensive |
+| 2023 | **Process supervision** (Lightman et al., arXiv:2305.20050 [F]) | reward the *steps*, not just the outcome | step-label data expensive |
 | 2023 | **Outcome supervision** (standard RLVR) | reward only final answer | sparse credit assignment |
 | 2024 | **OpenAI o1 / o3** (2024–2025) [F: OpenAI reports] | RL on long CoT with verifiable rewards → emergent search, backtracking | closed; cost; latency |
 | 2024 | **DeepSeek-R1** (arXiv:2501.12948 [F]) | open reproduction: GRPO + rule-based rewards + distillation | open weights; reasoning on verifiable domains first |
@@ -58,7 +58,7 @@ size and data.
 - **Latency/cost collapse:** 60s × $ answers for questions that needed 1s.
 
 ## Related
-`Post-Training/README.md` · `Agents/README.md` · `Inference/Inference-Metrics.md` ·
+`Post-Training/README.md` · `Post-Training/Alignment-RLHF.md` (RLVR is a post-training technique) · `Agents/README.md` · `Inference/Inference-Metrics.md` ·
 `Harness-Engineering/README.md`.
 
 ## Key Takeaways

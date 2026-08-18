@@ -58,7 +58,7 @@ alignment tax (the "alignment tax" term [I]). No Pareto point is known — it's 
 ongoing research frontier.
 
 ## Related
-`Reasoning/README.md` · `Training/README.md` · `Agents/README.md` ·
+`Alignment-RLHF.md` (SFT → RM → PPO → DPO → RLVR, with math) · `Reasoning/README.md` · `Training/README.md` · `Agents/README.md` ·
 `Evaluation/README.md` (how post-training quality is measured).
 
 ## Key Takeaways

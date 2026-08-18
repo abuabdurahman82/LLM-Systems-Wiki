@@ -61,7 +61,7 @@ LLM-Wiki/
 ├── Transformer/               ← first-principles learning path (tokens→logits, math, toy examples)
 ├── Model-Architectures/       ← encoder/decoder, MoE, MHA/MQA/GQA, RoPE/ALiBi, RMSNorm, SwiGLU, SSM, hybrids
 ├── Training/                  ← data, pretraining, scaling laws, distributed training, comms
-├── Post-Training/             ← SFT, RLHF, PPO, DPO, GRPO, RLAIF, distillation
+├── Post-Training/             ← SFT, RLHF/PPO, DPO, GRPO, RLAIF, distillation, alignment & RLHF lineage
 ├── Reasoning/                 ← CoT, ToT, ReAct, process supervision, test-time compute, RL for reasoning
 ├── Inference/                 ← The Life of a Token, Roofline, continuous batching, P/D disaggregation (+ Deep-Dives/), metrics, inference optimization
 ├── KV-Cache/                  ← shapes, memory equation, PagedAttention, eviction, compression, offloading
