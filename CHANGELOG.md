@@ -11,14 +11,14 @@
 - **Status:** P/D disaggregation is now a first-class, quantitatively-grounded, adversarially-reviewed topic in the wiki. Residual gaps: H1–H7 are labelled unverified experimental hypotheses; MFU/TP-eff/line-rate/RTT are stated [A] assumptions; vendor benchmarks tagged vendor-reported.
 
 ## 2026-08-18 — LLM Wiki: alignment/RLHF deep-dive + citation corrections
-- New core page `Post-Training/Alignment-RLHF.md`: full SFT → reward-model → PPO-RLHF → DPO → RLAIF → RLVR lineage with the math (Bradley-Terry, closed-form DPO, GRPO), the 2024+ shift from human preferences to verifiable rewards, limitations (reward hacking / Goodhart, alignment tax, verifier dependence), and 12 verified primary-source citations (all arXiv IDs confirmed via title-search this session).
+- New core page `Post-Training/Alignment-RLHF.md`: full SFT → reward-model → PPO-RLHF → DPO → RLAIF → RLVR lineage with the math (Bradley-Terry, closed-form DPO, GRPO), the 2024+ shift from human preferences to verifiable rewards, limitations (reward hacking / Goodhart, alignment tax, verifier dependence), and 16 verified primary-source citations (all arXiv IDs confirmed via API this session).
 - **Citation corrections** (verified against arXiv API, 2026-08-18):
-  - `Reasoning/README.md`: Tree-of-Thoughts arXiv ID `2305.10306` → **`2305.10601`** (the `…10306` ID was wrong).
-  - `Reasoning/README.md`: "Let's Verify Step by Step" (Lightman et al.) arXiv ID `2305.16896` → **`2305.20050`** (`…16896` is MultiTool-CoT, a different paper).
-  - Removed an unverified "Gold et al. 2024 (arXiv:2310.16789)" placeholder in the new alignment page; replaced with the verified `2406.02900` (Scaling Laws for RM Overoptimization in Direct Alignment Algorithms).
+  - `Reasoning/README.md`: Tree-of-Thoughts arXiv ID `2305.10306` → **`2305.10601`**.
+  - `Reasoning/README.md`: "Let's Verify Step by Step" arXiv ID `2305.16896` → **`2305.20050`** (`…16896` is MultiTool-CoT).
+- **Evaluator review pass (independent evaluator, deepseek-v4-flash-0731 @ 127.0.0.1:8888):** verdict REVISE @ 85% confidence; **9/9 flags accepted after independent re-verification** (IDs re-fetched from arXiv: Zephyr `2310.16944`, Christiano `1706.03741`, Stiennon `2009.01325`, Llama-2 `2307.09288`). Accepted fixes: (a) InstructGPT "first pipeline" → "first *at LLM scale*" + Christiano/Stiennon 2017–20 lineage row; (b) "GPT-4-era RLHF used PPO [InstructGPT]" → PPO cited to Schulman 2017, InstructGPT as LLM-scale reference only; (c) "Llama-2-Chat as DPO evidence" → reworded (Llama-2-Chat used PPO-RLHF; Zephyr-7B is the DPO example); (d) dangling "Gold 2024 / Gao 2023" refs → verified `2210.10760` + `2406.02900` (title-cited, no unverified author list); (e) SFT "mode collapse" phrasing (internally contradictory) → "averaged, over-dispersed outputs"; (f) GRPO advantage omits group-std normalization → fixed; (g) "proxy-to-true gap mostly disappears" (contradicted the page's own Limitations) → "narrows, not eliminates"; (h) o1 RLVR attribution tagged [A] (training details not fully published); (i) reference list extended to all 16 body-cited works.
 - `_sidebar.md`: new `Post-Training → Alignment & RLHF` entry.
 - Cross-links: `Post-Training/README.md` ↔ `Alignment-RLHF.md` ↔ `Reasoning/README.md`.
-- **Audit:** full internal-link check (markdown + backticked path refs) — 0 broken `.md` links across the 52-page wiki.
+- **Audit:** full internal-link check (markdown + backticked path refs) — 0 broken `.md` links across the 53-page wiki.
 
 ## 2026-08-18 — Inference-optimization content promoted into the wiki
 - Added `Inference/Inference-Optimization.md` (core page: measured ground-truth table, technique×effect summary, 7 workload profiles, evidence-challenged ladder, scorecard, TOP-5 experiments, limitations) and `Inference/Deep-Dives/inference-optimization-ladder-2026-08-17.md` (full 402-line two-pass-evaluated deliverable, copied from `~/inference-optimization-2026-08-17.md`).
