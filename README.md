@@ -70,9 +70,10 @@ LLM-Wiki/
 ├── Speculative-Decoding/      ← draft-verify, Medusa, EAGLE, MTP, production practice
 ├── Serving-Engines/           ← vLLM, SGLang, TensorRT-LLM, llama.cpp, TGI, MLC
 ├── Distributed-Inference/     ← DP/TP/PP/EP/CP/SP with comm patterns + hardware
-├── Agents/                    ← LLM→tool use→agent→multi-agent
+├── Agents/                    ← LLM→tool use→agent→multi-agent→coding agents→protocols (MCP/A2A)
 ├── Harness-Engineering/       ← system scaffolding; model-vs-harness question
-├── Context-Engineering/       ← prompt vs context vs harness; memory, retrieval, prefix caching
+├── Context-Engineering/       ← prompt vs context vs harness; budgets, long-context reality, compaction, memory
+├── Graph-Engineering/         ← KGs/GraphRAG, GNNs, reasoning-as-search, agent-workflow graphs
 ├── RAG/                       ← full pipeline + advanced RAG (hybrid, graph, agentic, self-RAG)
 ├── Multimodal/                ← text/image/audio/video/speech/robotics strategies
 ├── Evaluation/                ← benchmark families, contamination, saturation
@@ -91,6 +92,7 @@ LLM-Wiki/
 
 ## Reading guide
 - **Zero to hero:** start `Foundations/` → `Transformer/` → `Inference/The-Life-of-a-Token.md` → `KV-Cache/` → `Training/` → `Post-Training/` → `Reasoning/` → `Agents/` → `Latest-Research/`.
+- **Agent engineer:** `Agents/Agentic-AI-Evolution.md` → `Agents/Tool-Use.md` → `Agents/Agent-Loops-and-Reasoning-Strategies.md` → `Context-Engineering/` → `Harness-Engineering/Harness-Anatomy.md` → `Agents/Coding-Agents.md` → `Graph-Engineering/`.
 - **Inference engineer:** `Inference/The-Life-of-a-Token.md` → `Inference/Roofline.md` → `Inference/Inference-Optimization.md` (what to apply FIRST, measured) → `Attention/` → `KV-Cache/` → `Serving-Engines/` → `Distributed-Inference/` → `Quantization/` → `Speculative-Decoding/`.
 - **Researcher:** `Research-Papers/` → `Research-Lineage/` → `Evaluation/` → `Latest-Research/` → open questions in each section.
 

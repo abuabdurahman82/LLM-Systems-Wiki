@@ -50,7 +50,7 @@ Limitations → Why It Matters → Follow-ups → Related wiki pages
   tiled in SRAM, IO-aware. **Why it matters:** long-context inference unlocked; kernel,
   not math, changed. **Related:** `Attention/`.
 
-## 9. Kwon et al. — "Efficiently Scaling LLM Inference with PagedAttention" (vLLM, 2023, SOSP'23, arXiv:2309.00032) [F]
+## 9. Kwon et al. — "Efficient Memory Management for Large Language Model Serving with PagedAttention" (vLLM, 2023, SOSP'23, arXiv:2309.06180) [F]
 - **Problem:** KV memory fragmentation wasted 60–80% of GPU. **Core idea:** paged KV
   (virtual-memory analogy) + continuous batching. **Why it matters:** the modern
   serving stack. **Follow-ups:** prefix caching, RadixAttention. **Related:**

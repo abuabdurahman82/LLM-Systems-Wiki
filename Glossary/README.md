@@ -1,5 +1,5 @@
 # Glossary
-`LAST_UPDATED: 2026-08-16` · Cross-linked term index. (→ page)
+`LAST_UPDATED: 2026-08-19` · Cross-linked term index. (→ page)
 
 - **LLM** — large language model; pretrained next-token model at LLM scale. → `Transformer/`
 - **Transformer** — the architecture (self-attention + FFN + residuals). → `Transformer/`
@@ -72,7 +72,7 @@
 - **Prompt engineering** — crafting the instruction. → `Context-Engineering/`
 - **RAG** — retrieval-augmented generation. → `RAG/`
 - **Hybrid retrieval** — dense + sparse (BM25). → `RAG/`
-- **GraphRAG / Self-RAG / CRAG** — advanced RAG variants. → `RAG/`
+- **GraphRAG / Self-RAG / CRAG** — advanced RAG variants (GraphRAG deep-dive → `Graph-Engineering/Knowledge-Graphs-and-GraphRAG.md`). → `RAG/`
 - **Lost-in-the-middle** — degraded middle-context attention. → `Context-Engineering/`
 - **Memory (agent)** — persistent state across steps/sessions. → `Agents/`
 - **Computer use** — acting on OS/browser via vision+actions. → `Agents/`
@@ -107,6 +107,24 @@
 - **MFU** — model FLOPs utilization (training efficiency). → `Training/`
 - **DGX / NVL72** — NVIDIA systems (72-GPU NVLink domain). → `Hardware/`
 - **GB10 / DGX Spark** — edge/superchip class (~273 GB/s). → `Hardware/`
+- **MCP** — Model Context Protocol; agent↔tool interop (JSON-RPC, resources/tools/prompts). → `Agents/Agent-Protocols.md`
+- **A2A** — Agent-to-Agent protocol (Agent Cards, Task objects, cross-org agent interop). → same
+- **Subagent** — a delegated agent loop with its own clean context; returns a digest. → `Agents/Multi-Agent-Systems.md`
+- **GoT** — graph of thoughts (ToT generalized: merge/recombine/iterate over a DAG). → `Graph-Engineering/Reasoning-Graphs.md`
+- **Think-on-Graph** — LLM agent reasoning *over* an external knowledge graph (ToG). → same
+- **GNN / message passing** — neural nets that aggregate neighborhood structure per layer. → `Graph-Engineering/GNN-Basics.md`
+- **Over-squashing / over-smoothing** — GNN failure modes: info loss at bottlenecks / deep-layer collapse. → same
+- **Expressivity limit (WL test)** — 1-WL color-refinement ceiling for sum-aggregation GNNs. → same
+- **Knowledge graph (KG)** — entities (nodes) + relations (edges) as structured data. → `Graph-Engineering/Knowledge-Graphs-and-GraphRAG.md`
+- **Agent workflow graph** — the agent loop / MAS made an explicit node+edge data structure (AFlow, LangGraph). → `Graph-Engineering/Agent-Workflow-Graphs.md`
+- **Test-time search (ToT/GoT)** — reasoning as explicit graph search over partial solutions. → `Graph-Engineering/Reasoning-Graphs.md`
+- **Context compaction** — policy for summarizing/evicting context to stay in window. → `Context-Engineering/Context-Compaction.md`
+- **Agent memory** — persistent state across sessions (vector/KG/file tiers). → `Context-Engineering/Agent-Memory.md`
+- **Context budget** — the token + KV-memory allocations behind every context decision. → `Context-Engineering/Context-Budget.md`
+- **Sandbox / capability control** — OS-enforced isolation (container/cgroup/FS-scope) for agent actions. → `Harness-Engineering/Sandboxing.md`
+- **No-progress detection** — loop control: break repeated (tool,args,result) cycles. → `Harness-Engineering/Control-Loops.md`
+- **Model routing (per-step)** — cheap model for search/summarize, frontier for plan/edit. → `Harness-Engineering/Control-Loops.md`
+- **H1..Hn hypothesis convention** — unverified rankings labelled as hypotheses + deciding experiment. → `Harness-Engineering/Model-vs-Harness.md`
 
 ## Related
 Every section README.

@@ -1,5 +1,5 @@
 # Prefill/Decode Disaggregation
-`LAST_UPDATED: 2026-08-17` · Status: core page (deepened 2026-08-17 with primary-source + Python-verified break-even model; full report: `queries/pd-disaggregation-deep-dive-2026-08-17.md`)
+`LAST_UPDATED: 2026-08-17` · Status: core page (deepened 2026-08-17 with primary-source + Python-verified break-even model; full report: `Inference/Deep-Dives/pd-disaggregation-deep-dive-2026-08-17.md`)
 
 ## 30-Second Explanation
 Run prefill and decode on **different GPU pools**: prefill GPUs process prompts

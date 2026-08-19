@@ -25,12 +25,12 @@ the literature comes from mixing these three.
 |---|---|---|
 | **FlashAttention** (Dao 2022, arXiv:2205.14135) [F] | exact softmax attention tiled in SRAM; never materializes S×S in HBM; O(S) memory | kernel |
 | **FlashAttention-2** (2023, arXiv:2307.08691) [F] | better work partitioning/parallelism; ~2× FA1 | kernel |
-| **FlashAttention-3** (2024, arXiv:2403.04951) [F] | Hopper: warp-specialized pingpong, FP8 support; ~1.5–2× over FA2 | kernel |
-| **FlashInfer** (2025, arXiv:2501.15907, ICLR'25) [F] | prefill+decode kernels for *paged* KV, ragged batching; SGLang's primary backend; vLLM backend too | kernel |
-| **PagedAttention** (Kwon 2023, SOSP'23, arXiv:2309.00032) [F] | KV stored in blocks + block tables; kernel indexes by table | **kernel + memory strategy** |
+| **FlashAttention-3** (2024, ICLR'25; arXiv id UNVERIFIED 2026-08-19 — API throttled, excluded rather than mis-cited) | Hopper: warp-specialized pingpong scheduling, FP8 support; ~1.5–2× over FA2 [F: ICLR'25/OpenReview] | kernel |
+| **FlashInfer** (2025, ICLR'25 [F: ICLR OpenReview + flashinfer.ai; arXiv id unverified 2026-08-19]) | prefill+decode kernels for *paged* KV, ragged batching; SGLang's primary backend; vLLM backend too | kernel |
+| **PagedAttention** (Kwon 2023, SOSP'23, arXiv:2309.06180) [F] | KV stored in blocks + block tables; kernel indexes by table | **kernel + memory strategy** |
 | **FlashMLA** (DeepSeek 2025) [F: repo] | MLA-optimized exact attention; used by vLLM for DeepSeek-family models | kernel |
 | **TRT-LLM attention kernels** | custom compiled attention incl. fused paged paths | kernel |
-| **Ring / context-parallel attention** (arXiv:2211.12876 "Ring Attention"; DeepSpeed Ulysses arXiv:2309.14509) [F] | split sequence across devices, rotate KV | distributed-kernel |
+| **Ring / context-parallel attention** (Ring Attention arXiv:2310.01889 [F]; DeepSpeed Ulysses arXiv:2309.14509 [F]) | split sequence across devices, rotate KV | distributed-kernel |
 
 ### C. Memory-management strategies (same math+kernel)
 - **Paging** (block allocation), **prefix sharing** (APC / RadixAttention),

@@ -26,7 +26,7 @@ block tables; block pool + radix/hashing index for prefix sharing
 (`Attention/README.md` for the taxonomy).
 
 ## Paged KV Management
-Virtual-memory analogy [F: Kwon et al. 2023, SOSP, arXiv:2309.00032]. Near-zero
+Virtual-memory analogy [F: Kwon et al. 2023, SOSP, arXiv:2309.06180]. Near-zero
 fragmentation; dynamic block reallocation; shared blocks for shared prefixes; block
 tables consumed by attention kernels (FlashInfer/TRT-LLM-GEN/FlashMLA all support paged
 KV [F: vLLM docs]).

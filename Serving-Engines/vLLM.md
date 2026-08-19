@@ -11,7 +11,7 @@ today" is its superpower.
 - **Scheduler:** Python async event loop, **iteration-level continuous batching** [F].
   Priority queue; preemption by recompute or swap-to-CPU [F: docs].
 - **KV cache manager:** **PagedAttention** — block pool (default 16 tokens) + per-request
-  block tables; near-zero fragmentation [F: SOSP'23, arXiv:2309.00032].
+  block tables; near-zero fragmentation [F: SOSP'23, arXiv:2309.06180].
 - **Prefix caching:** hash-based **APC** — prefix hash → block list; physically shares
   paged blocks across requests via refcounts; enable via `--enable-prefix-caching` [F].
 - **Chunked prefill:** `--enable-chunked-prefill`, co-scheduled with decode steps [F].

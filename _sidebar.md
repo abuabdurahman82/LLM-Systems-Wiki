@@ -3,16 +3,38 @@
 - [Milestones](/Milestones.md)
 
 - **[Agents](/Agents/README.md)**
+  - [Agentic-AI-Evolution](/Agents/Agentic-AI-Evolution.md)
+  - [Tool-Use](/Agents/Tool-Use.md)
+  - [Agent-Loops-and-Reasoning-Strategies](/Agents/Agent-Loops-and-Reasoning-Strategies.md)
+  - [Multi-Agent-Systems](/Agents/Multi-Agent-Systems.md)
+  - [Coding-Agents](/Agents/Coding-Agents.md)
+  - [Agent-Evaluation](/Agents/Agent-Evaluation.md)
+  - [Agent-Protocols (MCP/A2A)](/Agents/Agent-Protocols.md)
 - **[Attention](/Attention/README.md)**
 - **[Benchmarks](/Benchmarks/README.md)**
 - **[Context-Engineering](/Context-Engineering/README.md)**
+  - [Context-Budget](/Context-Engineering/Context-Budget.md)
+  - [Lost-in-the-Middle-and-Long-Context-Reality](/Context-Engineering/Lost-in-the-Middle-and-Long-Context-Reality.md)
+  - [Context-Compaction](/Context-Engineering/Context-Compaction.md)
+  - [Agent-Memory](/Context-Engineering/Agent-Memory.md)
 - **[Distributed-Inference](/Distributed-Inference/README.md)**
 - **[Evaluation](/Evaluation/README.md)**
 - **[Foundations](/Foundations/README.md)**
 - **[Frontier-Models](/Frontier-Models/README.md)**
 - **[Glossary](/Glossary/README.md)**
+- **[Graph-Engineering](/Graph-Engineering/README.md)**
+  - [Knowledge-Graphs-and-GraphRAG](/Graph-Engineering/Knowledge-Graphs-and-GraphRAG.md)
+  - [GNN-Basics](/Graph-Engineering/GNN-Basics.md)
+  - [Reasoning-Graphs](/Graph-Engineering/Reasoning-Graphs.md)
+  - [Agent-Workflow-Graphs](/Graph-Engineering/Agent-Workflow-Graphs.md)
 - **[Hardware](/Hardware/README.md)**
 - **[Harness-Engineering](/Harness-Engineering/README.md)**
+  - [Harness-Anatomy](/Harness-Engineering/Harness-Anatomy.md)
+  - [Context-Management](/Harness-Engineering/Context-Management.md)
+  - [Control-Loops](/Harness-Engineering/Control-Loops.md)
+  - [Sandboxing](/Harness-Engineering/Sandboxing.md)
+  - [Model-vs-Harness](/Harness-Engineering/Model-vs-Harness.md)
+  - [Open-Harnesses](/Harness-Engineering/Open-Harnesses.md)
 - **Inference**
   - [Inference-Optimization](/Inference/Inference-Optimization.md)
   - [Continuous-Batching](/Inference/Continuous-Batching.md)
