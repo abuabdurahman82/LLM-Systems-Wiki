@@ -142,18 +142,18 @@ compute but **downtime + checkpoint overhead**:
 **[E] Downtime math (order-of-magnitude, all in
 `/tmp/te-research/audit.py`):** 6-month window = 4,320 h of
 wall-clock, 1250 nodes, 1 failure/node/month → **7,500 failures**
-[E: 1250 × 6]. A no-failure run in the same window yields 4,320 h
-of useful work; here the failures eat the idle:
+[E: 1250 × 6]. Compare both modes against a no-failure run that
+delivers 4,320 h of useful work in the same 4,320-h window:
 - **Stop-the-world** (5 min each): 7,500 × 5 min = 625 h down →
   **14.4% of the window idle** [E: 625/4320], leaving 3,695 h
-  useful. Total GPU-h = 4,320 vs 3,695 with no failures → a
-  **1.17× cost penalty** [E: 4320/3695 = 1.169].
+  useful. To deliver the same 4,320 h of useful work takes
+  4,320/0.8553 = 5,051 h of wall-clock → a **1.17× cost penalty**
+  [E: 1/0.8553 = 1.169].
 - **Elastic + fast restart** (0.5 min each): 62.5 h down = **1.4%**
-  [E: 62.5/4320], leaving 4,257.5 h useful. Total GPU-h ≈ 4,320
-  (the GPUs keep spinning during brief preempts) → only a
-  **~1.17× window** vs an ideal 1.0×, but the *lost useful work*
-  is 14× smaller than stop-the-world
-  [E: 62.5/625 = 0.1].
+  [E: 62.5/4320], leaving 4,257.5 h useful. Same-work wall-clock =
+  4,320/0.9855 = 4,383 h → only a **1.015× cost penalty**
+  [E: 1/0.9855 = 1.0147]. The *idle time* is 10× smaller than
+  stop-the-world [E: 62.5/625 = 0.1].
 (Earlier draft had a 10× run-length slip — 43,200 h instead of
 4,320 h — which made stop-the-world downtime look like 1.45%;
 the real figure is 14.4%.)

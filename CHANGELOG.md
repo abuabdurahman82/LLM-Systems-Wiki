@@ -30,8 +30,8 @@
 | R1 | "3M tokens/step over 5000 steps" | **ACCEPTED** — DSV3 paper §4.1: batch-in-sequences 3072→15360 over first 469B tokens; global batch ~10M tokens. Reworded. |
 | R2 | "1.58e25 FLOP / 15.2 PFLOP" | **REFUTED** — not present in the final draft; evaluator misread a stale intermediate. 5e23 FLOP = 32 H100-GPU-years at 50% MFU (3.12e22 FLOP/GPU-yr @100%). |
 | K1 | "Kaplan a ≈ b ≈ 0.34" / "Kaplan: scale N and D equally" | **ACCEPTED (×2)** — Kaplan's actual result: N_opt ∝ C^0.73, D_opt ∝ C^0.27, D ∝ N^0.74 — "most of the increase should go towards increased model size" (verified against the paper text, kaplan.txt). The "scale N and D equally" rule belongs to **Chinchilla**, not Kaplan. Fixed both the Kaplan section and the intro timeline. |
-| I1 | "14.5× more GPU-hours" | **ACCEPTED** — 1.45% overhead = 1.0145× total GPU-h, not 14.5×. Fixed. |
-| I2 | "1.32×" | **ACCEPTED** — correct is (0.55×0.9986)/(0.40×0.95) = 1.45×. Fixed. |
+| I1 | "14.5× more GPU-hours" | **ACCEPTED** — %-to-× slip. (Further corrected in pass 2: the 6-month window is 4,320 h, not 43,200 — so stop-the-world downtime is **14.4%**, total-GPU-h penalty **1.17×**, not 1.45%/1.0145×.) |
+| I2 | "1.32×" | **ACCEPTED** — correct is (0.55×0.986)/(0.40×0.95) = **1.43×** (with the pass-2-corrected 1.4% elastic downtime). Fixed. |
 | I3 | B200 node "144/72 PFLOP dense" | **ACCEPTED** — vendor footnote "Dense = ½ sparse" → node dense = 72/36 PFLOP FP4/FP8. Fixed. |
 | I4 | "3× B200 per NVL72 tray" | **ACCEPTED** — NVL72 = 18 trays × 4 B200/tray (2 GB200 superchips × 2 GPUs each). Fixed. |
 | I5 | "Llama-3 126 layers div by 8" | **ACCEPTED** — 126/8 = 15.75; divisors are 9/14/18/21/42/63. Fixed. |
@@ -39,6 +39,22 @@
 | I7 | "B200 FP8 = 2× H100 FP8" | **REFUTED on the evaluator's 1.14× (used the mislabeled BF16 column); the 2× claim is correct** (B200 FP8 dense 4.5 PFLOP / H100 FP8 dense 1.98 PFLOP = 2.27×). Kept. |
 | D1 | "DSV3 paper reports 54.2% MFU" | **REFUTED** — 0 occurrences of "MFU" in the full DSV3 paper text (verified by grep of the downloaded PDF extraction). The 33% back-calc stands. |
 | H1 | "B200 2,250 TFLOP FP8 dense" | **ACCEPTED** — 2,250 TFLOP is BF16 dense; FP8 dense is 4.5 PFLOP, FP4 dense is 9.0 PFLOP. Table corrected. |
+
+### Evaluator adjudication table (pass 2, 2026-08-20 — chunks 3 & 4)
+Most chunk-3/4 flags targeted the stale chunk text already fixed in
+pass 1 (ZeRO-2 formula, PP bubble, 80–90 GB activations, TP
+latency-bound, 0.62 s / 9–18× / 140 GB, ZeRO-1/2 up to 50B, B200
+node PLOPS, 3× B200/tray, 126-layers-div-8, FP4 training). New
+items:
+
+| Flag | Verdict |
+|---|---|
+| P2-1 | "43,200-h / 1.45% / 0.14% / 14.5×" | **ACCEPTED** — 10× run-length slip in my own draft (6 months = 4,320 h). STW = **14.4% idle, 1.17× total-GPU-h**; elastic = **1.4%, 10× less lost useful work**. Propagated to Interaction.md (0.14%→1.4%; ratio 1.45×→**1.43×**). audit.py corrected to match. |
+| P2-2 | "hundreds of hardware failures" | **ACCEPTED** — draft's own math says 7,500 over 6 months; now "thousands." |
+| P2-3 | "labs that run 10k-GPU jobs (MegaScale, DeepSeek, Kimi)" | **ACCEPTED** — DeepSeek ran 2,048 GPUs, Kimi's cluster is unstated. MegaScale (12,288 GPUs) now carries the 10k claim; DSV3 cited for zero-spike discipline at 2k scale. |
+| P2-4 | "134 MB TP AllReduce should be 268 MB" | **REFUTED** — evaluator summed send+receive without the ring factor. The draft's 2·(n−1)/n model gives 134 MB effective wire traffic; the final 42.9 GB/step is identical under both models (evaluator confirmed 42.9 GB correct). |
+| P2-5 | "1.58× should be 1.57×" | **REFUTED** — draft shows both 4.23/2.68 = 1.58 and 0.55/0.35 = 1.57; [E] tag self-consistent. |
+| P2-6 | "B200 FP8 = 2× H100 FP8 is 1.14×" | **REFUTED** — evaluator used the stale BF16-mislabeled table (already fixed). 4.5/1.98 = 2.27×; "≈2×" justified. |
 
 ## 2026-08-19 — Evaluation-Engineering: new first-class section (16 pages)
 - **New section: `Evaluation-Engineering/`** — LLM evaluation as a complete engineering discipline (not a benchmark chapter): `Evaluation-Fundamentals.md` (units of measurement, the eval stack, protocol spec), `Model-Evaluation.md`, `Benchmark-Design.md` (task→dataset→scorer, construct validity), `Benchmark-Contamination.md`, `Reasoning-Evaluation.md` (answer vs process, effort-level confounds), `Coding-Evaluation.md` (pass@k vs pass^k, execution oracles), `Agent-Tool-Use-Evaluation.md` (trajectories, harness effects, cost-per-success), `Context-Long-Context-Evaluation.md` (usable vs advertised length), `RAG-Evaluation.md`, `Harness-Serving-Evaluation.md` (SLOs, goodput), `Safety-Red-Teaming.md` (ASR/over-refusal), `Multimodal-Evaluation.md`, `LLM-as-a-Judge.md` (bias taxonomy, calibration), `Human-Evaluation.md` (kappa, hybrid pipelines), `Statistical-Evaluation.md` (Wilson/McNemar/bootstrap, multiple comparisons, judge agreement).
