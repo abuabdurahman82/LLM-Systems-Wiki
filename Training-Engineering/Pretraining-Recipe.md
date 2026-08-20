@@ -29,8 +29,10 @@ Open reference corpora:
 - The Pile — Gao et al. 2020, 825GB curated mix. arXiv id UNVERIFIED
   this session (candidate `2101.00037` resolved to an *unrelated HEP
   paper* — do not cite until re-verified).
-- RedPajama — `2411.12372` [F] — open 1T-token web corpus, C4-style
-  crawl + dedup.
+- RedPajama — `2411.12372` [F] — open reproduction of LLaMA's
+  training mix (V1 ≈ 1T tokens) plus a much larger web-only V2; the
+  combined datasets span >100T tokens (open crawl + dedup + quality
+  signals).
 - The Stack v2 (BigCode) — the standard open code corpus; arXiv id
   UNVERIFIED this session (candidate `2312.08568` resolved to an
   unrelated image-synthesis paper).

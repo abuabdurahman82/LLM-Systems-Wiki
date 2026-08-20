@@ -14,9 +14,10 @@ Training a model of N parameters on D tokens costs ≈ **6·N·D FLOPs**
 (≈2 N FLOPs per token forward, ×3 for forward+backward+optimizer-ish
 accounting — see derivation). Scaling laws fit loss L(N, D, C) to power
 laws; the question they answer: **for fixed compute C, what N and D
-minimize loss?** The answer has changed over time (Kaplan: scale N
-and D equally; Chinchilla: tokens ≈ 20× params; 2024+: over-train —
-fewer params, more
+minimize loss?** The answer has changed over time (Kaplan: most
+new compute into model size, D grows sublinearly; Chinchilla: scale
+N and D equally, tokens ≈ 20× params; 2024+: over-train — fewer
+params, more
 tokens — because inference cost matters and data is cheaper than compute).
 
 ## The master equation: FLOPs per token
@@ -59,12 +60,14 @@ holding the N/D ratio fixed. Key claims [F: paper]:
    exponent]. (The Chinchilla paper refits these exponents on
    better data and larger ranges; the practical takeaway it
    changes is the N/D ratio, not the C-exponent.)
-3. **Optimal allocation: at fixed compute C, scale N and D
-   *equally*** — N_opt ∝ D_opt ∝ C^0.5, i.e. the frontier is a fixed
-   N/D-ratio line. This is Kaplan's headline "scale everything
-   proportionally" result and the "GPT-3 was the right size"
-   reading: GPT-3 (175B, 300B tokens) was roughly on that frontier.
-   [F: paper]
+3. **Optimal allocation at fixed compute: most new compute goes to
+   model size, data grows sublinearly** — N_opt ∝ C^0.73, D_opt ∝
+   C^0.27, equivalently D ∝ N^0.74 [F: paper's fitted exponents
+   αN ≈ 0.076, αD ≈ 0.095; "most of the increase should go towards
+   increased model size"]. The "scale N and D equally" rule (N_opt
+   ∝ D_opt ∝ C^0.5) is **Chinchilla's** later result, not
+   Kaplan's. GPT-3 (175B, 300B tokens = ~1.7 tokens/param) was
+   roughly on Kaplan's frontier but far from the Chinchilla one.
 
 **Where Kaplan went wrong (later):** they trained most of their
 compute-optimal models on **repeated data** (no fresh-data

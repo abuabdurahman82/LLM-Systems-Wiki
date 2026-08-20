@@ -29,7 +29,7 @@
 | C2 | "0.62 s/step" | **REFUTED on 0.62 (correct is 0.078 s with 32,768 GPUs), ACCEPTED on the 9–18× ratio (now 72×/144×)** — draft had 4,096 GPUs (dropped PP=8). Fixed denominator + ratio. |
 | R1 | "3M tokens/step over 5000 steps" | **ACCEPTED** — DSV3 paper §4.1: batch-in-sequences 3072→15360 over first 469B tokens; global batch ~10M tokens. Reworded. |
 | R2 | "1.58e25 FLOP / 15.2 PFLOP" | **REFUTED** — not present in the final draft; evaluator misread a stale intermediate. 5e23 FLOP = 32 H100-GPU-years at 50% MFU (3.12e22 FLOP/GPU-yr @100%). |
-| K1 | "Kaplan a ≈ b ≈ 0.34" | **ACCEPTED** — Kaplan's exponents are L ∝ N^−0.076, D^−0.095, C^−0.076; the "0.34" was a misreading. Removed the sub-exponent claim; kept Kaplan's headline "scale N and D equally." |
+| K1 | "Kaplan a ≈ b ≈ 0.34" / "Kaplan: scale N and D equally" | **ACCEPTED (×2)** — Kaplan's actual result: N_opt ∝ C^0.73, D_opt ∝ C^0.27, D ∝ N^0.74 — "most of the increase should go towards increased model size" (verified against the paper text, kaplan.txt). The "scale N and D equally" rule belongs to **Chinchilla**, not Kaplan. Fixed both the Kaplan section and the intro timeline. |
 | I1 | "14.5× more GPU-hours" | **ACCEPTED** — 1.45% overhead = 1.0145× total GPU-h, not 14.5×. Fixed. |
 | I2 | "1.32×" | **ACCEPTED** — correct is (0.55×0.9986)/(0.40×0.95) = 1.45×. Fixed. |
 | I3 | B200 node "144/72 PFLOP dense" | **ACCEPTED** — vendor footnote "Dense = ½ sparse" → node dense = 72/36 PFLOP FP4/FP8. Fixed. |
