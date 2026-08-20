@@ -49,7 +49,7 @@ items:
 
 | Flag | Verdict |
 |---|---|
-| P2-1 | "43,200-h / 1.45% / 0.14% / 14.5×" | **ACCEPTED** — 10× run-length slip in my own draft (6 months = 4,320 h). STW = **14.4% idle, 1.17× total-GPU-h**; elastic = **1.4%, 10× less lost useful work**. Propagated to Interaction.md (0.14%→1.4%; ratio 1.45×→**1.43×**). audit.py corrected to match. |
+| P2-1 | "43,200-h / 1.45% / 0.14% / 14.5×" | **ACCEPTED** — 10× run-length slip in my own draft (6 months = 4,320 h). Against a no-failure 4,320-h useful-work baseline: STW = **14.4% window idle, 1.17× same-work wall-clock**; elastic = **1.4% idle, 1.015× same-work wall-clock** (idle time 10× smaller). Propagated to Interaction.md (0.14%→1.4%; ratio 1.45×→**1.43×**). audit.py corrected to the same-work framing. |
 | P2-2 | "hundreds of hardware failures" | **ACCEPTED** — draft's own math says 7,500 over 6 months; now "thousands." |
 | P2-3 | "labs that run 10k-GPU jobs (MegaScale, DeepSeek, Kimi)" | **ACCEPTED** — DeepSeek ran 2,048 GPUs, Kimi's cluster is unstated. MegaScale (12,288 GPUs) now carries the 10k claim; DSV3 cited for zero-spike discipline at 2k scale. |
 | P2-4 | "134 MB TP AllReduce should be 268 MB" | **REFUTED** — evaluator summed send+receive without the ring factor. The draft's 2·(n−1)/n model gives 134 MB effective wire traffic; the final 42.9 GB/step is identical under both models (evaluator confirmed 42.9 GB correct). |
