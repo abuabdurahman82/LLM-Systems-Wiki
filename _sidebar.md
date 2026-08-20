@@ -91,4 +91,11 @@
 - **[Speculative-Decoding](/Speculative-Decoding/README.md)**
 - **[Timeline](/Timeline/README.md)**
 - **[Training](/Training/README.md)**
+- **[Training-Engineering](/Training-Engineering/README.md)**
+  - [Model-Anatomy](/Training-Engineering/Model-Anatomy.md)
+  - [Pretraining-Recipe](/Training-Engineering/Pretraining-Recipe.md)
+  - [Scaling-Laws](/Training-Engineering/Scaling-Laws.md)
+  - [Parallelism](/Training-Engineering/Parallelism.md)
+  - [Scaling-1-to-10k](/Training-Engineering/Scaling-1-to-10k.md)
+  - [Interaction](/Training-Engineering/Interaction.md)
 - **[Transformer](/Transformer/README.md)**

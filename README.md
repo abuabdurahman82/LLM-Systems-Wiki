@@ -60,7 +60,8 @@ LLM-Wiki/
 ├── Foundations/               ← pre-LLM history: information theory → RNN → seq2seq → attention
 ├── Transformer/               ← first-principles learning path (tokens→logits, math, toy examples)
 ├── Model-Architectures/       ← encoder/decoder, MoE, MHA/MQA/GQA, RoPE/ALiBi, RMSNorm, SwiGLU, SSM, hybrids
-├── Training/                  ← data, pretraining, scaling laws, distributed training, comms
+├── Training/                  ← data, pretraining, scaling laws, distributed training, comms (overview)
+├── Training-Engineering/      ← FIRST-CLASS (2026-08-20): model anatomy, pretraining recipe, scaling-law math, 5-axis parallelism, 1→10k-GPU scaling, architecture/hardware/memory/network interaction — [F]/[I]/[E]-tagged, Python-audited
 ├── Post-Training/             ← SFT, RLHF/PPO, DPO, GRPO, RLAIF, distillation, alignment & RLHF lineage
 ├── Reasoning/                 ← CoT, ToT, ReAct, process supervision, test-time compute, RL for reasoning
 ├── Inference/                 ← The Life of a Token, Roofline, continuous batching, P/D disaggregation (+ Deep-Dives/), metrics, inference optimization

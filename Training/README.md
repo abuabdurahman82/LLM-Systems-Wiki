@@ -1,5 +1,14 @@
 # Training LLMs
-`LAST_UPDATED: 2026-08-16` · Status: core section
+`LAST_UPDATED: 2026-08-20` · Status: core section
+
+> **Note (2026-08-20):** this page is the *overview*. For the deep dive
+> — modern model anatomy, the full pretraining recipe, scaling-law
+> math, the five parallelism axes, scaling 1→10k GPUs, and the
+> architecture/hardware/memory/network interaction model — see the
+> new first-class section [`Training-Engineering/`](../Training-Engineering/README.md).
+> This page keeps the quick-reference tables; the new section
+> carries the first-principles derivations and [F]/[I]/[E]-tagged
+> claims.
 
 ## 30-Second Explanation
 Pretraining = next-token prediction over trillions of tokens with a Transformer. The hard
@@ -47,7 +56,7 @@ all standard [I]. Curriculum research is thin; most effect comes from data quali
 | Method | What's split | Comm | Notes |
 |---|---|---|---|
 | **Data parallel (DP)** | batch | AllReduce grads | every GPU holds full model; simple |
-| **ZeRO (DeepSpeed)** (Rajbhandari 2020, arXiv:1909.08053 [F]) | optimizer state + grads + params (1/2/3) | AllReduce/AllGather/ReduceScatter | ZeRO-3 = no param duplication; the training workhorse |
+| **ZeRO (DeepSpeed)** (Rajbhandari 2020, arXiv:1910.02054 [F]) | optimizer state + grads + params (1/2/3) | AllReduce/AllGather/ReduceScatter | ZeRO-3 = no param duplication; the training workhorse |
 | **FSDP** (PyTorch) | params+grads+optim (sharded) | AllGather | ZeRO-3 in PyTorch |
 | **Tensor parallel (Megatron)** (Sho et al. 2019, arXiv:1909.08053 [F]; Megatron-1/2/3 papers 2021–2023 [F]) | layer matrices | AllReduce ×2/layer | NVLink-class fabric required |
 | **Pipeline parallel** | layers | P2P activations | GPipe arXiv:1811.06965; 1F1B; bubble cost |

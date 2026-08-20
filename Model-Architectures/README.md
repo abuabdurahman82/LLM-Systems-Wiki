@@ -1,5 +1,13 @@
 # Model Architectures — The Evolution
-`LAST_UPDATED: 2026-08-16` · Status: section index
+`LAST_UPDATED: 2026-08-20` · Status: section index
+
+> **Note (2026-08-20):** for the *how-it-trains* side of these
+> architectures (parameter counts, FLOPs/param, KV-cache math, MoE
+> activation accounting, why MoE flips the binding constraint from
+> FLOPs to HBM) see
+> [`Training-Engineering/Model-Anatomy`](../Training-Engineering/Model-Anatomy.md).
+> This page keeps the architecture taxonomy (families, head designs,
+> positional encodings, non-transformer alternatives).
 
 ## Three families
 1. **Encoder-only** (BERT 2018, arXiv:1810.04805 [F]) — masked LM; great for understanding

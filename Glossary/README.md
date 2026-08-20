@@ -1,5 +1,5 @@
 # Glossary
-`LAST_UPDATED: 2026-08-19` · Cross-linked term index. (→ page)
+`LAST_UPDATED: 2026-08-20` · Cross-linked term index. (→ page)
 
 - **LLM** — large language model; pretrained next-token model at LLM scale. → `Transformer/`
 - **Transformer** — the architecture (self-attention + FFN + residuals). → `Transformer/`
@@ -49,7 +49,24 @@
 - **KV quantization** — store K,V in 8-bit. → `KV-Cache/`
 - **Speculative decoding** — draft-verify inference; EAGLE/MTP. → `Speculative-Decoding/`
 - **Continuous/iteration-level scheduling** — Orca lineage. → `Inference/Continuous-Batching.md`
-- **Scaling law** — loss vs compute/params/data power laws; Chinchilla. → `Training/`
+- **Scaling law** — loss vs compute/params/data power laws; Chinchilla. → `Training-Engineering/Scaling-Laws.md`
+- **Chinchilla point** — the compute-optimal (N, D) pair; ~20 tokens per param (70B/1.4T). → `Training-Engineering/Scaling-Laws.md`
+- **Compute-optimal / over-training** — training more tokens than the Chinchilla ratio (Llama-3 15–40×, MoE ~150×). → same
+- **6·N·D** — total pretraining FLOPs (forward 2N + backward 4N per token). → `Training-Engineering/Scaling-Laws.md`
+- **MFU** — model FLOPs utilization (achieved/peak FLOPs); dense ~40–60%, MoE lower. → `Training-Engineering/Scaling-1-to-10k.md`
+- **Global batch** — total tokens per optimizer step = DP × seq × micro. → `Training-Engineering/Pretraining-Recipe.md`
+- **Learning-rate schedule** — warmup + (cosine/warm-restart) decay; per-architecture peak LR. → same
+- **Loss spike** — sudden loss jump from a bad data shard / numerical blowup; roll back. → same
+- **Checkpointing (save)** — periodic weight+optimizer state to storage; the stability cost. → same
+- **Micro-batch (m)** — the sub-batch fed through PP; drives the pipeline bubble. → `Training-Engineering/Parallelism.md`
+- **Pipeline bubble** — idle fraction (p−1)/m of a PP schedule. → same
+- **1F1B** — one-forward-one-backward PP schedule (limits activation memory to ~2 micro-batches). → same
+- **Activation recompute / checkpointing** — recompute activations in bwd instead of storing; O(L)→O(√L). → same
+- **ZeRO-Offload** — offload optimizer/grad state to CPU DRAM/SSD when HBM is the limit. → same
+- **Hierarchical AllReduce** — intra-node ring → inter-node ring of node-aggregates (SHARP). → `Training-Engineering/Parallelism.md`
+- **SP (sequence parallelism)** — split activations across the TP group outside the GEMMs (Megatron-SP / ring attention). → same
+- **H800 / H100 / B200 / GB200** — the 2024–26 training GPUs; NVLink node vs NVL72. → `Hardware/`, `Training-Engineering/Scaling-1-to-10k.md`
+- **DGX / NVL72** — NVIDIA systems (72-GPU NVLink domain). → `Hardware/`
 - **Next-token prediction** — the pretraining objective. → `Transformer/`
 - **SFT** — supervised fine-tuning. → `Post-Training/`
 - **RLHF** — RL from human feedback (RM + PPO). → `Post-Training/`
@@ -104,8 +121,6 @@
 - **Sandbox / sandboxing** — isolated execution for agent actions. → `Safety/`, `Harness-Engineering/`
 - **KV-aware routing/scheduling** — place requests where KV helps. → `Inference/Prefill-Decode-Disaggregation.md`
 - **Goodput / SLO** — see above. → `Inference/Inference-Metrics.md`
-- **MFU** — model FLOPs utilization (training efficiency). → `Training/`
-- **DGX / NVL72** — NVIDIA systems (72-GPU NVLink domain). → `Hardware/`
 - **GB10 / DGX Spark** — edge/superchip class (~273 GB/s). → `Hardware/`
 - **MCP** — Model Context Protocol; agent↔tool interop (JSON-RPC, resources/tools/prompts). → `Agents/Agent-Protocols.md`
 - **A2A** — Agent-to-Agent protocol (Agent Cards, Task objects, cross-org agent interop). → same
@@ -115,7 +130,7 @@
 - **GNN / message passing** — neural nets that aggregate neighborhood structure per layer. → `Graph-Engineering/GNN-Basics.md`
 - **Over-squashing / over-smoothing** — GNN failure modes: info loss at bottlenecks / deep-layer collapse. → same
 - **Expressivity limit (WL test)** — 1-WL color-refinement ceiling for sum-aggregation GNNs. → same
-- **Knowledge graph (KG)** — entities (nodes) + relations (edges) as structured data. → `Graph-Engineering/Knowledge-Graphs-and-GraphRAG.md`
+- **Knowledge graph (KG)** — entities (nodes) + relations (edges); the data structure KGs are made of. → `Graph-Engineering/Knowledge-Graphs-and-GraphRAG.md`
 - **Agent workflow graph** — the agent loop / MAS made an explicit node+edge data structure (AFlow, LangGraph). → `Graph-Engineering/Agent-Workflow-Graphs.md`
 - **Test-time search (ToT/GoT)** — reasoning as explicit graph search over partial solutions. → `Graph-Engineering/Reasoning-Graphs.md`
 - **Context compaction** — policy for summarizing/evicting context to stay in window. → `Context-Engineering/Context-Compaction.md`
