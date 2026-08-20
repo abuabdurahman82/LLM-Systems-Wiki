@@ -181,10 +181,11 @@ order-of-magnitude.]
 N_act, more D, higher MFU, lower $/GPU-h, lower downtime) is a
 *$/token* lever. "Is 10k GPUs worth it?" is answered by whether
 the MFU + stability gains beat the $/GPU-h premium — and for
-frontier labs the answer is yes: a 55% MFU × 0.14% downtime
-configuration beats a 40% MFU × 5% downtime configuration at the
-same $/GPU-h by ~**1.45×** [E: (0.55×0.9986)/(0.40×0.95) =
-0.5492/0.3800 = 1.45].
+frontier labs the answer is yes: a 55% MFU × 1.4% downtime
+configuration (elastic + fast restart [E: 62.5 h / 4,320-h window])
+beats a 40% MFU × 5% downtime configuration at the
+same $/GPU-h by ~**1.43×** [E: (0.55×0.986)/(0.40×0.95) =
+0.5423/0.3800 = 1.427].
 That's the entire MegaScale result restated as a $/token delta
 [F: 2402.15627 reports 55.2% vs ~41% baseline, "1.34× MFU
 improvement"].

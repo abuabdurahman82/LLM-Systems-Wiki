@@ -14,7 +14,8 @@ At 1 node (8 GPUs) you fit a 7B model with ZeRO-3 and run a day of
 training. At 100 nodes you add PP + cross-node DP and start fighting
 the IB fabric. At 10,000 nodes you're fighting *failure rates,
 stragglers, and checkpoint cadence* more than FLOPs: a 10k-GPU run
-expects **hundreds of hardware failures** and the question is no longer
+expects **thousands of hardware failures** over a 6-month window and
+the question is no longer
 "can it run" but "how many GPU-hours do you lose to restarts and
 spikes". [I: consistent across MegaScale 2402.15627 and every
 2024–26 open training report.]
@@ -139,16 +140,23 @@ compute but **downtime + checkpoint overhead**:
    important as the detection. [I]
 
 **[E] Downtime math (order-of-magnitude, all in
-`/tmp/te-research/audit.py`):** 6-month run, 1250 nodes, 1
-failure/node/month → **7,500 failures** [E: 1250 × 6].
-- **Stop-the-world** (5 min each): 625 h of downtime = **1.45%**
-  of the 43,200-h run [E: 625/43200] — the run takes 1.45% longer,
-  i.e. **~1.015× the GPU-hours** of the same work with no failures
-  [E: 43200/42575 = 1.0147]. (The earlier "14.5× more GPU-hours"
-  was a %-to-× slip: 1.45% overhead = 1.0145×, not 14.5×.)
-- **Elastic + fast restart** (0.5 min each): 62.5 h = **0.14%**
-  [E: 62.5/43200] — a ~10× smaller downtime overhead from the
-  stability stack alone [E: 1.45%/0.14% ≈ 10.4].
+`/tmp/te-research/audit.py`):** 6-month window = 4,320 h of
+wall-clock, 1250 nodes, 1 failure/node/month → **7,500 failures**
+[E: 1250 × 6]. A no-failure run in the same window yields 4,320 h
+of useful work; here the failures eat the idle:
+- **Stop-the-world** (5 min each): 7,500 × 5 min = 625 h down →
+  **14.4% of the window idle** [E: 625/4320], leaving 3,695 h
+  useful. Total GPU-h = 4,320 vs 3,695 with no failures → a
+  **1.17× cost penalty** [E: 4320/3695 = 1.169].
+- **Elastic + fast restart** (0.5 min each): 62.5 h down = **1.4%**
+  [E: 62.5/4320], leaving 4,257.5 h useful. Total GPU-h ≈ 4,320
+  (the GPUs keep spinning during brief preempts) → only a
+  **~1.17× window** vs an ideal 1.0×, but the *lost useful work*
+  is 14× smaller than stop-the-world
+  [E: 62.5/625 = 0.1].
+(Earlier draft had a 10× run-length slip — 43,200 h instead of
+4,320 h — which made stop-the-world downtime look like 1.45%;
+the real figure is 14.4%.)
 **This is why the "zero-spike, elastic, fast-restart" stack is
 table stakes at 10k GPUs** [I].
 
@@ -183,11 +191,12 @@ such.)
 | 10k+ nodes | FLOPs | **failure rate + spike policy + checkpoint cadence** |
 
 **[I]** The single most important strategic fact: *above ~1k
-GPUs, the binding constraint is reliability, not FLOPs.* The labs
-that run 10k-GPU jobs at 55%+ MFU (ByteDance/MegaScale, DeepSeek,
-Kimi/Moonshot) invested in **stability engineering** (elastic
-scheduling, fast restart, straggler detection) *as much as* in
-comm overlap. [F: 2402.15627; 2412.19437]
+GPUs, the binding constraint is reliability, not FLOPs.* MegaScale
+(12,288 GPUs, 55.2% MFU [F: 2402.15627]) invested in **stability
+engineering** (elastic scheduling, fast restart, straggler
+detection) *as much as* in comm overlap — and DeepSeek's 2,048-GPU
+run (zero irrecoverable spikes [F: 2412.19437]) shows the same
+discipline at smaller scale.
 
 ## Key takeaways
 
