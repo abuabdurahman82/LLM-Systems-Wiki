@@ -7,9 +7,9 @@
   for frontier models + heavily *contaminated*. Use MMLU-Pro instead.
 - **MMLU-Pro** (2024 [F]) — harder, 10-way. Tests: deeper multi-step + knowledge. NOT:
   agentic.
-- **GSM8K** (2021, arXiv:2110.14118 [F]) — grade-school math. Tests: basic reasoning.
+- **GSM8K** (2021, arXiv:2110.14168 [F]) — grade-school math. Tests: basic reasoning.
   NOT: competition math. *Saturated*.
-- **MATH** (2021, arXiv:2112.00111 [F]) — competition math. Tests: multi-step reasoning +
+- **MATH** (2021, arXiv:2103.03874 [F]) — competition math. Tests: multi-step reasoning +
   test-time compute. NOT: faithfulness of CoT.
 - **AIME** (annual) — olympiad math. Tests: hard reasoning + test-time compute. NOT:
   broad capability. (2026 variants referenced in open-model tables.)
@@ -19,7 +19,7 @@
   GitHub issues, multi-file. Tests: repo-scale SWE agent. NOT: non-coding. Misleads:
   *scaffold-sensitive* — same model, different harness, big deltas.
 - **SWE-bench Pro** (2025 [F]) — harder/harder-to-game. Tests: robust SWE. NOT: breadth.
-- **GPQA** (2021, arXiv:2111.09133 [F]) — expert-level Q (bio/phys/chem); GPQA Diamond
+- **GPQA** (2023, arXiv:2311.12022 [F]) — expert-level Q (bio/phys/chem); GPQA Diamond
   = hardest subset. Tests: expert STEM reasoning. NOT: agentic.
 - **LiveBench** (2024 [F]) — living, contamination-resistant. Tests: general + current.
 - **Chatbot Arena / LMArena** (2023 [F]) — human pairwise preference (Elo). Tests:

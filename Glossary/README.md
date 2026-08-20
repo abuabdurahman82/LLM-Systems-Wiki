@@ -125,6 +125,18 @@
 - **No-progress detection** — loop control: break repeated (tool,args,result) cycles. → `Harness-Engineering/Control-Loops.md`
 - **Model routing (per-step)** — cheap model for search/summarize, frontier for plan/edit. → `Harness-Engineering/Control-Loops.md`
 - **H1..Hn hypothesis convention** — unverified rankings labelled as hypotheses + deciding experiment. → `Harness-Engineering/Model-vs-Harness.md`
+- **Goodput** — SLO-conforming requests/sec (not raw throughput); the capacity metric under latency limits. → `Inference/Inference-Metrics.md`, `Evaluation-Engineering/Harness-Serving-Evaluation.md`
+- **pass@k / pass^k** — prob ≥1 of k samples passes vs all-k pass; coding/SWE evals must state which. → `Evaluation-Engineering/Coding-Evaluation.md`
+- **Contamination / saturation** — test-set leakage into training / benchmark ceiling reached; both move the meaning of a score. → `Evaluation-Engineering/Benchmark-Contamination.md`
+- **Construct validity** — the benchmark measures the capability it claims to, under the protocol it pins. → `Evaluation-Engineering/Benchmark-Design.md`
+- **LLM-as-a-judge** — an LLM scores another LLM's outputs; the scalable scorer, with position/verbosity/self-preference biases. → `Evaluation-Engineering/LLM-as-a-Judge.md`
+- **Agent-as-a-judge** — an LLM (often an agent) scores a full trajectory, not just the final answer. → `Agents/Agent-Evaluation.md`, `Evaluation-Engineering/Agent-Tool-Use-Evaluation.md`
+- **ASR (attack success rate)** — successful jailbreaks / attempts; the safety-eval headline metric. → `Evaluation-Engineering/Safety-Red-Teaming.md`
+- **Over-refusal** — benign requests refused; the inverse failure of safety evals. → `Evaluation-Engineering/Safety-Red-Teaming.md`
+- **Cohen's kappa** — agreement above chance; the reliability statistic for human/judge labels. → `Evaluation-Engineering/Statistical-Evaluation.md`
+- **Faithfulness / groundedness** — answer claims entailed by the retrieved context; the core RAG generation metric. → `Evaluation-Engineering/RAG-Evaluation.md`
+- **Usable (effective) context length** — where performance holds, not the advertised window. → `Evaluation-Engineering/Context-Long-Context-Evaluation.md`
+- **Effort level** — thinking-budget setting a number is only defined at; part of the eval protocol. → `Evaluation-Engineering/Reasoning-Evaluation.md`
 
 ## Related
 Every section README.

@@ -43,7 +43,7 @@ answers a different question; match the metric to the workload.
 
 ## Related
 `Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `Inference/Inference-Optimization.md` ·
-`Evaluation/` (benchmark methodology).
+`../Evaluation-Engineering/Harness-Serving-Evaluation.md` (turning these metrics into SLO tests).
 
 ## Key Takeaways
 Match metric to workload. Report **percentiles at a fixed concurrency**, not averages.

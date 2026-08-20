@@ -19,6 +19,22 @@
   - [Agent-Memory](/Context-Engineering/Agent-Memory.md)
 - **[Distributed-Inference](/Distributed-Inference/README.md)**
 - **[Evaluation](/Evaluation/README.md)**
+- **[Evaluation-Engineering](/Evaluation-Engineering/README.md)**
+  - [Evaluation-Fundamentals](/Evaluation-Engineering/Evaluation-Fundamentals.md)
+  - [Model-Evaluation](/Evaluation-Engineering/Model-Evaluation.md)
+  - [Benchmark-Design](/Evaluation-Engineering/Benchmark-Design.md)
+  - [Benchmark-Contamination](/Evaluation-Engineering/Benchmark-Contamination.md)
+  - [Reasoning-Evaluation](/Evaluation-Engineering/Reasoning-Evaluation.md)
+  - [Coding-Evaluation](/Evaluation-Engineering/Coding-Evaluation.md)
+  - [Agent-Tool-Use-Evaluation](/Evaluation-Engineering/Agent-Tool-Use-Evaluation.md)
+  - [Context-Long-Context-Evaluation](/Evaluation-Engineering/Context-Long-Context-Evaluation.md)
+  - [RAG-Evaluation](/Evaluation-Engineering/RAG-Evaluation.md)
+  - [Harness-Serving-Evaluation](/Evaluation-Engineering/Harness-Serving-Evaluation.md)
+  - [Safety-Red-Teaming](/Evaluation-Engineering/Safety-Red-Teaming.md)
+  - [Multimodal-Evaluation](/Evaluation-Engineering/Multimodal-Evaluation.md)
+  - [LLM-as-a-Judge](/Evaluation-Engineering/LLM-as-a-Judge.md)
+  - [Human-Evaluation](/Evaluation-Engineering/Human-Evaluation.md)
+  - [Statistical-Evaluation](/Evaluation-Engineering/Statistical-Evaluation.md)
 - **[Foundations](/Foundations/README.md)**
 - **[Frontier-Models](/Frontier-Models/README.md)**
 - **[Glossary](/Glossary/README.md)**

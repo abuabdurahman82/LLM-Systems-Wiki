@@ -76,7 +76,8 @@ LLM-Wiki/
 ├── Graph-Engineering/         ← KGs/GraphRAG, GNNs, reasoning-as-search, agent-workflow graphs
 ├── RAG/                       ← full pipeline + advanced RAG (hybrid, graph, agentic, self-RAG)
 ├── Multimodal/                ← text/image/audio/video/speech/robotics strategies
-├── Evaluation/                ← benchmark families, contamination, saturation
+├── Evaluation/                ← benchmark reference: families, contamination, saturation
+├── Evaluation-Engineering/    ← the discipline: fundamentals, benchmark design, reasoning/coding/agent/long-context/RAG/serving/safety/multimodal eval, LLM-as-judge, human eval, statistics
 ├── Open-Source-Models/        ← Qwen, Llama/Meta, DeepSeek, Mistral, Gemma, OLMo, Falcon, BLOOM…
 ├── Frontier-Models/           ← GPT-5.x, Claude (Opus 5/Sonnet 5/Fable 5/Mythos 5), Gemini 3.x (verified 2026-08)
 ├── Hardware/                  ← GPU archs, HBM, NVLink/NVSwitch, PCIe, InfiniBand, RoCE, DPU
@@ -94,7 +95,8 @@ LLM-Wiki/
 - **Zero to hero:** start `Foundations/` → `Transformer/` → `Inference/The-Life-of-a-Token.md` → `KV-Cache/` → `Training/` → `Post-Training/` → `Reasoning/` → `Agents/` → `Latest-Research/`.
 - **Agent engineer:** `Agents/Agentic-AI-Evolution.md` → `Agents/Tool-Use.md` → `Agents/Agent-Loops-and-Reasoning-Strategies.md` → `Context-Engineering/` → `Harness-Engineering/Harness-Anatomy.md` → `Agents/Coding-Agents.md` → `Graph-Engineering/`.
 - **Inference engineer:** `Inference/The-Life-of-a-Token.md` → `Inference/Roofline.md` → `Inference/Inference-Optimization.md` (what to apply FIRST, measured) → `Attention/` → `KV-Cache/` → `Serving-Engines/` → `Distributed-Inference/` → `Quantization/` → `Speculative-Decoding/`.
-- **Researcher:** `Research-Papers/` → `Research-Lineage/` → `Evaluation/` → `Latest-Research/` → open questions in each section.
+- **Researcher:** `Research-Papers/` → `Research-Lineage/` → `Evaluation/` → `Evaluation-Engineering/` → `Latest-Research/` → open questions in each section.
+- **Evaluation engineer:** `Evaluation-Engineering/Evaluation-Fundamentals.md` → `Model-Evaluation.md` → `Benchmark-Design.md` → `Statistical-Evaluation.md` → the domain pages (`Agent-Tool-Use-Evaluation`, `RAG-Evaluation`, `Harness-Serving-Evaluation`, …) → `LLM-as-a-Judge.md` / `Human-Evaluation.md` (scorer calibration).
 
 ## The ten questions this wiki must answer
 1. How did modern LLMs evolve? → `Milestones.md`, `Foundations/`, `Model-Architectures/`
