@@ -6,6 +6,11 @@
 
 ---
 
+## What's new
+- **2026-08-21 — `GPU-Systems/` section (12 pages):** a zero-to-hero GPU/CUDA/kernel engineering handbook for LLM inference — GPU architecture, bandwidth-vs-compute reasoning, CUDA from zero, GEMMs, the kernel stack, inference-engine internals, multi-GPU execution, prefill/decode disaggregation, cross-layer optimization, load balancing, and a perf-experiment template. Start at `GPU-Systems/README.md`.
+
+---
+
 ## What this is
 
 A structured, cross-linked technical knowledge base covering the evolution of LLMs from
