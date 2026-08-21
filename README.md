@@ -75,6 +75,7 @@ LLM-Wiki/
 ├── Harness-Engineering/       ← system scaffolding; model-vs-harness question
 ├── Context-Engineering/       ← prompt vs context vs harness; budgets, long-context reality, compaction, memory
 ├── Graph-Engineering/         ← KGs/GraphRAG, GNNs, reasoning-as-search, agent-workflow graphs
+├── GPU-Systems/               ← FIRST-CLASS (2026-08-21): GPU arch → CUDA kernels → memory movement → inference-engine internals; Architecture, GEMM, Kernel-Stack, Inference-Engines, Load-Balancing, perf experiment template
 ├── RAG/                       ← full pipeline + advanced RAG (hybrid, graph, agentic, self-RAG)
 ├── Multimodal/                ← text/image/audio/video/speech/robotics strategies
 ├── Evaluation/                ← benchmark reference: families, contamination, saturation
