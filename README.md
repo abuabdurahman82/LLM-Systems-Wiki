@@ -21,6 +21,13 @@ For every major topic the wiki answers:
 - **what research followed** (see `Research-Lineage/`)
 - **how it changed** modern architecture, training, inference, agents, or deployment
 
+## How this wiki is built
+Inspired by Andrej Karpathy's *llm-wiki*, this wiki is researched, written, and maintained
+by a **Hermes agent** running on a home lab:
+
+- **Primary model:** Qwen 3.8 27B, served on an RTX 5090 workstation
+- **Delegate model:** DeepSeek V4 Flash, served on dual DGX Spark GB10 machines
+
 ## Audience
 AI engineers · inference engineers · researchers · infrastructure architects · graduate students · zero-to-advanced learners.
 `Learning-Path/` gives a levelled route through everything.
