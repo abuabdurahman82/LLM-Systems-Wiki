@@ -46,8 +46,8 @@ Open reference corpora:
 
 ### 1.2 Cleaning (the part that shows up in quality)
 1. **URL / document dedup** — exact URL, exact text, near-dup (MinHash /
-   SimHash) [F: Lee et al. 2022, "Deduplicating Training Data Makes
-   Language Models Better" `2107.00077`]. Duplicates → memorization
+   SimHash) [F: Lee et al. 2021, "Deduplicating Training Data Makes
+   Language Models Better" `2107.06499`]. Duplicates → memorization
    artifacts + inflated data count.
 2. **PII redaction** — regex + NER; compliance-driven. [I: standard]
 3. **Language ID** — fasttext / lid; keep target-language fraction.
@@ -100,8 +100,8 @@ Weight decay 0.1 (params) / 0 (biases, norms, embeddings) [I].
 
 ### 3.3 Precision
 - **BF16** compute (forward + backward) + **FP32 master weights +
-  FP32 Adam state** [F: mixed-precision recipe, 1712.05855 —
-  UNVERIFIED id this session; the pattern is universally documented].
+  FP32 Adam state** [F: mixed-precision recipe, Gupta et al.
+  `1712.01192`].
 - **FP8** (Hopper+) forward/backward with FP32 master — DeepSeek-V3
   trained on H800s with FP8 [F: 2412.19437, "H800" in report]; 2×
   compute/byte vs BF16 with careful scaling [I].
@@ -228,7 +228,7 @@ DeepSeek-V3 `2412.19437` · DeepSeek-V3.2 `2512.02556` · Kimi K2
 `2507.20534` · Qwen3 `2505.09388` · Llama 3 `2407.21783` · Llama 4
 `2601.11659` · FineWeb `2406.17557` · DataComp-LM `2406.11794` ·
 DoReMi `2305.10429` · RedPajama `2411.12372` · Lee et al. dedup
-`2107.00077` · Adam `1412.6980` · AdamW `1711.05101` · MegaScale
-`2402.15627`. UNVERIFIED this session: Pile `2101.00037`, The Stack
-Mixed-Precision arXiv id, Muon arXiv id, 3D-parallelism id,
-DeepSpeed OSDI'20 arXiv id.
+`2107.06499` · Adam `1412.6980` · AdamW `1711.05101` · Mixed-precision
+`1712.01192` · MegaScale `2402.15627`. UNVERIFIED this session: Pile
+`2101.00037` (wrong candidate), The Stack, Muon (covered under Kimi
+K2 `2507.20534`), 3D-parallelism id, DeepSpeed OSDI'20 arXiv id.

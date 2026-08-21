@@ -56,6 +56,32 @@ items:
 | P2-5 | "1.58× should be 1.57×" | **REFUTED** — draft shows both 4.23/2.68 = 1.58 and 0.55/0.35 = 1.57; [E] tag self-consistent. |
 | P2-6 | "B200 FP8 = 2× H100 FP8 is 1.14×" | **REFUTED** — evaluator used the stale BF16-mislabeled table (already fixed). 4.5/1.98 = 2.27×; "≈2×" justified. |
 
+### Evaluator adjudication table (pass 3, 2026-08-21 — second full pass over final text + manual re-verification)
+A second evaluator pass was run over the *final* revised text (4
+chunks). Note: chunks 2 & 4 degenerated into repetitive loops
+("H800 SXM 989.5?" / "400 GB/s?" repeated to the token cap), so no
+usable verdict came from them — the endpoint's deepseek-v4-flash
+loops under long multi-step reasoning; the chunk-1/3 verdicts and the
+manual audit below are the operative result.
+
+**Citation audit (independent, all 52 arXiv IDs re-fetched via arXiv
+export API this pass):** 49 correct; 3 wrong IDs found and fixed —
+| Fix | Detail |
+|---|---|
+| C1 | MQA `1911.06145` (resolves to "Neutron Ghost imaging") → **`1911.02150`** "Fast Transformer Decoding: One Write-Head is All You Need" (Shazeer). |
+| C2 | mixed-precision recipe `1712.05855` (resolves to "A Berkeley View of Systems Challenges") → **`1712.01192`** "Mixed-precision training of deep neural networks using computational memory" (Gupta et al.). Was previously marked UNVERIFIED; now verified. |
+| C3 | dedup `2107.00077` (resolves to "Learning to communicate about shared procedural abstractions") → **`2107.06499`** "Deduplicating Training Data Makes Language Models Better" (Lee et al. 2021), in 3 places. |
+
+**Substantive flag from chunk-3:**
+| Flag | Verdict |
+|---|---|
+| P3-1 | ZeRO-3 "≈560 GB raw received / ~3× plain DP" vs "ZeRO paper reports 1.5×" | **ACCEPTED (convention mix-up in my draft)** — the 560 GB was a *ring wire-traffic* figure while the "1.5×" claim is a *net-data* figure; the draft mixed the two. Net-data accounting: AllGather fwd+bwd (2×140 GB) + ReduceScatter (140 GB) = **420 GB = 1.5× plain DP's 279 GB**, matching the ZeRO paper. Rewrote the ZeRO-3 comm bullet, the bottom-line block (560→420 GB, 11.2→8.4 s, 144×→107×), and the ZeRO-3 memory bullet ("~3×"→"1.5×"), keeping an explicit note that ring wire-traffic is ~2× higher (≈560 GB). |
+| P3-2 | Korthikanti activation-memory formula "not exact" | **HOLD** — the evaluator's own re-derivation stalled/truncated (couldn't settle the paper's exact constants); the draft cites the formula by reference [F: 2205.05198] and uses it for an order-of-magnitude "fits" estimate, which is the correct usage. No numeric claim was made from it in a load-bearing way. |
+
+All citations now verified: 52/52 IDs resolve to their claimed papers;
+4 remain explicitly UNVERIFIED (Pile, The Stack, 3D-parallelism
+primary paper, DeepSpeed OSDI'20) — none load-bearing.
+
 ## 2026-08-19 — Evaluation-Engineering: new first-class section (16 pages)
 - **New section: `Evaluation-Engineering/`** — LLM evaluation as a complete engineering discipline (not a benchmark chapter): `Evaluation-Fundamentals.md` (units of measurement, the eval stack, protocol spec), `Model-Evaluation.md`, `Benchmark-Design.md` (task→dataset→scorer, construct validity), `Benchmark-Contamination.md`, `Reasoning-Evaluation.md` (answer vs process, effort-level confounds), `Coding-Evaluation.md` (pass@k vs pass^k, execution oracles), `Agent-Tool-Use-Evaluation.md` (trajectories, harness effects, cost-per-success), `Context-Long-Context-Evaluation.md` (usable vs advertised length), `RAG-Evaluation.md`, `Harness-Serving-Evaluation.md` (SLOs, goodput), `Safety-Red-Teaming.md` (ASR/over-refusal), `Multimodal-Evaluation.md`, `LLM-as-a-Judge.md` (bias taxonomy, calibration), `Human-Evaluation.md` (kappa, hybrid pipelines), `Statistical-Evaluation.md` (Wilson/McNemar/bootstrap, multiple comparisons, judge agreement).
 - **Citation hygiene:** 68 distinct arXiv IDs across the section; verified this session where API reachable, two IDs left marked UNVERIFIED with an explicit note rather than mis-cited.

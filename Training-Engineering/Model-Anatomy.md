@@ -58,7 +58,7 @@ and memory traffic*, while "FFN architecture" (SwiGLU width, **MoE**) moves
 
 ### 1. Head sharing: MHA → MQA → GQA → MLA
 - **MHA** (Vaswani 2017 [F: 1706.03762]): every head owns its own K,V.
-- **MQA** (Shazeer 2019 [F: 1911.06145]): all heads share *one* K,V head.
+- **MQA** (Shazeer 2019 [F: 1911.02150]): all heads share *one* K,V head.
   KV cache shrinks by ×h (×32 for 7B) [E].
 - **GQA** (Ainslie et al. 2023 [F: 2305.13245]): `g` K,V groups; LLaMA-2
   70B uses `g=8` over 64 heads → KV shrinks ×8 vs MHA. [F: Llama 2 report]
@@ -215,7 +215,7 @@ at B=1, S=2048:
 - Vaswani et al. 2017, Attention Is All You Need — `1706.03762`
 - LLaMA — `2302.13971`; Llama 2 — `2307.09288`; Llama 3 — `2407.21783`
 - GPT-4 Technical Report — `2303.08774`
-- MQA (Shazeer) — `1911.06145`; GQA (Ainslie) — `2305.13245`
+- MQA (Shazeer) — `1911.02150`; GQA (Ainslie) — `2305.13245`
 - DeepSeek-V2 (MLA) — `2405.04434`; DeepSeek-V3 — `2412.19437`;
   DeepSeek-V3.2 (DSA) — `2512.02556`
 - Kimi K2 (MoE, MuonClip) — `2507.20534`; Qwen3 — `2505.09388`;

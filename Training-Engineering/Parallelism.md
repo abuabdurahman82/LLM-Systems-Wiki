@@ -98,16 +98,15 @@ this session]):
   [E: at n=8 = 1.5N ≈ 10 GB] — every param is AllGathered
   just-in-time for its layer's forward/backward, then
   discarded.
-- Comm: ZeRO-3 raw received-bytes ≈ **~3× plain-DP grad
-  AllReduce** [E: plain DP receives ≈2·(n−1)/n·M ≈ 280 GB at
-  70B; ZeRO-3 additionally AllGathers params in *both* fwd and
-  bwd, ≈2× the param-bytes 2·(n−1)/n·N ≈ 280 GB more, so ≈560 GB
-  total received/GPU vs 280 GB for plain DP]. Each param AllGather
-  is small and *layer-overlap-able*. The ZeRO paper's headline
-  "1.5× the DP communication volume" [F: 1910.02054] is an
-  *effective, overlap-schedule* number (AllGathers pipelined with
-  compute, and send+receive counted symmetrically), not the
-  raw-received-bytes number; my raw-bytes derivation gives ~3×.
+- Comm: ZeRO-3 ≈ **1.5× plain-DP grad AllReduce** in net received
+  data [E: plain DP receives ≈2·(n−1)/n·M ≈ 280 GB at 70B; ZeRO-3
+  additionally AllGathers params in *both* fwd and bwd, 2 × 140 GB
+  = 280 GB more, so ≈420 GB total received/GPU vs 280 GB for plain
+  DP = 1.5×]. Each param AllGather is small and *layer-overlap-able*.
+  The ZeRO paper's headline "1.5× the DP communication volume"
+  [F: 1910.02054] matches this net-data accounting. (In raw ring
+  wire-traffic terms the figure is ~2× larger, ≈560 GB, because each
+  byte traverses the ring ~(n−1) hops.)
 - **[I] Practice rule:** ZeRO-1 fits ~16B, ZeRO-2 ~24B, ZeRO-3
   ~53B on 8×80GB (ignoring activations) [E: 12N/n vs 4N+8N/n etc.];
   in practice with activations, ZeRO-3/FSDP is the workhorse for
@@ -268,23 +267,26 @@ Per step, per GPU [E: audit in `/tmp/te-research/audit.py`]:
   [I: standard 2024–26 cluster practice]
 - **ZeRO-3's comm** [E, derived + F: ZeRO paper 1910.02054]: a
   rank stores N/n_dp params, so to run a layer it AllGathers that
-  layer's full parameters — effective ring traffic ≈
-  2·(n−1)/n × N_bytes **per pass**, and fwd + bwd = 2 passes. At
-  70B (N = 70e9 params × 2 B = 140 GB): ≈ 2 × [2·(511/512)·140 GB]
-  ≈ **≈560 GB received/GPU/step raw** [E], plus a negligible
-  ReduceScatter of its grad shard. The ZeRO paper reports the
-  comm *volume* as ≈**1.5× plain DP** [F: 1910.02054, §3 comm
-  analysis — their accounting counts send+receive symmetrically
-  and overlaps the param AllGather; my raw received-bytes
-  derivation is higher]. The key difference vs plain DP is
-  *timing*: ZeRO-3's param AllGather is **layer-by-layer and
-  overlap-able with compute** (gather layer i+1 while computing
-  layer i), whereas plain DP's grad AllReduce is a bulk
-  end-of-step operation. So ZeRO-3's *effective* cost is far
-  below the raw-bytes number. [I: this is the standard
-  explanation for why ZeRO-3 + comm/compute overlap reaches 40–50%
-  MFU where un-overlapped DP can't; and why ZeRO-3 is paired with
-  TP (which shrinks N per rank before sharding) at 100B+.]
+  layer's full parameters. In net *received data* per pass, a rank
+  moves ≈ (n−1)/n × N_bytes. At 70B (N_bytes = 70e9 × 2 B = 140 GB),
+  one pass ≈ (511/512)×140 ≈ **140 GB**; fwd + bwd = 2 passes ≈ 280
+  GB, plus the end-of-step ReduceScatter of its grad shard ≈ 140 GB
+  → **≈420 GB received/GPU/step net** [E: 3 × (511/512)×140 GB].
+  That is **1.5× plain DP's 279 GB** — matching the ZeRO paper's
+  reported ≈1.5× comm-volume figure [F: 1910.02054 §3; net-data
+  accounting]. (If instead you count *ring wire-traffic* —
+  2·(n−1)/n per AllGather — the numbers are ~2× larger, ≈560 GB,
+  because each byte traverses the ring ~(n−1) hops; the net-data
+  figure above is what "how much distinct data does this GPU receive"
+  asks, and it's the one consistent with the paper's 1.5×.) The key
+  difference vs plain DP is *timing*: ZeRO-3's param AllGather is
+  **layer-by-layer and overlap-able with compute** (gather layer i+1
+  while computing layer i), whereas plain DP's grad AllReduce is a
+  bulk end-of-step operation. So ZeRO-3's *effective* cost is far
+  below the raw number. [I: this is the standard explanation for why
+  ZeRO-3 + comm/compute overlap reaches 40–50% MFU where un-overlapped
+  DP can't; and why ZeRO-3 is paired with TP (which shrinks N per rank
+  before sharding) at 100B+.]
 - **PP P2P**: S·d·2 B ≈ 67 MB per stage boundary (activation,
   not a full AllReduce) × p boundaries — small and latency-bound
   (first/last stage).
@@ -294,13 +296,13 @@ Per step, per GPU [E: audit in `/tmp/te-research/audit.py`]:
 
 **[E] Bottom line:** at 70B, DP=512, the *NVLink* side (TP) is
 ~43 GB/step ≈ 48 ms [E]; the *IB* side (DP AllReduce ≈279 GB
-effective, ZeRO-3 ≈560 GB raw, both overlap-able) is **≈5.6 s /
-≈11.2 s at 50 GB/s/GPU if un-overlapped** [E: 279e9/50e9,
-559e9/50e9]. Compute/step across all 32,768 GPUs (512×8×8) at
+effective, ZeRO-3 ≈420 GB net, both overlap-able) is **≈5.6 s /
+≈8.4 s at 50 GB/s/GPU if un-overlapped** [E: 279e9/50e9,
+420e9/50e9]. Compute/step across all 32,768 GPUs (512×8×8) at
 35% MFU is **≈0.078 s** [E: 6·70e9·(4096·512) tokens /
 (32768·989e12·0.35)]. So the *naive, un-overlapped* decomposition
-is **~72× (DP) to ~144× (ZeRO-3) slower** than compute
-[E: 5.6/0.078 ≈ 72; 11.2/0.078 ≈ 144]. Hence real runs use
+is **~72× (DP) to ~107× (ZeRO-3) slower** than compute
+[E: 5.6/0.078 ≈ 72; 8.4/0.078 ≈ 107]. Hence real runs use
 **hierarchical AllReduce + comm/compute overlap + SHARP**, which
 is exactly what pushes MFU from ~35% to ~50–55% [I: MegaScale
 reports 55.2% with full-stack overlap, F: 2402.15627]. The

@@ -132,7 +132,7 @@ Data-Constrained Language Models") formalizes this. [I]
 2. **MoE + huge over-training** (Kimi K2, DeepSeek-V3, Llama-4) —
    store more knowledge than the compute budget implies. [I]
 3. **Data engineering as a first-class budget line**: dedup (Lee et
-   al. [F: 2107.00077]), quality filtering (FineWeb [F: 2406.17557]),
+   al. [F: 2107.06499]), quality filtering (FineWeb [F: 2406.17557]),
    mixture optimization (DoReMi [F: 2305.10429]), synthetic data
    (growing 2025–26 [I: K2's "large-scale agentic task synthesis
    pipeline" is post-training; pretraining synthetic is earlier and
@@ -234,7 +234,7 @@ a bigger point.)
 - Chinchilla (Hoffmann et al. 2022) — `2203.15556` [F, verified]
 - LLaMA — `2302.13971`; Llama 3 — `2407.21783`; DeepSeek-V3 —
   `2412.19437`; Kimi K2 — `2507.20534` [all verified]
-- Dedup (Lee et al.) — `2107.00077`; FineWeb — `2406.17557`;
+- Dedup (Lee et al.) — `2107.06499`; FineWeb — `2406.17557`;
   DoReMi — `2305.10429` [verified]
 - Data-constrained scaling laws, Grokking (Narayanan et al.) —
   UNVERIFIED ids this session (do not cite until re-verified)
