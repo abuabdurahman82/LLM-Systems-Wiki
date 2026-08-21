@@ -65,8 +65,6 @@ roof (levers: Tensor Cores, better dtype, larger GEMMs); `AI < P/BW` → memory
 roof (levers: fewer bytes via quant/KV shrink, or more reuse via batching/SRAM).
 Real kernels sit **below** both roofs — the roof is a ceiling, not a promise;
 the gap is kernel quality / MFU [I].
-
-H100 SXM roofline (BF16):
 ```
  FLOP/s
  989e12 ┤                           ┌──────────────  compute roof: P

@@ -247,7 +247,7 @@ __global__ void gemmNaive(const float* A, const float* B, float* C,
 - **When.** Any GEMM with meaningful K — i.e., all real ones; cuBLAS/CUTLASS
   implement this plus the higher rungs.
 - Pseudo: block owns a T×T C tile; per k-slice: load 2 tiles → `__syncthreads()` →
-  T FMAs/thread in registers → `__syncthreads()` → next slice.
+  T FMAs/thread in registers → `__syncthreads()` → next slice (see code).
 
 ```cuda
 #define T 32
@@ -298,7 +298,6 @@ __global__ void gemmTiled(const float* A, const float* B, float* C,
 - **Profile/Improve:** `ncu` → `stalled_barrier`, shared-mem throughput; shuffles for
   in-warp levels, `atomicAdd` when blocks < ~1024, or a single-kernel reduction
   (last-block-finishes trick) to kill the second launch.
-- Pseudo: `partial = Σ chunk(i); s = block-tree(partial); out += atomic(s)`
 
 ```cuda
 __global__ void blockReduce(const float* x, float* out, int n) {
@@ -327,7 +326,6 @@ __global__ void blockReduce(const float* x, float* out, int n) {
   pass online softmax, or stash exp in shared memory; in LLMs softmax lives **inside**
   attention, where FlashAttention folds it in and never materializes S×S [F:
   arXiv:2205.14135; ../Attention/README.md].
-- Pseudo: `m = rowmax(x); l = Σ exp(x−m); y = exp(x−m)/l` (3 row-wise passes)
 
 ```cuda
 __global__ void rowSoftmax(const float* x, float* y, int d) {
@@ -357,7 +355,6 @@ __global__ void rowSoftmax(const float* x, float* y, int d) {
   hold the row in **registers** (d = 4096, block = 128 → 32 floats/thread, fits) so
   re-reads cost nothing, and fuse the residual add into the kernel (Fused-Kernels.md)
   — production engines do exactly this.
-- Pseudo: `μ=mean(x); σ²=var(x); y=(x−μ)/√(σ²+ε)*g+b` (row-wise, 2–3 passes)
 
 ```cuda
 __global__ void rowLayerNorm(const float* x, const float* g, const float* b,
@@ -389,7 +386,6 @@ __global__ void rowLayerNorm(const float* x, const float* g, const float* b,
   `y = x' + MLP(RMSNorm(x'))` [F: RMSNorm arXiv:1910.07467; LLaMA arXiv:2302.13971;
   Qwen2.5 arXiv:2412.15115] → **2L RMSNorm kernels per token** (64 at L = 32); each is
   tiny, so the real cost is launches + HBM footprint — what fusion/graphs attack.
-- Pseudo: `ss = Σ x²; rstd = 1/√(ss/d + ε); y = x * rstd * g`
 
 ```cuda
 __global__ void rowRMSNorm(const float* x, const float* g, float* y, int d) {
