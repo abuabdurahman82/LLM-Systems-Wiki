@@ -47,6 +47,7 @@
   - [Architecture](/GPU-Systems/Architecture.md)
   - [Bandwidth-vs-Compute](/GPU-Systems/Bandwidth-vs-Compute.md)
   - [CUDA-From-Zero](/GPU-Systems/CUDA-From-Zero.md)
+  - [Tensor-Cores](/GPU-Systems/Tensor-Cores.md)
   - [GEMM](/GPU-Systems/GEMM.md)
   - [Kernel-Stack](/GPU-Systems/Kernel-Stack.md)
   - [Inference-Engines](/GPU-Systems/Inference-Engines.md)

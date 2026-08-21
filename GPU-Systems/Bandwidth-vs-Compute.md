@@ -69,39 +69,39 @@ the gap is kernel quality / MFU [I].
 H100 SXM roofline (BF16):
 ```
  FLOP/s
- 989e12 ┤                          ┌─────────────  compute roof: P
+ 989e12 ┤                           ┌──────────────  compute roof: P
         │                         ╱
-        │                       ╱   ● prefill GEMM (AI ≈ 1365–2048)
-        │                      ╱      (compute roof)
-        │                    ╱
-        │         ● B ≈ 345 knee (AI = ridge)
+        │                      ╱  ● prefill GEMM (AI ≈ 1365–2048)
+        │                    ╱      (compute roof)
+        │                 ╱
+        │    ● B ≈ 345 knee (AI = ridge)
         │╱
  3.35e12┤● decode B=1 (AI ≈ 1; FLOP/s = BW × 1 = 3.35e12)
-        └────────────────────────────────── AI (FLOP/byte)
-          1             B* ≈ 295–345        295 (ridge = P/BW)
+        └───────────────────────────────── AI (FLOP/byte)
+          1              B* ≈ 295–345      295 (ridge = P/BW)
 ```
 (Memory-roof slope = HBM bandwidth; at AI = 1 the achievable rate is
 BW × 1 = 3.35e12 FLOP/s = 0.34% of peak [E: 3.35/989 = 0.0034].)
 
 ### When
 Predict which roof a new model/workload sits under before running it; pick
-kernels (large-M prefill vs skinny-M decode, `GEMM.md`); size batching
-(throughput rises with B until AI(B) hits the ridge — B*, derived in
+kernels (large-M prefill vs skinny-M decode, `GEMM.md`); size batching —
+throughput rises with B until AI(B) hits the ridge (B*, derived in
 [E3](#e3-knee-batch-b--where-decode-crosses-from-memory-to-compute)); reason
 about quantization (weight quant cuts bytes → lifts the memory roof).
 
 ### Hardware impact
 H100 SXM BF16 ridge ≈ 295 FLOP/byte [E: 989e12 ÷ 3.35e12 = 295.2]; B200 FP8
 ridge 562.5 [E above] — doubled, but decode (AI ≈ 1–4) stays far below it, so
-bandwidth still binds token generation [I]. PCIe 5.0 x16 (≈ 64 GB/s) and
-NVLink (≈ 900 GB/s) are **separate roofs** in multi-GPU systems: the fabric
-becomes the "HBM" of the parallel machine (communication-bound regime below).
+bandwidth still binds token generation [I]. PCIe 5.0 (≈ 64 GB/s) and NVLink
+(≈ 900 GB/s) are **separate roofs** in multi-GPU systems: the fabric becomes
+the "HBM" of the parallel machine (communication-bound regime below).
 
 ### Inference impact
 **TTFT** (prefill, compute roof): FP8/FP4, FlashAttention
 (../Attention/README.md), more GPUs (TP). **ITL** (decode, memory roof):
-`ITL ≈ (weight_bytes + KV_bytes)/effective_BW` → quantize, batch to B*,
-GQA/MLA, KV quant (`../KV-Cache/README.md`). Full metric mapping:
+`ITL ≈ (weight_bytes + KV_bytes)/effective_BW` → quantize, batch to B*, KV
+quant (`../KV-Cache/README.md`). Full metric mapping:
 [Inference-Optimization](../Inference/Inference-Optimization.md).
 
 ### Example
@@ -182,8 +182,7 @@ prefill levers (FP8/FP4, FlashAttention, prefix cache, TP). **ITL matters**
 (interactive chat): pay on the memory roof → decode levers (quantization,
 batching, GQA, KV quant, CUDA Graphs, spec decoding). **Serving both at
 once:** continuous batching interleaves prefill chunks with decode steps —
-the two regimes fight for the same SMs (../Inference/Continuous-Batching.md;
-`Prefill-Decode-Disaggregation.md`).
+the two regimes fight for the same SMs (../Inference/Continuous-Batching.md).
 
 ### Hardware impact
 Prefill loads the **Tensor Cores** (H100: 989 TFLOP BF16 dense); HBM traffic
@@ -208,17 +207,16 @@ into small GEMMs (draft+verify), raising AI and lifting ITL above the B=1 roof
 ### Example
 27B model, one H100 SXM [E, Python-verified]:
 - Weights: 27e9 × 2 B = 5.4e10 B = **50.3 GiB**; KV @ 8192 (GQA, h_kv=8):
-  **1.0 GiB**; total per decode step: 5.507e10 B.
-- Decode ceiling: `3.35e12 ÷ 5.507e10 = 60.8 tok/s` (weights only:
-  `3.35e12 ÷ 5.4e10 = 62.0 tok/s` — `GEMM.md` quotes ≈ 65 tok/s, a looser
+  **1.0 GiB**; total per decode step: 5.507e10 B → decode ceiling
+  `3.35e12 ÷ 5.507e10 = 60.8 tok/s` (weights only:
+  `3.35e12 ÷ 5.4e10 = 62.0 tok/s`; `GEMM.md` quotes ≈ 65 tok/s, looser
   rounding of the same ratio).
 - Prefill @ S=8192: 2·N·S = 2 × 27e9 × 8192 = 4.42e14 FLOP
   [E, `The-Life-of-a-Token.md`]; at 60% MFU of 989 TFLOP [A] →
   `4.42e14 ÷ 5.93e14 ≈ 0.75 s` of prefill work [I].
 - NVFP4 weights: 27e9 × 4.5/8 = 1.519e10 B = 14.1 GiB [E; 4.5 bits/param
-  counts block-scale overhead, matching `Roofline.md`] → ceiling
-  `3.35e12 ÷ 1.626e10 = 206 tok/s` [E] — ≈ 3.4× because bytes fell 3.4×
-  [E: 5.507e10 ÷ 1.626e10 = 3.39].
+  incl. block-scale overhead, matching `Roofline.md`] → ceiling
+  `3.35e12 ÷ 1.626e10 = 206 tok/s` [E] — ≈ 3.4× because bytes fell 3.4×.
 
 ### Failure modes
 Treating decode like prefill (or vice versa): large-M GEMM kernels at B=1, or

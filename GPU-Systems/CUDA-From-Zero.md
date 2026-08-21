@@ -77,9 +77,9 @@ tiny → you are **launch-bound**, not bandwidth-bound — the motivation for CU
 Graphs + fusion (Kernel-Life.md, Fused-Kernels.md).
 
 ### Example [E]
-vec-add over n = 10⁶, block = 256 → grid = ⌈10⁶/256⌉ = **3907 blocks**; block 3906
-runs ids 999,936..999,999 (64 live, 192 idle). 10⁶ threads = 31,250 warps ≈ 236
-warps/SM on a 132-SM H100 [E] — plenty in flight to hide HBM latency.
+vec-add over n = 10⁶, block = 256 → grid = ⌈10⁶/256⌉ = **3907 blocks** (last block:
+64 live, 192 idle); 31,250 warps ≈ 236/SM on a 132-SM H100 [E] — plenty in flight to
+hide HBM latency.
 
 ### Failure modes
 - Missing `if (i < n)` → OOB write in the last block (silent corruption).
@@ -130,7 +130,7 @@ cudaFree(x_d); cudaFree(y_d); cudaFree(z_d);
   the simplest correct model.
 - **Streams:** named FIFOs; same-stream work is ordered, different-stream work may
   **overlap** (a copy engine + SMs at once). Engines overlap KV movement with compute;
-  CUDA Graphs replay a whole stream graph in one launch (Kernel-Life.md).
+  CUDA Graphs replay a whole graph in one launch (Kernel-Life.md).
 - **Pinned host memory:** `cudaHostAlloc` pages let `cudaMemcpyAsync` DMA directly;
   pageable RAM forces a staging copy + implicit sync [F].
 
@@ -140,18 +140,16 @@ only for sampling/logits. Debug: keep host mirrors and D2H-diff against CPU.
 
 ### Hardware impact
 The copy path is the slow lane: 40 GB of weights ≈ 0.63 s over PCIe 5.0 [E: 40e9 ÷
-64e9] but ~12 ms through HBM [E: 40e9 ÷ 3.35e12]. Kernel time is HBM-dominated
-**unless** you copy every step — which you must not.
+64e9] but ~12 ms through HBM [E: 40e9 ÷ 3.35e12] — so copy at load, not per step.
 
 ### Inference impact
-Weights + KV live in HBM for the server's life, so H2D is a one-time cost; the
+Weights + KV live in HBM for the server's life → H2D is a one-time cost; the
 per-token cost is HBM reads, not PCIe (../Inference/The-Life-of-a-Token.md).
-Multi-GPU turns some "copies" into NCCL collectives over NVLink (NCCL.md).
 
 ### Example [E]
 n = 10⁶ floats: 4 MB/tensor; 3 copies = 12 MB over PCIe ≈ 0.19 ms [E: 12e6 ÷ 64e9]
-vs the kernel moving the same 12 MB in HBM ≈ 3.6 µs [E: 12e6 ÷ 3.35e12]. Same bytes,
-~50× slower per copy — load once, compute forever.
+vs the kernel moving the same 12 MB in HBM ≈ 3.6 µs [E: 12e6 ÷ 3.35e12] — same bytes,
+~50× slower per copy. Load once, compute forever.
 
 ### Failure modes
 - Host pointer in a kernel (or device pointer on host) → illegal address, crash.
@@ -160,13 +158,13 @@ vs the kernel moving the same 12 MB in HBM ≈ 3.6 µs [E: 12e6 ÷ 3.35e12]. Sam
 - No `cudaFree` → device OOM (`cudaErrorMemoryAllocation`).
 
 ### How to measure
-`nsys` timeline: copy phases vs kernel phases; gaps = sync stalls. `ncu`:
-`dram__throughput`. `nvidia-smi` / DCGM PCIe counters for copy saturation.
+`nsys` timeline (copy vs kernel phases; gaps = sync stalls), `ncu`
+(`dram__throughput`), `nvidia-smi` / DCGM PCIe counters for copy saturation.
 
 ## Eight Worked Examples
 
 Each: CPU version → GPU change → thread organization → access pattern → expected
-bottleneck → profile → improve. Floats shown for clarity; production runs BF16/FP16.
+bottleneck → profile → improve. Floats for clarity; production runs BF16/FP16.
 
 ### 1. Vector add: `z[i] = x[i] + y[i]`
 - **CPU:** one core loops i = 0..n-1, add, store; AVX does 4–8 elements/cycle.
@@ -298,8 +296,8 @@ __global__ void gemmTiled(const float* A, const float* B, float* C,
 - **Bottleneck:** not bandwidth but **tree latency + the cross-block step**; large n
   is bandwidth-bound, small n is latency-bound [I].
 - **Profile/Improve:** `ncu` → `stalled_barrier`, shared-mem throughput; shuffles for
-  in-warp levels, `atomicAdd` when blocks < ~1024, single-kernel reduction (last-block
-  finishes trick) to kill the second launch.
+  in-warp levels, `atomicAdd` when blocks < ~1024, or a single-kernel reduction
+  (last-block-finishes trick) to kill the second launch.
 - Pseudo: `partial = Σ chunk(i); s = block-tree(partial); out += atomic(s)`
 
 ```cuda
@@ -389,8 +387,8 @@ __global__ void rowLayerNorm(const float* x, const float* g, const float* b,
   step in CUDA Graphs at decode batch (Kernel-Life.md).
 - **Why it matters for LLMs:** pre-norm decoders run `x' = x + Attn(RMSNorm(x))`,
   `y = x' + MLP(RMSNorm(x'))` [F: RMSNorm arXiv:1910.07467; LLaMA arXiv:2302.13971;
-  Qwen2.5 arXiv:2412.15115] → **2L RMSNorm kernels per token** (64 at L = 32). Each is
-  tiny; the real cost is launches + HBM footprint — exactly what fusion/graphs attack.
+  Qwen2.5 arXiv:2412.15115] → **2L RMSNorm kernels per token** (64 at L = 32); each is
+  tiny, so the real cost is launches + HBM footprint — what fusion/graphs attack.
 - Pseudo: `ss = Σ x²; rstd = 1/√(ss/d + ε); y = x * rstd * g`
 
 ```cuda
@@ -420,10 +418,10 @@ four-step recipe:
    for rowwise stats (§6–8), register-resident rows, and fusion to delete round-trips
    entirely (Fused-Kernels.md).
 
-§1–3 are bandwidth-bound; §4 is where compute starts to matter (GEMM.md); §5–8 are the
-LLM glue that makes or breaks decode latency. Next pages: `./Fused-Kernels.md` (why
-§7+§8 fuse with the residual add), `./GEMM.md` (the §3→§4→Tensor-Core ladder in full),
-`./Kernel-Life.md` (what happens after `<<<`), `./Triton.md` (writing §1–§8 without C++).
+§1–3 are bandwidth-bound; §4 is where compute starts to matter; §5–8 are the LLM glue
+that makes or breaks decode latency. Next: `./Fused-Kernels.md` (§7+§8 fused with the
+residual add), `./GEMM.md` (the §3→§4→Tensor-Core ladder), `./Kernel-Life.md` (what
+happens after `<<<`), `./Triton.md` (§1–§8 without C++).
 
 ## Related
 `../Inference/The-Life-of-a-Token.md` · `../Inference/Roofline.md` · `./Architecture.md`
