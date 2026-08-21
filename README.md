@@ -141,3 +141,9 @@ On any update:
 
 ## Verified-current snapshot (2026-08-16)
 Frontier (primary sources): OpenAI GPT-5.6 series incl. "Ultrafast" Sol mode (openai.com RSS, 2026-08-13); Anthropic Claude Opus 5 (2026-07-24), Sonnet 5 (2026-06-30), plus Fable 5 / Mythos 5 tiers (anthropic.com/news); Google Gemini 3.7 Flash (Aug 2026, deepmind.google). Open-weights: Meta Muse Glimmer 30B Apache-2.0 (2026-08-10, HF blog); HuggingFace *State of Open Models: Summer 2026* (2026-08-14): Chinese-lab open model ceiling 754B–2.78T params; NVIDIA Nemotron 3 Ultra 561B; Qwen as de-facto community base model. DeepSeeK/xAI latest releases: UNVERIFIED at research time.
+
+## Contributing
+Contributions, corrections and research references are welcome.
+
+## License
+MIT License — see `LICENSE`.
