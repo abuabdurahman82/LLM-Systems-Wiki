@@ -8,6 +8,17 @@
 
 ## What's new
 - **2026-08-21 — `GPU-Systems/` section (12 pages):** a zero-to-hero GPU/CUDA/kernel engineering handbook for LLM inference — GPU architecture, bandwidth-vs-compute reasoning, CUDA from zero, GEMMs, the kernel stack, inference-engine internals, multi-GPU execution, prefill/decode disaggregation, cross-layer optimization, load balancing, and a perf-experiment template. Start at `GPU-Systems/README.md`.
+- **2026-08-20 — `Training-Engineering/` section (7 pages):** training at scale as a first-class discipline — model anatomy, pretraining recipe, scaling laws, 5-axis parallelism, 1→10k-GPU scaling, architecture↔hardware interaction; 52/52 citations verified, all [E] numbers machine-audited.
+- **2026-08-19 — `Evaluation-Engineering/` section (16 pages):** evaluation as an engineering discipline — benchmark design, contamination, reasoning/coding/agent/long-context/RAG/serving/safety/multimodal eval, LLM-as-judge, human eval, statistics.
+- **2026-08-19 — Mission extension:** new `Graph-Engineering/` section (5 pages) plus deepened `Agents/` (7 pages), `Context-Engineering/` (4 pages), and `Harness-Engineering/` (5 pages).
+- **2026-08-18 — Deep-dive: LLM router signals** — should a production router consider queue backlog, remaining work, and KV/prefix-cache state? First-principles thesis with a Python-verified routing example; three-pass adversarial review.
+- **2026-08-18 — `Post-Training/Alignment-RLHF.md`:** full SFT → reward-model → PPO-RLHF → DPO → RLAIF → RLVR lineage with the math; 16 verified primary-source citations.
+- **2026-08-18 — Inference optimization promoted into the wiki:** `Inference/Inference-Optimization.md` core page + the optimization-ladder deep-dive from the live measurement session.
+- **2026-08-17 — Deep-dive: P/D disaggregation** — quantitative break-even model, KV-transfer fabric physics (RDMA/RoCE/IB/NVLink), measurement design, deployment decision tree.
+- **2026-08-17 — Lab 13:** executed prefix-cache causal measurement — 8.7× TTFT cold→warm on an 8k identical prefix.
+- **2026-08-16 — Initial build:** 33 sections / 48 content pages, milestones timeline (1948–2026), 10 lineage maps, glossary, Zero-to-Hero + 80/20 learning paths, 12 hands-on labs.
+
+Full history: `CHANGELOG.md`.
 
 ---
 
