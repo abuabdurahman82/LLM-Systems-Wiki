@@ -45,9 +45,14 @@
   - [Agent-Workflow-Graphs](/Graph-Engineering/Agent-Workflow-Graphs.md)
 - **[GPU-Systems](/GPU-Systems/README.md)**
   - [Architecture](/GPU-Systems/Architecture.md)
+  - [Bandwidth-vs-Compute](/GPU-Systems/Bandwidth-vs-Compute.md)
+  - [CUDA-From-Zero](/GPU-Systems/CUDA-From-Zero.md)
   - [GEMM](/GPU-Systems/GEMM.md)
   - [Kernel-Stack](/GPU-Systems/Kernel-Stack.md)
   - [Inference-Engines](/GPU-Systems/Inference-Engines.md)
+  - [Multi-GPU](/GPU-Systems/Multi-GPU.md)
+  - [Prefill-Decode-Disaggregation](/GPU-Systems/Prefill-Decode-Disaggregation.md)
+  - [Cross-Layer-Optimization](/GPU-Systems/Cross-Layer-Optimization.md)
   - [Load-Balancing](/GPU-Systems/Load-Balancing.md)
   - [Perf-Experiment-Template](/GPU-Systems/Perf-Experiment-Template.md)
 - **[Hardware](/Hardware/README.md)**

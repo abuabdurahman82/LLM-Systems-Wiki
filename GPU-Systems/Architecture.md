@@ -19,7 +19,7 @@ the SM** — the scheduler switches to another ready warp; with enough warps res
 outstanding loads keep the HBM pipeline saturated, so *slow* memory *behaves* like fast
 memory. Prefill (big dense GEMMs) lives on Tensor Cores with high occupancy; decode
 (streaming weights, one token at a time) lives on latency hiding — see
-[Rooﬄine](../Inference/Roofline.md) and [The Life of a Token](../Inference/The-Life-of-a-Token.md).
+[Roofline](../Inference/Roofline.md) and [The Life of a Token](../Inference/The-Life-of-a-Token.md).
 
 ## Why Neural-Network Workloads Map to GPUs
 Two properties of LLM math fit the GPU's strengths [I]:
