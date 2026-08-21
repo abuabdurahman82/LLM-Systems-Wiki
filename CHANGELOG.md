@@ -158,7 +158,7 @@ primary paper, DeepSpeed OSDI'20) — none load-bearing.
   - **Refuted (2):** (a) "70B Regime-1 rows wrong (1.84/1.16 → 0.46/0.29)" — evaluator computed 70B prefill at TP=1; draft explicitly uses TP=4, and at TP=4 the ratios are exactly 1.84/1.16; (b) "high-affinity = same-node" — the DistServe paper's §4.2 low-node-affinity algorithm *is* the same-node NVLink one; evaluator's reverse reading is wrong. Both documented in the deep-dive's §13 adjudication table.
 - **Status:** P/D disaggregation is now a first-class, quantitatively-grounded, adversarially-reviewed topic in the wiki. Residual gaps: H1–H7 are labelled unverified experimental hypotheses; MFU/TP-eff/line-rate/RTT are stated [A] assumptions; vendor benchmarks tagged vendor-reported.
 
-## 2026-08-18 — LLM Wiki: alignment/RLHF deep-dive + citation corrections
+## 2026-08-18 — LLM Systems Wiki: alignment/RLHF deep-dive + citation corrections
 - New core page `Post-Training/Alignment-RLHF.md`: full SFT → reward-model → PPO-RLHF → DPO → RLAIF → RLVR lineage with the math (Bradley-Terry, closed-form DPO, GRPO), the 2024+ shift from human preferences to verifiable rewards, limitations (reward hacking / Goodhart, alignment tax, verifier dependence), and 16 verified primary-source citations (all arXiv IDs confirmed via API this session).
 - **Citation corrections** (verified against arXiv API, 2026-08-18):
   - `Reasoning/README.md`: Tree-of-Thoughts arXiv ID `2305.10306` → **`2305.10601`**.

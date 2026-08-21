@@ -1,4 +1,4 @@
-# LLM Wiki — A Living Encyclopedia of Large Language Models
+# LLM Systems Wiki — A Living Encyclopedia of Large Language Models
 
 > **Status:** LIVING · **LAST_UPDATED:** 2026-08-16 · **SOURCE_DATE:** 2026-08-16 · **RESEARCH_STATUS:** initial build complete; current-coverage sections verified against live sources on 2026-08-16
 >
