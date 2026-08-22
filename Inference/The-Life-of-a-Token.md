@@ -180,6 +180,8 @@ Yu et al. 2022 OSDI (Orca, iteration-level scheduling, arXiv:2211.06863) [F].
 `Transformer/README.md` · `Inference/Roofline.md` · `Inference/Inference-Optimization.md` · `KV-Cache/README.md` ·
 `Inference/Continuous-Batching.md` · `Attention/README.md`
 
+ GPU-Systems foundation (SIMT/warps, memory hierarchy, why thousands of threads hide HBM latency): `GPU-Systems/Architecture.md`.
+
 ## Key Takeaways
 1. One token's life = tokenize → embed → L×(attention+FFN) → last-position logits → sample.
 2. Prefill (compute roof) and decode (memory roof) are different problems wearing the same

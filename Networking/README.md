@@ -60,6 +60,8 @@ parallelism depth (inference).
 `Hardware/README.md` · `Distributed-Inference/README.md` ·
 `Inference/Prefill-Decode-Disaggregation.md`.
 
+ NCCL collectives + the multi-GPU/multi-node fabric detail: `GPU-Systems/NCCL.md`.
+
 ## Key Takeaways
 Network = the difference between "the model fits" and "the model runs fast." AllReduce
 wants NVLink; AllToAll wants bandwidth; KV transfer wants RDMA. Match the parallelism

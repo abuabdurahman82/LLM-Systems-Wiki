@@ -91,6 +91,8 @@ Kwon et al. 2023 (vLLM/PagedAttention, SOSP'23).
 ## Related Topics
 `The-Life-of-a-Token.md` · `Inference/Inference-Metrics.md` · `Inference/Inference-Optimization.md` · `Distributed-Inference/README.md`
 
+ GPU-Systems roofline deep-dive (achievable vs peak, decode ceiling, knee batch, roofline-for-LLM): `GPU-Systems/Bandwidth-vs-Compute.md`.
+
 ## Key Takeaways
 1. Prefill = compute roof; decode = memory roof; the ridge is where batching lives.
 2. Decode speed ≈ BW / bytes-per-token — every KV/weight byte you save is speed.

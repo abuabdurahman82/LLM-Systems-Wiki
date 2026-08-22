@@ -149,3 +149,5 @@ Common setup (assume a 24–96GB GPU):
 
 ## Related
 `Inference/Inference-Metrics.md` · `Inference/Roofline.md` · `Serving-Engines/README.md`.
+
+ The hands-on GPU-Systems lab roadmap (12 labs: roofline→GEMM→TP→serving): `GPU-Systems/Labs.md`.

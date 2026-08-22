@@ -67,6 +67,8 @@ decode speed until the compute ridge. Quantization is the cheapest "hardware upg
 ## Related
 `Inference/Roofline.md` · `Inference/The-Life-of-a-Token.md` · `Inference/Inference-Optimization.md` · `Labs/Lab-4`.
 
+ Tensor-Core precision (FP32→NVFP4) and quantized GEMMs: `GPU-Systems/Tensor-Cores.md`.
+
 ## Key Takeaways
 Quantization is a **bandwidth/capacity** tool first, a **compute** tool second. NVFP4/FP8
 are the 2025–2026 datacenter defaults; GGUF is the edge standard; W4A16 (GPTQ/AWQ) is the

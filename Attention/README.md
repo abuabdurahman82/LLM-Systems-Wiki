@@ -59,6 +59,8 @@ the literature comes from mixing these three.
 `Transformer/README.md` · `Model-Architectures/Attention-Head-Designs.md` ·
 `KV-Cache/README.md` · `Serving-Engines/` (per-engine kernel choices) · `Labs/Lab-3`.
 
+ FlashAttention on the GPU (IO-aware exact attention, FlashAttention-3 on Hopper): `GPU-Systems/FlashAttention.md`.
+
 ## Key Takeaways
 Always ask: *architecture, kernel, or memory strategy?* The question prevents most
 benchmark misreadings.

@@ -4,17 +4,17 @@ GPU-systems section. All [E] numbers Python-verified this session; crux arithmet
 shown inline. Hardware constants per `../Hardware/README.md` and NVIDIA specs.
 
 ## 30-Second Explanation
-A modern GPU has two big numbers: **peak FLOPS** (H100 SXM: 989 TFLOP BF16 dense
-[F: vendor spec]) and **HBM bandwidth** (3.35 TB/s [F: vendor spec]). Which one
+A GPU has two big numbers: **peak FLOPS** (H100 SXM: 989 TFLOP BF16 dense [F:
+vendor spec]) and **HBM bandwidth** (3.35 TB/s [F: vendor spec]). Which one
 limits a kernel is decided by one ratio — **arithmetic intensity, AI = FLOPs
 performed / bytes pulled from HBM**:
 - **Prefill** processes S prompt tokens in one parallel pass; its dense GEMMs
   `[S,d]×[d,d]` reuse every weight element S times → AI ≈ 1365–2048 at d=4096,
-  BF16 [E] ≫ the ridge (≈ 295 FLOP/byte, H100 BF16 [E]) → **compute-bound**.
+  BF16 [E] ≫ the ridge (≈ 295 FLOP/byte [E]) → **compute-bound**.
 - **Decode** emits one token at a time; every token streams the entire weight
   matrix (a 27B BF16 model ≈ 50 GiB [E]) plus its KV cache → AI ≈ 1 [E] →
   **memory-bandwidth-bound**; ceiling ≈ 62 tok/s on an H100 [E] while the
-  989-TFLOP Tensor Cores sit mostly idle waiting for data.
+  989-TFLOP Tensor Cores sit mostly idle.
 Everything reduces to four regimes — **compute-bound, memory-bandwidth-bound,
 latency-bound, communication-bound** — and every optimization (quantization,
 batching, CUDA Graphs, TP, P/D split) attacks one of them. The Roofline model
@@ -34,8 +34,8 @@ needing 1/AI bytes per FLOP cannot exceed `BW × AI` FLOP/s, nor P, so
   ([GEMM](./GEMM.md), "why GEMM performance depends on shape").
 - **Raise AI without new hardware:** batch more tokens (amortize the weight
   stream — [Continuous-Batching](../Inference/Continuous-Batching.md)), keep
-  data in SRAM/L2 via tiling ([Memory-Hierarchy](./Memory-Hierarchy.md)), fuse
-  so intermediates never round-trip HBM (`Fused-Kernels.md`).
+  data in SRAM/L2 via tiling ([Memory-Hierarchy](./Memory-Hierarchy.md)), or
+  fuse so intermediates never round-trip HBM (`Fused-Kernels.md`).
 - **Lower bytes without touching FLOPs:** quantize weights/KV
   (`../Quantization/README.md`).
 - **The ridge** of a machine: `R = P/BW`; H100 SXM BF16: `989e12 ÷ 3.35e12 =
@@ -50,7 +50,8 @@ page's numbers (H100 ridge ≈ 295, decode AI ≈ 1–4) are reused, not re-deri
 `achieved FLOP/s = min(P, BW × AI)`: P is the flat **compute roof**,
 `BW × AI` the sloping **memory roof**; the **ridge point** `AI* = P/BW`
 separates them. Origin: Williams, Waterman & Patterson, "Roofline" (ACM CACM
-2009 [F]); LLM-serving application follows Pope et al. (arXiv:2111.02534 [F]).
+2009 [F]); LLM-serving application: Yuan et al., "LLM Inference Unveiled: Survey
+and Roofline Model Insights" (arXiv:2402.16363 [F]).
 
 ### Why
 Compute and memory are sized by different economics, and the ratio drifts
@@ -62,16 +63,16 @@ roofs you'd "optimize FLOPs" for a kernel that is actually byte-starved [I].
 Count FLOPs (F = 2·M·N·K for a GEMM; `GEMM.md`) and HBM bytes (weights +
 activation in/out + KV), compute AI = F/B, locate it: `AI ≥ P/BW` → compute
 roof (levers: Tensor Cores, better dtype, larger GEMMs); `AI < P/BW` → memory
-roof (levers: fewer bytes via quant/KV shrink, or more reuse via batching/SRAM).
-Real kernels sit **below** both roofs — the roof is a ceiling, not a promise;
-the gap is kernel quality / MFU [I].
+roof (levers: fewer bytes via quant/KV shrink, more reuse via batching/SRAM).
+Real kernels sit **below** both roofs — the roof is a ceiling, not a promise
+(gap = kernel quality / MFU [I]). H100 SXM roofline (BF16):
 ```
  FLOP/s
- 989e12 ┤                           ┌──────────────  compute roof: P
-        │                         ╱
-        │                      ╱  ● prefill GEMM (AI ≈ 1365–2048)
-        │                    ╱      (compute roof)
-        │                 ╱
+ 989e12 ┤                          ┌──────────────  compute roof: P
+        │                        ╱
+        │                     ╱  ● prefill GEMM (AI ≈ 1365–2048)
+        │                   ╱      (compute roof)
+        │                ╱
         │    ● B ≈ 345 knee (AI = ridge)
         │╱
  3.35e12┤● decode B=1 (AI ≈ 1; FLOP/s = BW × 1 = 3.35e12)
@@ -84,9 +85,9 @@ BW × 1 = 3.35e12 FLOP/s = 0.34% of peak [E: 3.35/989 = 0.0034].)
 ### When
 Predict which roof a new model/workload sits under before running it; pick
 kernels (large-M prefill vs skinny-M decode, `GEMM.md`); size batching —
-throughput rises with B until AI(B) hits the ridge (B*, derived in
-[E3](#e3-knee-batch-b--where-decode-crosses-from-memory-to-compute)); reason
-about quantization (weight quant cuts bytes → lifts the memory roof).
+throughput rises with B until AI(B) hits the ridge (B*, in
+[E3](#e3-knee-batch-b--where-decode-crosses-from-memory-to-compute));
+quantize (weight quant cuts bytes → lifts the memory roof).
 
 ### Hardware impact
 H100 SXM BF16 ridge ≈ 295 FLOP/byte [E: 989e12 ÷ 3.35e12 = 295.2]; B200 FP8
@@ -110,11 +111,11 @@ GEMV on the same weights: F = 2·4096² = 33,554,432; B = 33,554,432; AI = 1.0
 ≪ 295 → memory roof.
 
 ### Failure modes
-Treating the roof as gospel — real kernels sit below it (good GEMM MFU 40–70%
-[A]); counting FLOPs without the two S·d activation moves per GEMM [I];
-one-precision peaks (FP8 peak is 2× BF16, so the ridge shifts — a quantized
-model is not automatically "on the memory roof" if P doubled too); ignoring
-the latency roof (small kernels miss *both* roofs via launch gaps).
+Treating the roof as gospel — real kernels sit below it (good GEMM MFU
+40–70% [A]); counting FLOPs without the two S·d activation moves per GEMM
+[I]; one-precision peaks (FP8 peak is 2× BF16, so the ridge shifts — a
+quantized model is not automatically "on the memory roof" if P doubled too);
+ignoring the latency roof (small kernels miss *both* roofs via launch gaps).
 
 ### How to measure it
 Nsight Compute: `dram__throughput` vs `sm__inst_executed_pipe_tensor`;
@@ -163,24 +164,23 @@ Autoregression is the root cause: position t needs positions < t, so
 generation cannot parallelize *within* a sequence, only *across* sequences
 (batching) — and serving keeps B small for latency [I]. Prefill parallelizes
 *within* the prompt (S tokens), so its GEMMs stay dense. Same weights, same
-GPU, opposite roofs: the asymmetry is a property of GEMM shape, not the model
-(`GEMM.md`).
+GPU, opposite roofs: the asymmetry is a property of GEMM shape (`GEMM.md`).
 
 ### How
 **Prefill:** one shot — embeddings → L × (attention + FFN) dense GEMMs + O(S²)
-attention → logits at the last position. **Decode:** a loop — sample →
-embedding → L × GEMV stack (streams all weights + KV) → logits → sample;
+attention → last-position logits. **Decode:** a loop — sample → embedding →
+L × GEMV stack (streams all weights + KV) → logits;
 `ITL ≈ (weight_bytes + KV_bytes)/effective_BW + overheads`. The **KV cache**
-bridges them: written once at prefill (big burst), read every decode step;
-size `2·L·B·h_kv·d_h·S·b` caps concurrency ([KV-Cache](../KV-Cache/README.md)).
+bridges them: written once at prefill, read every decode step; its size
+`2·L·B·h_kv·d_h·S·b` caps concurrency ([KV-Cache](../KV-Cache/README.md)).
 
 ### When
-**TTFT matters** (long prompts, RAG, agents): pay on the compute roof →
-prefill levers (FP8/FP4, FlashAttention, prefix cache, TP). **ITL matters**
+**TTFT matters** (long prompts, RAG): pay on the compute roof → prefill
+levers (FP8/FP4, FlashAttention, prefix cache, TP). **ITL matters**
 (interactive chat): pay on the memory roof → decode levers (quantization,
-batching, GQA, KV quant, CUDA Graphs, spec decoding). **Serving both at
-once:** continuous batching interleaves prefill chunks with decode steps —
-the two regimes fight for the same SMs (../Inference/Continuous-Batching.md).
+batching, GQA, KV quant, CUDA Graphs, spec decoding). **Serving both:**
+continuous batching interleaves prefill chunks with decode steps — the two
+regimes fight for the same SMs (../Inference/Continuous-Batching.md).
 
 ### Hardware impact
 Prefill loads the **Tensor Cores** (H100: 989 TFLOP BF16 dense); HBM traffic
@@ -188,24 +188,24 @@ Prefill loads the **Tensor Cores** (H100: 989 TFLOP BF16 dense); HBM traffic
 **HBM**: a 27B BF16 model moves ≈ 50.3 GiB per token
 [E: 27e9 × 2 B = 5.4e10 B = 50.29 GiB]; at 3.35 TB/s that is
 `5.4e10 ÷ 3.35e12 = 16.1 ms`/token → ≈ 62 tok/s ceiling [E] — 989 TFLOPS is
-essentially irrelevant at B=1 (achieved rate at AI=1 is only 3.35e12 FLOP/s
-= 0.34% of peak [E: 3.35/989 = 0.0034]). KV adds ≈ 1.0 GiB/step at 8192 ctx,
-GQA h_kv=8, BF16 [E, `The-Life-of-a-Token.md`: 2·32·8·128·8192·2 B = 1.07e9 B]
-→ total 5.507e10 B → `3.35e12 ÷ 5.507e10 = 60.8 tok/s` [E].
+irrelevant at B=1 (3.35e12 FLOP/s = 0.34% of peak [E: 3.35/989 = 0.0034]).
+KV adds ≈ 1.0 GiB/step at 8192 ctx, GQA h_kv=8, BF16
+[E, `The-Life-of-a-Token.md`: 2·32·8·128·8192·2 B = 1.07e9 B] → total
+5.507e10 B → `3.35e12 ÷ 5.507e10 = 60.8 tok/s` [E].
 
 ### Inference impact
 **Throughput** = B × per-token rate, rising with B until the knee batch B*
-(E3) — the entire economic case for batching
+(E3) — the economic case for batching
 (../Inference/Continuous-Batching.md). **P99 vs P50:** prefill interference
 inflates the decode ITL tail unless you chunk prefill or split P/D
-(../Inference/Inference-Optimization.md). **Speculative decoding** turns GEMVs
-into small GEMMs (draft+verify), raising AI and lifting ITL above the B=1 roof
+(../Inference/Inference-Optimization.md). **Speculative decoding** turns
+GEMVs into small GEMMs, raising AI above the B=1 roof
 (../Speculative-Decoding/README.md) [I].
 
 ### Example
 27B model, one H100 SXM [E, Python-verified]:
 - Weights: 27e9 × 2 B = 5.4e10 B = **50.3 GiB**; KV @ 8192 (GQA, h_kv=8):
-  **1.0 GiB**; total per decode step: 5.507e10 B → decode ceiling
+  **1.0 GiB**; total 5.507e10 B → decode ceiling
   `3.35e12 ÷ 5.507e10 = 60.8 tok/s` (weights only:
   `3.35e12 ÷ 5.4e10 = 62.0 tok/s`; `GEMM.md` quotes ≈ 65 tok/s, looser
   rounding of the same ratio).
@@ -217,14 +217,14 @@ into small GEMMs (draft+verify), raising AI and lifting ITL above the B=1 roof
   `3.35e12 ÷ 1.626e10 = 206 tok/s` [E] — ≈ 3.4× because bytes fell 3.4×.
 
 ### Failure modes
-Treating decode like prefill (or vice versa): large-M GEMM kernels at B=1, or
-compute-roof optimizations aimed at B=1. "Faster GPU = faster tokens": H100 →
-B200 lifts P from 989 TFLOP to ≈ 4.5 PFLOP FP8, but at B=1 the ceiling is
-BW ÷ bytes, so the token-rate gain is ≈ the bandwidth ratio
+Treating decode like prefill (or vice versa): large-M GEMM kernels at B=1,
+or compute-roof optimizations aimed at B=1. "Faster GPU = faster tokens":
+H100 → B200 lifts P from 989 TFLOP to ≈ 4.5 PFLOP FP8, but at B=1 the
+ceiling is BW ÷ bytes, so the token-rate gain is ≈ the bandwidth ratio
 (8/3.35 = 2.39× [E: 8e12 ÷ 5.507e10 = 145 tok/s vs 60.8]), not the FLOPS
 ratio (4.5× [E: 4.5e15 ÷ 989e12 = 4.55]) [I]. Ignoring KV growth: ITL
-degrades with context as the KV read grows. Prefill/decode contention on one
-GPU inflates P99 ITL — the classic continuous-batching failure mode.
+degrades with context as the KV read grows. Prefill/decode contention on
+one GPU inflates P99 ITL — the classic continuous-batching failure mode.
 
 ### How to measure it
 Trace one request (`Profiling.md`): prefill chunk time vs each decode step
@@ -261,8 +261,8 @@ HBM idle waiting on the network. The fabric roof: NVLink ≈ 900 GB/s vs HBM
 3.35 TB/s; PCIe 5.0 x16 ≈ 64 GB/s; IB NDR ≈ 50 GB/s/link [F: vendor specs].
 *Examples [E: arithmetic]:*
 - **TP AllReduce** at decode B=1, BF16: each AllReduce moves ≈ 2·d·b_w =
-  2·4096·2 = 16,384 B per rank (ring, N ≥ 2); 2 AllReduces/layer × 32 layers
-  = 1,048,576 B/token → NVLink `÷ 900e9 = 1.2 µs`, PCIe `÷ 64e9 = 16.4 µs`,
+  2·4096·2 = 16,384 B/rank (ring, N ≥ 2); 2 AllReduces/layer × 32 layers =
+  1,048,576 B/token → NVLink `÷ 900e9 = 1.2 µs`, PCIe `÷ 64e9 = 16.4 µs`,
   IB `÷ 50e9 = 21.0 µs`. Tax on a 16.1 ms ITL ≈ 0.01% [E:
   1.2e-6 ÷ 1.61e-2 = 0.00007] — but it happens 64×/token and serializes the
   step (`Tensor-Parallelism.md`) [I].
@@ -272,10 +272,10 @@ HBM idle waiting on the network. The fabric roof: NVLink ≈ 900 GB/s vs HBM
   routes *all* expert traffic through the fabric; hot experts contend
   (`MoE-Expert-Parallelism.md`) [I].
 - **P/D KV transfer:** 1.0 GiB KV (8192 ctx, [E]): IB NDR
-  `1.074e9 ÷ 50e9 = 21.5 ms` vs NVLink `1.074e9 ÷ 900e9 = 1.2 ms` [E] —
-  exactly the cost DistServe (arXiv:2401.09670 [F]) and Mooncake
-  (arXiv:2407.00079 [F]) engineer around; P/D split is a *communication*
-  decision, not just scheduling (`Prefill-Decode-Disaggregation.md`).
+  `1.074e9 ÷ 50e9 = 21.5 ms` vs NVLink `1.074e9 ÷ 900e9 = 1.2 ms` [E] — the
+  cost DistServe (arXiv:2401.09670 [F]) and Mooncake (arXiv:2407.00079 [F])
+  engineer around; P/D split is a *communication* decision, not just
+  scheduling (`Prefill-Decode-Disaggregation.md`).
 *Lever:* NVLink over PCIe (TP), hierarchical ring/tree collectives, colocate
 P/D on a fast fabric, RDMA/GPUDirect for KV (`Multi-Node.md`, `NCCL.md`).
 
@@ -301,10 +301,10 @@ The 27B/H100 argument [E, Python-verified]:
    ridge (E3); quantize → bytes ÷ 2 (FP8) or ÷ 3.4 (NVFP4: 50.3 → 14.1 GiB
    [E]; ceiling 62 → 206 tok/s with KV [E]).
 For **token generation** the HBM stack is the engine and the Tensor Cores the
-transmission: more TFLOPS buys prefill speed and headroom, but the decode
-ceiling is `bandwidth ÷ bytes per token`, full stop. Same arithmetic on a
-GDDR7 card (≈ 1.79 TB/s [Roofline.md]): `1.79e12 ÷ 5.507e10 ≈ 32.5 tok/s`
-(≈ 33 tok/s as quoted in `Roofline.md` [E]) — bandwidth decided it [I].
+transmission: more TFLOPS buys prefill speed, but the decode ceiling is
+`bandwidth ÷ bytes per token`, full stop. Same arithmetic on a GDDR7 card
+(≈ 1.79 TB/s [Roofline.md]): `1.79e12 ÷ 5.507e10 ≈ 32.5 tok/s` (≈ 33 tok/s
+as quoted in `Roofline.md` [E]) — bandwidth decided it [I].
 
 ## Hand-calculable examples
 *(All [E], Python-verified this session; every step shown.)*
@@ -358,16 +358,15 @@ B* = R·b_w·d / (2·(d − R·b_act))
   bytes fall on the memory roof, FLOPS rise on the compute roof.
 
 ## Related
-[Roofline](../Inference/Roofline.md) (one-page roofline; ridge examples; the
-B* numbers re-derived here) ·
+[Roofline](../Inference/Roofline.md) (one-page roofline; B* re-derived here) ·
 [The-Life-of-a-Token](../Inference/The-Life-of-a-Token.md) (op-by-op
 walkthrough; KV formula) · [GEMM](./GEMM.md) (M is the regime switch) ·
-[Memory-Hierarchy](./Memory-Hierarchy.md) (where bytes move; tiling/
-coalescing) · [Continuous-Batching](../Inference/Continuous-Batching.md)
-(operating at B*) · [Inference-Optimization](../Inference/Inference-Optimization.md)
-(TTFT/ITL → levers) · [KV-Cache](../KV-Cache/README.md) (the
-`2·L·B·h_kv·d_h·S·b` budget) · Siblings: `Kernel-Life.md` · `Fused-Kernels.md`
-· `Tensor-Parallelism.md` · `MoE-Expert-Parallelism.md` · `NCCL.md` ·
+[Memory-Hierarchy](./Memory-Hierarchy.md) (where bytes move) ·
+[Continuous-Batching](../Inference/Continuous-Batching.md) (operating at B*)
+· [Inference-Optimization](../Inference/Inference-Optimization.md) (TTFT/ITL
+→ levers) · [KV-Cache](../KV-Cache/README.md) (the `2·L·B·h_kv·d_h·S·b`
+budget) · Siblings: `Kernel-Life.md` · `Fused-Kernels.md` ·
+`Tensor-Parallelism.md` · `MoE-Expert-Parallelism.md` · `NCCL.md` ·
 `Prefill-Decode-Disaggregation.md` · `Diagnostics.md` · `Profiling.md`.
 
 ## Key Takeaways

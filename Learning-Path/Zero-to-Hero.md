@@ -107,3 +107,5 @@ See `Learning-Path/80-20-LLM-Guide.md`.
 
 ## Related
 `Labs/README.md` · `80-20-LLM-Guide.md` · `Transformer/README.md`.
+
+ The GPU-Systems zero-to-hero path (13 levels, hardware→kernel→engine→cluster): `GPU-Systems/Zero-to-Hero-Path.md`.

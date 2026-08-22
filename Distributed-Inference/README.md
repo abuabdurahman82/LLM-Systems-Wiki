@@ -74,6 +74,8 @@ the network pays for.
 `Networking/README.md` · `Inference/Prefill-Decode-Disaggregation.md` ·
 `Hardware/README.md` · `Labs/Lab-8` (TP sweep).
 
+ 11 reference distributed architectures + the parallelism decision matrix: `GPU-Systems/Distributed-Architectures.md`.
+
 ## Key Takeaways
 TP = latency (NVLink-bound). EP/CP = bandwidth (AllToAll). PP = capacity (cross-node).
 DP = scale-out (router-bound). The best stack composes them: TP intra-node, EP/PP

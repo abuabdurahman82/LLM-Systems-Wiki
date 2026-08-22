@@ -64,6 +64,8 @@ bottleneck; see `Inference/Prefill-Decode-Disaggregation.md` and `Networking/REA
 `Model-Architectures/Attention-Head-Designs.md` (GQA/MQA shrink h_kv) ·
 `Quantization/README.md` · `Labs/Lab-2` (observe KV growth).
 
+ Per-level memory hierarchy (registers→HBM→NVLink, capacity/latency/bandwidth): `GPU-Systems/Memory-Hierarchy.md`.
+
 ## Key Takeaways
 1. `2·L·B·h_kv·d_h·S·b` is the serving budget equation.
 2. Paging made it usable; prefix caching made it shared; quantization made it cheap.

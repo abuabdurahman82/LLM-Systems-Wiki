@@ -48,6 +48,8 @@ routed" design; Switch Transformer also] — a dense residual path under the spa
 `Training/README.md` (expert parallelism) · `Distributed-Inference/README.md` ·
 `Inference/Roofline.md` · `Latest-Research/README.md` (2026 MoE items).
 
+ MoE + Expert Parallelism on the GPU (AllToAll, hot experts, EP+TP): `GPU-Systems/MoE-Expert-Parallelism.md`.
+
 ## Key Takeaways
 MoE = capacity without compute, paying in memory + communication. The 2024–2026
 frontier (DeepSeek, Qwen, GPT-OSS) is MoE; the open problems are expert placement,

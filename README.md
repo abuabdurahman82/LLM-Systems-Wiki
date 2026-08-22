@@ -98,7 +98,7 @@ LLM-Wiki/
 ├── Harness-Engineering/       ← system scaffolding; model-vs-harness question
 ├── Context-Engineering/       ← prompt vs context vs harness; budgets, long-context reality, compaction, memory
 ├── Graph-Engineering/         ← KGs/GraphRAG, GNNs, reasoning-as-search, agent-workflow graphs
-├── GPU-Systems/               ← FIRST-CLASS (2026-08-21): GPU arch → CUDA kernels → memory movement → inference-engine internals; Architecture, GEMM, Kernel-Stack, Inference-Engines, Load-Balancing, perf experiment template
+├── GPU-Systems/               ← FIRST-CLASS (2026-08-21): 40-page GPU arch → CUDA kernels → memory → GEMM/Tensor-Cores → inference engines (vLLM/SGLang/TRT-LLM) → multi-GPU/distributed (TP/PP/EP/MoE/NCCL) → profiling/diagnostics → 11 reference architectures + 12 hands-on labs
 ├── RAG/                       ← full pipeline + advanced RAG (hybrid, graph, agentic, self-RAG)
 ├── Multimodal/                ← text/image/audio/video/speech/robotics strategies
 ├── Evaluation/                ← benchmark reference: families, contamination, saturation
@@ -120,6 +120,7 @@ LLM-Wiki/
 - **Zero to hero:** start `Foundations/` → `Transformer/` → `Inference/The-Life-of-a-Token.md` → `KV-Cache/` → `Training/` → `Post-Training/` → `Reasoning/` → `Agents/` → `Latest-Research/`.
 - **Agent engineer:** `Agents/Agentic-AI-Evolution.md` → `Agents/Tool-Use.md` → `Agents/Agent-Loops-and-Reasoning-Strategies.md` → `Context-Engineering/` → `Harness-Engineering/Harness-Anatomy.md` → `Agents/Coding-Agents.md` → `Graph-Engineering/`.
 - **Inference engineer:** `Inference/The-Life-of-a-Token.md` → `Inference/Roofline.md` → `Inference/Inference-Optimization.md` (what to apply FIRST, measured) → `Attention/` → `KV-Cache/` → `Serving-Engines/` → `Distributed-Inference/` → `Quantization/` → `Speculative-Decoding/`.
+- **GPU systems / infrastructure engineer:** `GPU-Systems/Architecture.md` (SIMT, warps, memory, latency-hiding) → `GPU-Systems/Bandwidth-vs-Compute.md` (the roofline + ridge) → `GPU-Systems/GEMM.md` + `Tensor-Cores.md` → `GPU-Systems/Kernel-Stack.md` → `GPU-Systems/Inference-Engines.md` + `vLLM`/`SGLang`/`TensorRT-LLM` → `GPU-Systems/Multi-GPU.md` + `Tensor-Parallelism` + `MoE-Expert-Parallelism` → `GPU-Systems/Distributed-Architectures.md` (11 topologies) → `GPU-Systems/Diagnostics.md` + `Profiling.md` → `GPU-Systems/Labs.md` (do it). Full ordered path: `GPU-Systems/Zero-to-Hero-Path.md`.
 - **Researcher:** `Research-Papers/` → `Research-Lineage/` → `Evaluation/` → `Evaluation-Engineering/` → `Latest-Research/` → open questions in each section.
 - **Evaluation engineer:** `Evaluation-Engineering/Evaluation-Fundamentals.md` → `Model-Evaluation.md` → `Benchmark-Design.md` → `Statistical-Evaluation.md` → the domain pages (`Agent-Tool-Use-Evaluation`, `RAG-Evaluation`, `Harness-Serving-Evaluation`, …) → `LLM-as-a-Judge.md` / `Human-Evaluation.md` (scorer calibration).
 

@@ -33,3 +33,6 @@ Engine choice = workload fit + ecosystem + ops, *then* measured performance. Ben
 fairness requires pinning: kernel, quant, sampling, context limit, batching config, CUDA
 graphs, prefix-cache behavior, versions (see the engine-comparison fairness checklist in
 `Labs/Lab-8`).
+
+## Related
+ Engine comparison (vLLM/SGLang/TRT-LLM matrix, no fake numbers) + the GPU-Systems engines: `GPU-Systems/Inference-Engines.md`.

@@ -50,6 +50,8 @@ fabric question. [I]
 `Networking/README.md` · `Inference/Roofline.md` · `Distributed-Inference/README.md` ·
 `Quantization/README.md`.
 
+ GPU-Systems handbook (architecture → CUDA → kernels → engines → multi-GPU): `GPU-Systems/README.md`.
+
 ## Key Takeaways
 Three numbers define an accelerator. HBM bandwidth = decode; tensor cores = prefill;
 fabric = parallelism. Generations shift all three; the roofline tells you which one your
