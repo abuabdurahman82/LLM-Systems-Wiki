@@ -33,10 +33,11 @@ token across the fleet**, which reduces *both* cost/token and energy/token
 
 ### Worked sketch (computed, illustrative)
 An H100 at ~700 W GPU TDP, 8× = 5.6 kW IT per node, × PUE 1.35 and ~$0.08/kWh:
-power is a meaningful but not dominant fraction of the fully-loaded $/GPU-hr
-computed in [scripts/economic_foundation.py](scripts/economic_foundation.py)
-(≈ $1.3–2 of the ~$4.3/hr node-implied figure depends on load/PUE/rate —
-**illustrative**).
+power works out to **≈ $0.07 / GPU-hr at full power draw — roughly 5% of the
+~$1.49/GPU-hr fully-loaded nominal** computed in
+[scripts/economic_foundation.py](scripts/economic_foundation.py). So energy is a
+real but *minority* share of the fully-loaded bill; capex + staff dominate.
+(**Illustrative** — depends on load, PUE, electricity rate.)
 
 ## Trade-offs (often in tension)
 

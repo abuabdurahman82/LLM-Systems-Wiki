@@ -8,6 +8,11 @@ serving stack and read the frontier literature critically.)
 > goodput, GPU monitoring, queueing, autoscaling, distributed-inference
 > reliability, releases, chaos/incidents, multi-region DR):
 > `Production-Operations/40-llm-sre-zero-to-hero.md` + `Production-Operations/39-llm-sre-80-20.md`.
+>
+> **Platform-economics companion:** for running a *shared* LLM platform
+> (multi-tenancy, cost, quotas, governance), a dedicated 0→10 path is in
+> `Platform-Economics/52-multi-tenant-platform-zero-to-hero.md` +
+> `Platform-Economics/51-multi-tenant-llm-platform-80-20.md`.
 
 ## LEVEL 0 — Math + Python
 - **Concepts:** linear algebra (vectors, matrices, GEMM), probability (distributions,
@@ -115,3 +120,4 @@ See `Learning-Path/80-20-LLM-Guide.md`.
 `Labs/README.md` · `80-20-LLM-Guide.md` · `Transformer/README.md`.
 
  The GPU-Systems zero-to-hero path (13 levels, hardware→kernel→engine→cluster): `GPU-Systems/Zero-to-Hero-Path.md`.
+ The Platform-Economics zero-to-hero path (10 levels, GPU-cost→model→tokens→tenant→governance→optimization): `Platform-Economics/52-multi-tenant-platform-zero-to-hero.md`.

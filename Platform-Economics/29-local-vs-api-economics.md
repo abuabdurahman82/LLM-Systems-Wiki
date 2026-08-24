@@ -36,18 +36,22 @@ $$\text{Break-even tokens} = \frac{\text{Fixed Monthly Cost}}{\text{API Cost/tok
 
 ### Worked example (computed)
 
-Using the on-prem 8×H100 model at **~$25,314/mo fixed**:
+Using the on-prem 8×H100 model at **~$8,703/mo fixed**:
 
 | API baseline | API cost/req (@1500/500) | Break-even volume |
 |---|---|---|
-| gpt-4o-mini | $0.0005 | ~**48M req/mo** |
-| GPT-4.1 | $0.0070 | ~**3.6M req/mo** |
-| gpt-5.6-sol | $0.0225 | ~**1.1M req/mo** |
+| gpt-4o-mini | $0.0005 | ~**16.6M req/mo** |
+| GPT-4.1 | $0.0070 | ~**1.2M req/mo** |
+| gpt-5.6-sol | $0.0225 | ~**0.39M req/mo** |
 
-**Reading:** against a *cheap* API you need a huge volume for local to win; against
-a *premium* API the break-even is far lower. The break-even shifts with your
-utilization: at 20% utilization local is costlier per effective unit and the
-break-even rises (you're paying the idle tax).
+**Reading:** against a *cheap* API you need a huge volume for local to win;
+against a *premium* API the break-even is far lower. Note this simple formula's
+assumptions: it treats the node's full fixed cost as the reservation regardless
+of utilization. In practice **low utilization** means you're paying the fixed
+bill for comparatively little *useful output*, so even if the request-count
+break-even is unchanged, the **effective cost per unit of delivered value** is
+worse — which is exactly why utilization is the deciding variable
+([05](05-gpu-utilization-economics.md)).
 
 ## Method & cautions [I]
 

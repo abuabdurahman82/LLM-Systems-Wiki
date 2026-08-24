@@ -44,8 +44,8 @@ where:
 
 | Utilization | Prefill $/1M | Decode $/1M |
 |---|---|---|
-| 20% | $0.20 | $0.24 |
-| 70% | $0.06 | $0.07 |
+| 20% | $0.07 | $0.08 |
+| 70% | $0.02 | $0.02 |
 
 Decode is costlier per token here *even though* its nominal rate looks high —
 reflecting its bandwidth-bound nature; the gap widens sharply for reasoning

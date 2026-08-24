@@ -171,5 +171,20 @@
 - **RTO / RPO** — time to restore / acceptable loss on disaster recovery; state (weights, prompts, indexes, eval sets) may be unrecoverable while GPUs are replaceable. → `Production-Operations/37-disaster-recovery.md`
 - **Agent budgets (step/token/time/cost/delegation)** — the harness-enforced bounds that stop runaway agents. → `Production-Operations/34-agent-sre.md`
 
+### Multi-tenant Platform Economics & Governance (2026-08-24)
+- **Tenant** — a distinct consumer with its own identity/quota/budget/policy; the accounting unit. → `Platform-Economics/01-multi-tenant-llm-platform-overview.md`
+- **Fully loaded cost** — GPU+CPU+RAM+storage+network+licenses+power+cooling+ops+software+idle+replication+availability. → `Platform-Economics/03-llm-inference-unit-economics.md`
+- **Effective $/prod GPU-hr** — annualized cost ÷ productive GPU hours; utilization-aware. → `Platform-Economics/04-capex-vs-opex-ai-platform.md`
+- **Traffic intensity ρ = λ/μ** — utilization; tail latency explodes as ρ→1. → `Platform-Economics/05-gpu-utilization-economics.md`
+- **Soft vs hard multi-tenancy** — shared-with-limits vs physically-isolated. → `Platform-Economics/02-multi-tenancy-models.md`
+- **Goodput** — useful work meeting the SLO / time; the economic numerator. → `Platform-Economics/43-goodput-economics.md`
+- **Showback vs chargeback** — report consumption vs financially allocate cost. → `Platform-Economics/14-showback-chargeback.md`
+- **Task Amplification Factor (TAF)** — model calls per agent task; 1 task → N calls. → `Platform-Economics/35-agent-economics.md`
+- **Budget-aware routing** — maximize utility (quality − cost − latency − risk) within a budget. → `Platform-Economics/22-budget-aware-routing.md`
+- **Noisy neighbor** — one tenant's burst degrading others' latency/memory/SLO. → `Platform-Economics/19-noisy-neighbor.md`
+- **Policy-as-code** — governance enforced as testable, versioned rules (OPA/Kyverno). → `Platform-Economics/27-policy-as-code.md`
+- **Reservation premium** — the cost of reserved-but-idle capacity held for an SLO. → `Platform-Economics/30-capacity-reservation.md`
+- **Cost per good request** — platform cost ÷ good (SLO-compliant, acceptable) requests. → `Platform-Economics/43-goodput-economics.md`
+
 ## Related
 Every section README.

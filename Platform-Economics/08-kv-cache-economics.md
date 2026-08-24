@@ -45,8 +45,8 @@ $$\text{Cache Value} = \text{Avoided Prefill Cost} \;-\; \text{Memory Opportunit
 
 ### Worked illustration (computed — self-hosted)
 
-- Avoided prefill at 20% util: **$0.20 / 1M cached tokens**
-- Memory opportunity cost: **$0.15 / 1M** (illustrative; the GPU memory
+- Avoided prefill at 20% util: **$0.07 / 1M cached tokens**
+- Memory opportunity cost: **$0.02 / 1M** (illustrative; the GPU memory
   otherwise usable for concurrent work)
 - Cache hit rate 0.6 → net cache value ≈ **$0.03 / 1M requests when hit**.
 

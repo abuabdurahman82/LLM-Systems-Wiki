@@ -40,14 +40,15 @@ Stricter latency SLO
 
 | ρ (safe util) | Effective $/GPU-hr | Relative to 70% |
 |---|---|---|
-| 0.50 | $8.67 | 1.40× |
-| 0.70 | $6.19 | 1.00× |
-| 0.90 | $4.82 | 0.78× |
+| 0.50 | $2.98 | 1.40× |
+| 0.70 | $2.13 | 1.00× |
+| 0.90 | $1.66 | 0.78× |
 
-With all else equal, the confidence to run at 70% vs 50% **util is worth ~40%
-of your GPU bill**. That's the "cost of reliability" in its purest (utilization)
-form, and why strict SLOs are expensive. Interactive chats with 500 ms TTFT
-targets must stay at lower ρ than batch pipelines that tolerate hours of queueing
+With all else equal, the confidence to run at 70% vs 50% utilization cuts the
+per-GPU-hour cost by **~29%** (a **1.40×** unit cost at 50% vs 70%). That's the
+"cost of reliability" in its purest (utilization) form, and why strict SLOs are
+expensive. Interactive chats with 500 ms TTFT targets must stay at lower ρ than
+batch pipelines that tolerate hours of queueing
 ([09-batching-and-economics](09-batching-and-economics.md)).
 
 ## Cost of Reliability (framework)
