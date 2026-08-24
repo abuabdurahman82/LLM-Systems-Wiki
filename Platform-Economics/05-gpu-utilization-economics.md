@@ -20,9 +20,9 @@ From [04](04-capex-vs-opex-ai-platform.md), the fully-loaded on-prem H100 fleet:
 
 | Utilization | Effective $/prod GPU-hr | Relative |
 |---|---|---|
-| 20% | $21.67 | 3.5× the 70% figure |
-| 70% | $6.19 | baseline |
-| 95% | $4.56 | 0.74× |
+| 20% | $7.45 | 3.5× the 70% figure |
+| 70% | $2.13 | baseline |
+| 95% | $1.57 | 0.74× |
 
 A platform running at 20% pays **~3.5× more per productive GPU-hour** than one
 at 70%. At low utilization you might as well have rented from a hyperscaler on

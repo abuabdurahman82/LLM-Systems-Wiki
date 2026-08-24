@@ -31,7 +31,7 @@ GPU_TDP_W        = 700
 NODE_TDP_W       = GPU_TDP_W * NODE_GPUS     # 5600 W GPU-only for 8x
 PUE              = 1.35    # illustrative data-center Power Usage Effectiveness
 ELEC_PRICE       = 0.08    # $/kWh commercial DC, illustrative
-NODE_LIFETIME_H  = 24*365  # 8760 h/yr * 3 yr = 26280 h
+HOURS_PER_YEAR   = 8760
 
 # Utilization (share of a GPU's time doing useful work)
 UTIL_LOW, UTIL_MID, UTIL_HIGH = 0.20, 0.70, 0.95
@@ -73,12 +73,11 @@ def onprem_gpu_hour(util=1.0):
     capex_per_yr     = node_capex / DEPRECIATION_YRS
     # Power (IT + cooling via PUE), per node per year
     node_avg_w       = NODE_TDP_W * 0.9                      # not full TDP always
-    kwh_per_yr       = node_avg_w/1000 * NODE_LIFETIME_H / DEPRECIATION_YRS
+    kwh_per_yr       = node_avg_w/1000 * HOURS_PER_YEAR
     power_cost_yr    = kwh_per_yr * ELEC_PRICE * PUE
     ops_support_yr   = 18000   # illustrative $/node/yr: staff, software, mgmt
     total_yr         = capex_per_yr + power_cost_yr + ops_support_yr
-    node_hours_yr    = (NODE_LIFETIME_H/DEPRECIATION_YRS)   # 8760 h/yr
-    per_gpu_hour_nom = total_yr / (NODE_GPUS * node_hours_yr)
+    per_gpu_hour_nom = total_yr / (NODE_GPUS * HOURS_PER_YEAR)
     return per_gpu_hour_nom / util    # utilization-adjusted
 
 base_onprem = onprem_gpu_hour(1.0)
@@ -180,7 +179,7 @@ print("\n" + "="*76)
 print("KV/PREFIX CACHE ROI (illustrative)")
 avoid_prefill_1m = cost_per_1m(base_onprem/UTIL_LOW)[0]
 cache_hit = 0.6
-mem_opp_cost_1m = 0.15   # $ per 1M cached tokens' memory opportunity (illustrative)
+mem_opp_cost_1m = 0.02  # $ per 1M cached tokens' memory opportunity (illustrative)
 value = cache_hit*(avoid_prefill_1m - mem_opp_cost_1m)
 print(f"  avoid prefill ${avoid_prefill_1m:.2f}/1M; cache hit {cache_hit}; "
       f"mem opp ${mem_opp_cost_1m:.2f}/1M")

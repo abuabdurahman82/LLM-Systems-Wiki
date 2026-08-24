@@ -69,13 +69,13 @@ where *productive* excludes idle, SLO-violating, and wasted time
 Using the fully-loaded on-prem H100 model from
 [03](03-llm-inference-unit-economics.md) (8×H100 node ≈ $245k/3yr + power + ops):
 
-| Utilization | Effective $/prod GPU-hr | vs nominal ($4.33 @100%) |
+| Utilization | Effective $/prod GPU-hr | vs nominal ($1.49 @100%) |
 |---|---|---|
-| 10% | **$43.35** | 10× |
-| 20% | **$21.67** | 5× |
-| 50% | **$8.67** | 2× |
-| 70% | **$6.19** | 1.4× |
-| 90% | **$4.82** | 1.1× |
+| 10% | **$14.90** | 10× |
+| 20% | **$7.45** | 5× |
+| 50% | **$2.98** | 2× |
+| 70% | **$2.13** | 1.4× |
+| 90% | **$1.66** | 1.1× |
 
 **A fleet idling at 20% utilization is costing more per productive hour than
 renting on-demand from AWS ($6.88).** Utilization is where ownership wins or

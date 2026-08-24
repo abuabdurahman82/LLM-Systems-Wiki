@@ -17,8 +17,8 @@ per useful SLO-compliant token** — see [43-goodput-economics](43-goodput-econo
 Buying an H100 buys *time*, so every other metric starts there.
 
 - **On-prem, fully loaded, ILLUSTRATIVE:** an 8×H100 node at ~$245k capex over
-  3 years, plus power/cooling/ops, works out to **≈ $4.33 / GPU-hr at 100%
-  utilization** — but **≈ $21.67/GPU-hr at 20%** and **≈ $6.19 at 70%**
+  3 years, plus power/cooling/ops, works out to **≈ $1.49 / GPU-hr at 100%
+  utilization** — but **≈ $7.45/GPU-hr at 20%** and **≈ $2.13 at 70%**
   (computed; [04-capex-vs-opex-ai-platform](04-capex-vs-opex-ai-platform.md)).
 - **Cloud on-demand, dated 2026-07/08, US:** AWS **$6.88**/GPU-hr, Azure
   **$6.98**, GCP **$11.06**, neoclouds **$2.99–3.99**, spot ~**$2.30**
@@ -51,18 +51,22 @@ and aggregate decode **25k tok/s/GPU** under continuous batching:
 
 | Utilization | $/GPU-hr (on-prem, full load) | Prefill $/1M | Decode $/1M |
 |---|---|---|---|
-| 20% | **$21.67** | $0.20 | $0.24 |
-| 70% | **$6.19** | $0.06 | $0.07 |
-| 95% | **$4.56** | $0.04 | $0.05 |
+| 20% | **$7.45** | $0.07 | $0.08 |
+| 70% | **$2.13** | $0.02 | $0.02 |
+| 95% | **$1.57** | $0.01 | $0.02 |
 
-So for a `1500 in / 500 out` request: **≈ $0.0004/req at 20% util**, **≈ $0.0001/req
-at 95%** — vs OpenAI-style APIs at the same shape: gpt-4o-mini **$0.0005/req**,
-GPT-4.1 **$0.0070/req**, gpt-5.6-sol **$0.0225/req** (dated 2026).
+So for a `1500 in / 500 out` request: **≈ $0.0001/req at 20% util**, **≈ $0.00004/req
+at 70%**, **≈ $0.00003 at 95%** — vs OpenAI-style APIs at the same shape:
+gpt-4o-mini **$0.0005/req**, GPT-4.1 **$0.0070/req**, gpt-5.6-sol **$0.0225/req**
+(dated 2026).
 
-> **[I]** Notice a subtle and honest result: **self-hosting at *low* utilization
-> is no cheaper per request than a cheap third-party API** — you pay for idle
-> capacity either way. The economic case for owning GPUs is *utilization-dependent*
-> ([05](05-gpu-utilization-economics.md), [29-local-vs-api-economics](29-local-vs-api-economics.md)).
+> **[I]** A subtle and honest result: **self-hosting is only cheaper than a
+> third-party API per request at meaningful scale.** The per-token *marginal*
+> cost is low, but you pay the node's **fixed** cost whether or not it works
+> ([04](04-capex-vs-opex-ai-platform.md)). At low utilization the idle tax
+> dominates; the economic case for owning GPUs is utilization- and
+> volume-dependent ([05](05-gpu-utilization-economics.md),
+> [29-local-vs-api-economics](29-local-vs-api-economics.md)).
 
 ## The unit-economics ladder
 
