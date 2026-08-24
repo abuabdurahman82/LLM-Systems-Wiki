@@ -1,5 +1,5 @@
 # Glossary
-`LAST_UPDATED: 2026-08-20` · Cross-linked term index. (→ page)
+`LAST_UPDATED: 2026-08-23` · Cross-linked term index. (→ page)
 
 - **LLM** — large language model; pretrained next-token model at LLM scale. → `Transformer/`
 - **Transformer** — the architecture (self-attention + FFN + residuals). → `Transformer/`
@@ -152,6 +152,24 @@
 - **Faithfulness / groundedness** — answer claims entailed by the retrieved context; the core RAG generation metric. → `Evaluation-Engineering/RAG-Evaluation.md`
 - **Usable (effective) context length** — where performance holds, not the advertised window. → `Evaluation-Engineering/Context-Long-Context-Evaluation.md`
 - **Effort level** — thinking-budget setting a number is only defined at; part of the eval protocol. → `Evaluation-Engineering/Reasoning-Evaluation.md`
+- **SLI / SLO / SLA** — measure / target / contract for reliability; for LLMs these extend beyond uptime to TTFT, TPOT, goodput, groundedness. → `Production-Operations/02-sli-slo-sla-for-llms.md`
+- **Goodput (production)** — *useful* work satisfying the SLO (+quality/cost) per unit time; the metric that beats raw throughput under latency limits. → `Production-Operations/03-goodput-vs-throughput.md`, `Inference/Inference-Metrics.md`
+- **Golden signals** — latency, traffic, errors, saturation; extended for LLMs with TTFT/TPOT, token rates, KV/queue. → `Production-Operations/04-llm-golden-signals.md`
+- **Error budget** — 100% − SLO; the planned-for failure that makes releases safe; LLMs add a *quality* error budget. → `Production-Operations/06-error-budgets-for-ai-systems.md`
+- **Utilization ρ = λ/μ** — as ρ → 1, queueing latency explodes; why 100% GPU ≠ low P99. → `Production-Operations/08-queueing-theory-for-llm-sre.md`
+- **Little's Law (L = λW)** — in-flight = arrival × latency; links utilization, queue depth, tail latency. → `Production-Operations/08-queueing-theory-for-llm-sre.md`
+- **Xid** — driver-reported GPU error to the kernel log (`NVRM: Xid`); a debugging guide, not an exact diagnosis. → `Production-Operations/10-gpu-reliability.md`
+- **DCGM / DCGM Exporter** — NVIDIA Data Center GPU Manager; Prometheus GPU telemetry. → `Production-Operations/10-gpu-reliability.md`, `Labs/08`
+- **Admission control** — decide admit/queue/reject/degrade when demand exceeds capacity; prevents catastrophic collapse. → `Production-Operations/13-overload-protection.md`
+- **Circuit breaker** — short-circuit a failing dependency (open → probe → closed) instead of hammering it. → `Production-Operations/14-retries-timeouts-circuit-breakers.md`
+- **Fallback (model/provider/region/quant/local)** — serving via an alternative that may differ in quality/latency/cost/privacy/capability; must be evaluated and tagged. → `Production-Operations/15-model-fallback-and-resilience.md`
+- **Shadow testing / canary** — run a candidate on copies of traffic (shadow) or a growing % (canary) with automatic rollback. → `Production-Operations/26-shadow-testing.md`, `27-canary-deployment.md`
+- **Chaos engineering** — safely simulate failures (replica/GPU/network/RAG/provider) with bounded blast radius + rollback. → `Production-Operations/29-chaos-engineering-for-llms.md`
+- **Incident roles** — Incident Commander, Operations, Communications, SMEs. → `Production-Operations/30-llm-incident-response.md`
+- **Runbook** — prescribed response: symptoms → impact → checks → commands → causes → mitigation → escalation → recovery → validation. → `Production-Operations/31-production-runbooks.md`
+- **Blameless postmortem** — the incident→improvement loop that fixes the system, not the person. → `Production-Operations/32-blameless-postmortems.md`
+- **RTO / RPO** — time to restore / acceptable loss on disaster recovery; state (weights, prompts, indexes, eval sets) may be unrecoverable while GPUs are replaceable. → `Production-Operations/37-disaster-recovery.md`
+- **Agent budgets (step/token/time/cost/delegation)** — the harness-enforced bounds that stop runaway agents. → `Production-Operations/34-agent-sre.md`
 
 ## Related
 Every section README.

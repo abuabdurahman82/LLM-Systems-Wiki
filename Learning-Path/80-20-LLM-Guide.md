@@ -52,5 +52,14 @@ quant: fewer bytes/token           (decode speed)
 - Safety/evals depth (injection, reward hacking, SLO design).
 - Frontier research details (MLA internals, GRPO nuances, KV-learned eviction).
 
+## The 80/20 of the OTHER half: keeping it up
+A companion 80/20 exists for *operating* (not just building) LLM systems —
+queue growth over GPU%, goodput over throughput, KV-as-resource, retry danger,
+admission control, infra-health ≠ answer-quality, everything-is-a-release:
+`Production-Operations/39-llm-sre-80-20.md`. Start there once you can run and
+serve models (`Production-Operations/40-llm-sre-zero-to-hero.md` is the levelled
+route into ops).
+
 ## Related
-`Zero-to-Hero.md` · `Inference/Roofline.md` · `Transformer/README.md`.
+`Zero-to-Hero.md` · `Inference/Roofline.md` · `Transformer/README.md` ·
+`Production-Operations/39-llm-sre-80-20.md`.

@@ -27,6 +27,7 @@ Only historically significant developments. Format: Date | Milestone | Area | Pr
 | 2026-08-10 | Meta Muse Glimmer 30B [F: HF blog 2026-08-10] | Open models | Meta Llama line paused | Dense 30B multimodal (2B ViT encoder + 28B decoder), Apache-2.0, local agentic focus, day-0 vLLM/llama.cpp/transformers | Open local-agentic models re-enter the race |
 | 2026-08-13 | OpenAI GPT-5.6 series; "Ultrafast" GPT-5.6 Sol up to 14× speed [F: openai.com RSS 2026-08-13] | Frontier/inference | — | Latency-tiered frontier (Sol/Luna tiers; speed modes) | Speed as explicit product dimension |
 | 2026-08-14 | HF State of Open Models: Summer 2026 [F: HF blog] | Open ecosystem | — | Data: Chinese-lab open ceiling 754B–2.78T params; US <130B in 5/7 months (excl. Nemotron 3 Ultra 561B); Qwen = community base model; 1.5% of repos = 99.2% of downloads | Open-weights geopolitics & distribution shape documented |
+| 2026-08-23 | `Production-Operations/` Wiki section [I, this repo] | Operations/SRE | Serving/routing documented but reliability discipline not unified | 41-page LLM Reliability, SRE & Production Ops handbook (SLI/SLO/SLA, goodput, golden signals, failure taxonomy, GPU/distributed/KV reliability, incident/runbook/postmortem discipline, DR, cost/agent/RAG SRE) + 12 labs | Operations treated as a first-class LLM-engineering discipline |
 
 ## 2026 entries (verified live against fetched primary-source pages on 2026-08-16:
 anthropic.com/news/claude-opus-5, /claude-sonnet-5, deepmind.google/discover/blog,

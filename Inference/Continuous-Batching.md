@@ -49,7 +49,8 @@ serving GPUs stay busy.
 
 ## Related
 `Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `Inference/Inference-Optimization.md` · `KV-Cache/README.md` ·
-`Serving-Engines/` · `Labs/Lab-5`.
+`Serving-Engines/` · `Labs/Lab-5` ·
+`Inference/Production-Serving/07-scheduling-inside-the-engine.md` (what the router above the engine may assume about this scheduler).
 
 ## Key Takeaways
 Continuous batching is *the* utilization unlock of modern serving; chunked prefill is the

@@ -1,7 +1,13 @@
 # Zero-to-Hero Learning Path
-`LAST_UPDATED: 2026-08-16` · Ten levels; each = concepts / papers / courses / projects /
+`LAST_UPDATED: 2026-08-23` · Ten levels; each = concepts / papers / courses / projects /
 hands-on. (Estimates assume ~10–20h/level; "hero" = can run + evaluate + extend a
 serving stack and read the frontier literature critically.)
+
+> **Ops companion:** once you can build and serve (Levels 3–6), a separate
+> levelled path covers *reliability & production operations* (SLI/SLO/SLA,
+> goodput, GPU monitoring, queueing, autoscaling, distributed-inference
+> reliability, releases, chaos/incidents, multi-region DR):
+> `Production-Operations/40-llm-sre-zero-to-hero.md` + `Production-Operations/39-llm-sre-80-20.md`.
 
 ## LEVEL 0 — Math + Python
 - **Concepts:** linear algebra (vectors, matrices, GEMM), probability (distributions,

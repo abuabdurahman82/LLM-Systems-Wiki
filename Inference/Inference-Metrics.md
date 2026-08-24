@@ -43,7 +43,8 @@ answers a different question; match the metric to the workload.
 
 ## Related
 `Inference/The-Life-of-a-Token.md` · `Inference/Roofline.md` · `Inference/Inference-Optimization.md` ·
-`../Evaluation-Engineering/Harness-Serving-Evaluation.md` (turning these metrics into SLO tests).
+`../Evaluation-Engineering/Harness-Serving-Evaluation.md` (turning these metrics into SLO tests) ·
+`Production-Serving/12-observability-and-slos.md` (wiring these metrics into the routing/scheduling control loops).
 
 ## Key Takeaways
 Match metric to workload. Report **percentiles at a fixed concurrency**, not averages.

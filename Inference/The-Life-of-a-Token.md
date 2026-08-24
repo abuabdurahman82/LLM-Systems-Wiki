@@ -178,7 +178,8 @@ Yu et al. 2022 OSDI (Orca, iteration-level scheduling, arXiv:2211.06863) [F].
 
 ## Related Topics
 `Transformer/README.md` · `Inference/Roofline.md` · `Inference/Inference-Optimization.md` · `KV-Cache/README.md` ·
-`Inference/Continuous-Batching.md` · `Attention/README.md`
+`Inference/Continuous-Batching.md` · `Attention/README.md` ·
+`Inference/Production-Serving/01-production-serving-overview.md` (what happens to the token's request *above* the engine: gateway → router → scheduler)
 
  GPU-Systems foundation (SIMT/warps, memory hierarchy, why thousands of threads hide HBM latency): `GPU-Systems/Architecture.md`.
 
