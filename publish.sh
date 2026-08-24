@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# publish.sh — validate sidebar links, then commit and push the wiki.
+# publish.sh — validate sidebar links, then commit if needed and push.
 # Usage: ./publish.sh ["commit message"]
+# Safe for cron: also pushes when the working tree is clean but main is ahead of origin.
 
 cd "$(dirname "$0")" || exit 1
 
@@ -22,18 +23,20 @@ if [ "$missing" -gt 0 ]; then
   exit 1
 fi
 
-if [ -z "$(git status -s)" ]; then
-  echo "== No changes to publish =="
-  exit 0
+if [ -n "$(git status -s)" ]; then
+  msg="${1:-Wiki update $(date '+%Y-%m-%d %H:%M')}"
+  echo "== Committing =="
+  git add -A
+  git commit -m "$msg" || exit 1
+else
+  echo "== Working tree clean =="
 fi
 
-msg="${1:-Wiki update $(date '+%Y-%m-%d %H:%M')}"
-
-echo "== Committing =="
-git add -A
-git commit -m "$msg" || exit 1
-
-echo "== Pushing =="
-git push || exit 1
-
-echo "== Published: $msg =="
+ahead=$(git rev-list --count '@{u}..HEAD' 2>/dev/null || echo 0)
+if [ "${ahead:-0}" -gt 0 ]; then
+  echo "== Pushing $ahead commit(s) =="
+  git push || exit 1
+  echo "== Published =="
+else
+  echo "== Nothing to push =="
+fi
