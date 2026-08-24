@@ -59,7 +59,7 @@ per-machine behavior F]
 | TPU v1 | 2015–18 | 92 TOPS INT8, 65,536 8-bit MACs (256×256), 28 MiB SRAM, inference-only. SHIPPED [F: arXiv:1704.04760] |
 | TPU v2 | 2017–19 | 16-bit MXU 128×128 (two per chip on some configs); training; BF16/FP16. SHIPPED [F: Google docs] |
 | TPU v3 | 2019–21 | 4× v2 compute, 1.14 TB/s ICI, 3D torus pods up to 1,024 chips. SHIPPED [F: arXiv (v3 paper, "In-Datacenter Performance Analysis of a TPU v3" — arXiv ID UNVERIFIED at authoring time; cite Google docs)] |
-| TPU v4 / v4i | 2022–23 | First **reconfigurable optical circuit switches** (Palomar) in ICI; SparseCores (embedding lookup offloaded from MXU); BF16+INT8; 4,096-chip pods. SHIPPED [F: arXiv:2304.01433] |
+| TPU v4 / v4i | 2022–23 | First **reconfigurable optical circuit switches** (Palomar) in ICI; SparseCores (embedding lookup offloaded from MXU); BF16+INT8; 4,096-chip pods; peak **275 TFLOPS (BF16 or INT8)** [F: ISCA 2023 Table, arXiv:2304.01433]. SHIPPED [F: arXiv:2304.01433] |
 | TPU v5e / v5p | 2023–24 | Split: v5e efficiency (inference/embeddings), v5p performance; v5p 3.3× v4 INT8 FLOPS, 2.2× HBM bandwidth, 8,960-chip pods at 4,800 Gbps/chip ICI in 3D torus. SHIPPED [F: Google Cloud blog 2023-12] |
 | Trillium (v6e) | 2024–25 | First 256×256 MXU; 4.7× v5e peak FLOPS at similar power; 256-chip pods; trained Gemini 2.0; 2 SparseCores/chip. SHIPPED [F: Google blog 2024-10] |
 | TPU v7 "Ironwood" | 2025–26 | Inference-focused; 4,614 TFLOPS FP8 per chip (first TPU with native FP8 at this class), 192 GB HBM, 7.2–7.4 TB/s, ICI 1.2 TB/s bidirectional; 256- or 9,216-chip pods; 42.5 ExaFLOPS FP8 at pod scale. SHIPPED/GA April 2026 [F: Google "What's new with AI Hypercomputer" + Cloud Next coverage] |

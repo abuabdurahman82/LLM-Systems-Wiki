@@ -91,8 +91,9 @@ CPU (OoO, speculative) → GPU (hardware warp scheduler, occupancy)
     → Groq (static cycle-level schedule, chip and network)
 Cerebras is off this axis: dataflow — execution is triggered by operand arrival.
 ```
-Consequences: determinism (Groq: BERT-Large latency measured within a ~75 µs band over
-24,240 runs [F: Groq public results, cited in ISCA-adjacent material]); adaptability (GPU
+Consequences: determinism (Groq: BERT-Large latency measured across 24,240 runs on 4 TSPs,
+with P99 < 1,225 µs and P100 = 1,300 µs [F: ISCA 2022 §5.4; the compiler's predicted
+latency sat within 2% of measured in most cases]); adaptability (GPU
 wins on data-dependent control flow); compiler burden (moves to the compiler as you go
 right). [I: framing]
 
