@@ -29,7 +29,10 @@ model mix dominate cost ([03](03-llm-inference-unit-economics.md),
 - $/1M tokens (in/out)
 - $/request
 - $/tenant
-- monthly platform cost
+- **monthly platform cost** — the **variable/marginal** token cost at the stated
+  sizing **and demand**, *not* the all-in fixed bill. The fixed node reservation
+  (e.g. **$8,703/mo** for an 8×H100) is shown separately via the **break-even**
+  output — the two are different sums and must not be conflated.
 - **break-even cloud/local volume** ([29-local-vs-api-economics](29-local-vs-api-economics.md))
 
 ## Scenarios

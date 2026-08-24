@@ -25,7 +25,10 @@ cd ../scripts && python3 economic_foundation.py | grep -A8 "UTILIZATION IMPACT"
 | 70% | $2.13 | 1.4× |
 | 95% | $1.57 | 1.05× |
 
-Latency (M/M/1, T_s=0.5s): P99 ≈ 5.9s @70%, 21s @90%, 44s @95%.
+Latency (M/M/1, T_s=0.5s): P99 sojourn ≈ 7.7s @70%, 23s @90%, 46s @95% (exact
+`Ts·ln(100)/(1−ρ)`; M/M/1 is an order-of-magnitude simplification for
+continuous-batched multi-GPU serving, so treat as illustrative, not an SLA
+predictor).
 
 ## Interpretation
 Cost falls with utilization, but **interactive latency SLOs cap how high you

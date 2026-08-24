@@ -204,12 +204,15 @@ print("\n" + "="*76)
 print("M/M/1 P99 WAIT vs UTILIZATION (illustrative; T_service=0.5s)")
 import math
 Ts = 0.5
+# P99 of M/M/1 SOJOURN (wait+service) time:  P(T>t)=exp(-(mu-lambda)t)=0.01
+#   -> t = ln(100)/(mu-lambda) = Ts*ln(100)/(1-rho)
+# CAVEAT: M/M/1 is a single-server, exponential-service simplification.
+# A continuous-batching, multi-GPU LLM engine differs (finite batch slots,
+# correlated arrivals, multiple servers); treat these as an order-of-magnitude
+# latency-vs-utilization illustration, not a precise SLA predictor.
 for rho in (0.20, 0.50, 0.70, 0.80, 0.90, 0.95):
-    # P99 of response time ~= (Ts/(1-rho)) * ln(100)? Use classic approx:
-    # T_p99_queue = (1/(mu - lambda)) * ln(1/(1-0.99))  -> CDF of M/M/1 wait
-    Tq_p99 = (Ts * rho / (1 - rho)) * math.log(100)   # queue wait, p99
-    T99 = Ts + Tq_p99
-    print(f"  rho={rho:.2f}: p99 response ~{T99*1000:.0f} ms")
+    T99 = Ts * math.log(100) / (1 - rho)
+    print(f"  rho={rho:.2f}: p99 sojourn ~{T99*1000:.0f} ms")
 
 # -----------------------------------------------------------------------------
 # 10. Forecasting headroom (P90 vs mean)

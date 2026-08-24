@@ -120,7 +120,9 @@ RUNNERS = {"private":scenario_private,"public":scenario_public,
 def show(d):
     print(f"  {d['scenario']:<11} util={str(d['util']):<6} "
           f"$/req={d['req'] if isinstance(d['req'],float) else d['req']} "
-          f"monthly=${d['monthly_platform']:,.0f}")
+          f"marginal $/mo={d['monthly_platform']:,.0f}  "
+          f"(variable token cost at stated sizing; EXCLUDES the fixed node "
+          f"reservation — see break-even below)")
 
 def main():
     args = sys.argv[1:]

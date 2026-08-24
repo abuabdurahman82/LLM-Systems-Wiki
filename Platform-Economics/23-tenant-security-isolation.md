@@ -20,7 +20,7 @@ the *cross-tenant* dimension.)
 | **Identity** | per-tenant authN/authZ, keys, tokens | key confusion across tenants |
 | **Network** | tenant-segmented paths (zero-trust, mTLS) | cross-tenant lateral movement |
 | **Compute** | GPU/CPU tenancy ([02-multi-tenancy-models](02-multi-tenancy-models.md)) | side-channel / resource bleed |
-| **Memory** | no cross-tenant process sharing of sensitive buffers | dump/remnant memory |
+| **Memory** | **engine-logical** isolation for soft/shared tenancy (cache + KV scoping); a hard process/GPU-memory boundary ONLY in hard-isolation tiers. No true per-tenant process boundary when tenants share one engine process on a shared GPU ([02](02-multi-tenancy-models.md)). | dump/remnant memory |
 | **Storage** | weights, datasets, checkpoints, object stores | data at rest exposure |
 | **Logs / telemetry** | who may read whose logs | cross-tenant log leakage |
 | **Vector databases (RAG)** | per-tenant namespaces/filters | RAG retrieval leaking another tenant's documents |

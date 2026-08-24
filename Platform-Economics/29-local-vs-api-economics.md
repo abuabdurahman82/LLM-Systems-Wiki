@@ -33,6 +33,12 @@ $$\text{Break-even tokens} = \frac{\text{Fixed Monthly Cost}}{\text{API Cost/tok
 - Fixed monthly cost = fully-loaded local fleet for a month (capacity held) .
 - API cost/token = the metered provider price at a given request shape.
 - Local marginal cost/token = compute-derived at a stated utilization.
+- **Effective note:** the self-host *marginal* cost (≈ $0.00003/req at 70% util,
+  [03](03-llm-inference-unit-economics.md)) is **~2–3 orders of magnitude below the
+  API cost**, so in the worked computation the `−Local Marginal` term is dropped
+  (~0) and the formula reduces to `Fixed ÷ API $/req` — what the scripts compute.
+  It only matters when your local marginal is comparable to the API price (e.g.
+  very small models + premium API), in which case do not drop it.
 
 ### Worked example (computed)
 

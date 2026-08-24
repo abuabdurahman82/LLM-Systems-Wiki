@@ -10,11 +10,11 @@ one-shot chat answer, and show the budget needed to contain it.
 ## Approach (computation)
 ```python
 calls = 27                       # planner + researchers + critic + revisions
-per_call = (1500*2.00 + 500*8.00)/1e6   # GPT-4.1-class $/req -> $0.007
+per_call = (1500*2.00 + 500*8.00)/1e6   # GPT-4.1-class $/req -> $0.007 (ILLUSTRATIVE, 2026-08)
 task_cost = calls * per_call
 TAF = calls
 print("per-call", per_call, "task", task_cost, "TAF", TAF)
-# per-call ~0.007, task ~0.19, TAF 27
+# per-call ~0.007, task ~0.19, TAF 27   (all ILLUSTRATIVE, dated 2026-08)
 ```
 
 Then set a **run budget**: metadata says a task may send at most `step_cap`

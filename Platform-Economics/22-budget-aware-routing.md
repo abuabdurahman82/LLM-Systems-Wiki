@@ -15,7 +15,10 @@ as the budget drains.
 
 ## Example (illustrative)
 
-A tenant has **$2,000 remaining** this month; a request can run on:
+A tenant has **$2,000 remaining** this month; a request can run on these
+**illustrative** per-request costs (deliberately rounded for readability — e.g.
+"local-large $0.07" ≈ a long, high-output request on a premium model; not the
+tiny 1500/500-token shape in [03](03-llm-inference-unit-economics.md)):
 
 | Option | Quality | Latency | Cost |
 |---|---|---|---|

@@ -38,17 +38,22 @@ $$\rho = \frac{\lambda}{\mu}$$
 
 where $\lambda$ is arrival rate and $\mu$ is service rate. As $\rho \to 1$
 (utilization → 100%), the average queue length and waiting time **blow up to
-infinity**. Under an M/M/1 model with a 0.5 s service time, the P99 response
-time (computed) does this:
+infinity**. Under an M/M/1 model with a 0.5 s service time, the P99 **sojourn**
+(wait + service) time (computed, `Ts·ln(100)/(1−ρ)`) does this:
 
-| ρ (utilization) | P99 response (≈) |
+| ρ (utilization) | P99 sojourn (≈) |
 |---|---|
-| 0.20 | ~1.1 s |
-| 0.50 | ~2.8 s |
-| 0.70 | ~5.9 s |
-| 0.80 | ~9.7 s |
-| 0.90 | ~21 s |
-| 0.95 | ~44 s |
+| 0.20 | ~2.9 s |
+| 0.50 | ~4.6 s |
+| 0.70 | ~7.7 s |
+| 0.80 | ~11.5 s |
+| 0.90 | ~23 s |
+| 0.95 | ~46 s |
+
+> ⚠️ **M/M/1 is a simplification** (single server, exponential service). A
+> continuous-batching, multi-GPU engine differs (finite batch slots, correlated
+> arrivals, multiple servers) — treat the table as an **order-of-magnitude
+> illustration of the ρ→latency relationship, not a precise SLA predictor**.
 
 The knee is unmistakable: **past ~70% utilization, tail latency stops being
 "a bit worse" and becomes qualitatively broken** for an interactive SLO.

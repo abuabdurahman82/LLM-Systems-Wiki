@@ -34,9 +34,11 @@ The transformer's two phases have different cost physics (full treatment in
   parallel attention. Cost scales with ~context length × layers.
 - **Decode** (output) is **memory-bandwidth-bound**: tokens are produced one at
   a time, repeatedly reading the model weights. This is why providers charge
-  **3–5× more per output token than per input token** — a reflection of the
-  real cost, not just convention. [F] OpenAI-style output/input ratios (e.g.
-  GPT-4.1 `$8/$2`, gpt-5.6-sol `$30/$5` per 1M, dated 2026) encode this.
+  **typically 3–5× more per output token than per input token** (up to ~6× on
+  some frontier reasoning models, e.g. gpt-5.6-sol `$30`/`$5` = 6×, dated 2026)
+  — a reflection of the real cost, not just convention. [F] OpenAI-style
+  output/input ratios (e.g. GPT-4.1 `$8/$2`, gpt-5.6-sol `$30/$5` per 1M, dated
+  2026) encode this.
 
 ## Cost components that a flat per-token price hides
 

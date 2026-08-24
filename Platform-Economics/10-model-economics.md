@@ -32,7 +32,8 @@ and [Distributed-Inference/](../Distributed-Inference/README.md).
 
 ## Cost per successful answer beats cost per token
 
-Two models serve the same task:
+Two models serve the same task (illustrative costs, price-date **2026-08**; reuse
+the section's computed per-request figures — see [03](03-llm-inference-unit-economics.md)):
 
 - **Model W (weak/cheap):** $0.0004/request, but succeeds only 70% of the time.
   Expected cost per *success* ≈ $0.0004 / 0.70 ≈ **$0.00057** plus the cost of
