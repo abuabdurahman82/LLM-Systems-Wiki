@@ -94,8 +94,7 @@ source, `[E]` measured, `[I]` author inference, `[A]` assumption, `UNVERIFIED`.
 Drafted by the **DeepSeek V4 Flash** agent (main model) on 2026-08-24 against
 existing Wiki conventions. Economic numbers machine-computed and audited. An
 independent evaluator review was run and adjudicated — see
-[the review record](57-economics-governance-big-picture.md) and the section of
-`CHANGELOG.md` for 2026-08-24.
+[EVALUATION.md](EVALUATION.md) and the 2026-08-24 section of `CHANGELOG.md`.
 
 ## Key takeaways
 

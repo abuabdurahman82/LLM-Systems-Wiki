@@ -193,6 +193,7 @@
   - [55 Governance anti-patterns](/Platform-Economics/55-governance-antipatterns.md)
   - [56 Open research questions](/Platform-Economics/56-open-research-questions.md)
   - [57 Big picture](/Platform-Economics/57-economics-governance-big-picture.md)
+  - [Evaluator review record](/Platform-Economics/EVALUATION.md)
   - **Labs** (15)
     - [Labs index](/Platform-Economics/Labs/README.md)
     - [Lab 1 $/1M tokens](/Platform-Economics/Labs/lab-01-cost-per-million-tokens.md)
