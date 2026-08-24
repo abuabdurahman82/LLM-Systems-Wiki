@@ -55,8 +55,14 @@ and the more important fast failure detection + restart becomes.
    rather than hang it indefinitely.
 4. **Replicate across DP** — keep data-parallel copies so losing a TP group
    doesn't lose all of a model class.
-5. **Drain-and-rebuild** — on worker loss, rebuild the group cleanly; a
-   half-dead group causes repeated retries → retry storm ([14](14-retries-timeouts-circuit-breakers.md)).
+5. **Restart the whole group, don't hot-rebuild** — NCCL collectives are
+   **process-group-scoped**: a single rank loss/hang blocks *all* pending
+   collectives in that group (including requests you'd think are elsewhere),
+   and most frameworks (vLLM, TensorRT-LLM) do **not** support clean in-place
+   hot-rebuild of a TP group. The reliable recovery is to fail the group as a
+   unit and restart the whole TP group/pod. A half-dead group that keeps getting
+   retried causes repeated retries → retry storm
+   ([14](14-retries-timeouts-circuit-breakers.md)).
 6. **Trace the request** across ranks with rank/replica ids ([23](23-llm-tracing.md)).
 
 ## Related

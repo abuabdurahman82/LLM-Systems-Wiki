@@ -40,11 +40,11 @@ for c in CONC:
                  sorted(ttft)[int(len(ttft)*0.95)]))
     print(c, "tok/s=%.0f"%rows[-1][1], "TTFT med=%.2fs"%rows[-1][2], "P95=%.2fs"%rows[-1][3])
 
-c,[ag,tt,p95]=zip(*rows)  # unpack
+c, ag, tt, p95 = zip(*rows)          # rows = [(c, tok/s, ttft_med, p95), ...]
 plt.plot(c, ag, marker='o'); plt.xlabel("concurrency"); plt.ylabel("aggregate tok/s"); plt.title("tok/s vs concurrency"); plt.savefig("lab2_tok.png")
 plt.clf()
-plt.plot(c, [tt,p95])  # illustrative
-plt.xlabel("concurrency"); plt.ylabel("TTFT s"); plt.legend(["median","P95"]); plt.title("TTFT vs concurrency"); plt.savefig("lab2_ttft.png")
+plt.plot(c, tt, 'o-', label='median'); plt.plot(c, p95, 'o-', label='P95')
+plt.xlabel("concurrency"); plt.ylabel("TTFT s"); plt.legend(); plt.title("TTFT vs concurrency"); plt.savefig("lab2_ttft.png")
 ```
 
 ## Interpretation

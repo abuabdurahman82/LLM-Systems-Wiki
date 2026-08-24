@@ -38,7 +38,7 @@ MW side streams: **DCGM Exporter** → Prometheus for GPU hardware metrics
 
 | Source | What it provides | Notes / provenance |
 |---|---|---|
-| **vLLM metrics** | server-level and per-request metrics via Prometheus endpoint | engine metrics endpoint (`[F]` vLLM docs for exact metric names) |
+| **vLLM metrics** | server-level aggregate metrics via its Prometheus endpoint (request counts, running/waiting, TTFT/iteration histograms); **per-request** breakdowns may require engine flags/extra instrumentation | `[F]` only for the default server-level endpoint; per-request = verify per version |
 | **SGLang metrics** | latency/throughput metrics via its monitoring endpoint | `[F]` SGLang docs where documented |
 | **TensorRT-LLM observability** | Triton backend metrics, per-stage timing | `[F]` TRT-LLM/Triton docs where documented; mark unverified gaps `UNVERIFIED` |
 | **DCGM (Exporter)** | GPU hardware: temp, clocks, power, memory, ECC, NVLink | `[F]` NVIDIA; exporter Prometheus on :9400 |

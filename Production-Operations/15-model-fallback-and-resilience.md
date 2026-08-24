@@ -23,6 +23,10 @@ be designed and evaluated, not just "tried when things break."
 
 ## Example chains
 
+> `[A]` illustrative example naming specific products ONLY as a generic
+> local→remote and large→small pattern; not a claim that this exact pairing was
+> tested/verified here.
+
 ```
 local Qwen
    ↓ unavailable

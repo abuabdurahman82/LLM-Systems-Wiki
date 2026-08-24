@@ -42,14 +42,15 @@ in k8s probes ([19](19-llm-health-checks.md)).
 
 ## GPU Operator
 
-The **NVIDIA GPU Operator** (`[F]` NVIDIA docs) automates the deployment of the
-GPU driver, the device plugin, the container runtime hook, DCGM/dcgm-exporter,
-and other components into Kubernetes as their own DaemonSets/StatefulSets,
-instead of requiring manual driver install per node. For an LLM SRE this means:
-GPU nodes self-provision driver + device plugin + telemetry, and `nvidia.com/gpu`
-becomes schedulable consistently. (Details/versions verified against official
-NVIDIA GPU Operator docs; treat version specifics as `[F]` only against the
-current doc.)
+The **NVIDIA GPU Operator** (`[F]` NVIDIA docs) automates GPU enablement in
+Kubernetes. Note precisely what is a k8s workload vs host-level: the **driver**
+(in DaemonSet mode), the **device plugin**, and **DCGM/dcgm-exporter** run as
+k8s DaemonSets/StatefulSets managed by the Operator; the **nvidia-container-toolkit**
+(the "container runtime hook" that lets containerd/Docker inject the GPU into
+pods) is a **host-level** component the Operator installs on each node —
+it is not itself a k8s pod. So the Operator replaces manual per-node
+driver/toolkit/plugin install, and `nvidia.com/gpu` becomes schedulable via the
+device plugin.
 
 ## Reliability practice (`[I]`)
 

@@ -33,7 +33,7 @@ per request, per tenant, per priority.
 | **Token budgets** | cap input+output tokens per request | bounds per-request work |
 | **Max prompt length** | reject/truncate over-long prompts | bounds prefill + KV |
 | **Max output length** | bound decode work | prevents runaway long outputs |
-| **Per-tenant quota** | fairness across tenants | protects everyone from one hog ([13→13-multitenancy]) |
+| **Per-tenant quota** | fairness across tenants | protects everyone from one hog (see `Inference/Production-Serving/13-multi-tenancy-fairness-priority.md`) |
 | **Priority** | serve important work first | premium / interactive > batch |
 | **Backpressure** | propagate "slow down" upstream | producer throttling |
 | **Load shedding** | drop a fraction of requests early | fail fast rather than hang |

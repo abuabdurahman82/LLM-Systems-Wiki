@@ -16,8 +16,15 @@ SLO into a domain where availability is the least informative number you have.
 | Term | Question | Example |
 |---|---|---|
 | **SLI** | What do we measure? | P95 time-to-first-token; request success rate; output-token rate |
-| **SLO** | What do we target? | P95 TTFT < 1.5 s over a 30-day window |
+| **SLO** | What do we target? | e.g. "≥ 99.5% of requests have TTFT < 1.5 s over 30 days" (standard SRE formulation: a *fraction* of requests meeting a latency bound over the window) |
 | **SLA** | What do we contractually promise? | "If monthly uptime < 99.9%, you get a service credit" |
+
+> **Percentile vs fraction (`[I]` note):** "P95 TTFT < 1.5 s" (the 95th percentile
+> of the whole distribution over the window) and "≥ 95% of requests have TTFT
+> < 1.5 s" are **not** the same SLO and can give different error budgets under
+> skewed latency. Prefer the standard SRE *fraction* formulation above for a
+> contractual SLO, and keep the percentile form for dashboard context
+> ([21](21-production-dashboard.md)).
 
 An **error budget** (the gap between 100% and the SLO) is the amount of failure
 you have *planned for*; it is what makes rolling releases and experiments safe.

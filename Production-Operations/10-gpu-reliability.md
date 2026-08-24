@@ -61,6 +61,15 @@ Examples from the official catalog (verified `[F]`):
 diagnostics. Refer to NVIDIA *GPU Debug Guidelines* / `nvidia-bug-report.sh` for
 deeper steps (`[F]` documentation recommendation).
 
+> **Catalog-version caveat (`[I]`, honest-about-drift):** the symbolic names and
+> precise catalog rows above are as listed in the **2026 NVIDIA Xid catalog**
+> (docs.nvidia.com/deploy/xid-errors/latest, fetched 2026-08-23). NVIDIA changes
+> Xid symbol names and numbers across driver generations and GPU architectures
+> (older catalogs described e.g. Xid 48 differently, and some contained-memory
+> codes are newer). Before trusting any specific Xid→meaning for *your* nodes,
+> consult the catalog for **your exact driver/R565+ version**, and treat every
+> Xid as a diagnostic starting point — never as a standalone root-cause verdict.
+
 ## The operator's toolset
 
 | Tool | What it shows | Notes |

@@ -60,8 +60,8 @@ way. LLM failures span far more than "the server is down" — many are *silent*
 
 **NETWORK**
 - NCCL timeout (collective stalls)
-- RoCE congestion (lossy/loss on RDMA fabric)
-- packet loss
+- RoCE / InfiniBand congestion causing packet loss on an RDMA fabric
+- packet loss / link drops
 
 **SCHEDULER**
 - admission mistake (admitted work that can't fit)

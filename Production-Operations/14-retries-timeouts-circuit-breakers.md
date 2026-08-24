@@ -33,7 +33,7 @@ retry traffic.
 | **Exponential backoff** | exponentially growing delay between retries (e.g. 1s→2s→4s…) |
 | **Jitter** | randomize retry timing so clients don't synchronize (thundering herd) |
 | **Retry budget** | hard cap on total retries per request unit of time |
-| **Idempotency** | ensure retries don't double-do side-effecting work (important for tools/payments, not pure reads) |
+| **Idempotency** | ensure retries don't double-do side-effecting work (important for tools/payments, not pure reads). For **streamed LLM** requests, a retry after the first token is a *fresh non-deterministic* response, not a continuation — treat it as new, never as a resume |
 | **Circuit breaker** | stop calling a failing dependency after N failures, for a cool-down, then half-open probe |
 | **Timeout hierarchy** | every stage gets its own bounded timeout, so failures are *fast* |
 
@@ -74,13 +74,20 @@ than be hammered.
 ## Operational practice (`[I]`)
 
 1. **Retry only idempotent, cheap-enough operations** and cap the retry budget.
-2. **Back off exponentially with jitter** to avoid sync and storming.
-3. **Set every timeout** in the hierarchy; add an outer bound.
-4. **Trip the breaker on systemic failure** (e.g. provider 5xx), not on one-off
+2. **Distinguish transient from capacity failures** — the most important LLM
+   distinction. Network timeouts/connection resets are *transient* (retry helps).
+   GPU OOM, KV exhaustion, and overload/429 are *capacity* failures: the
+   resource is still full on the next attempt, so retrying is almost always
+   pointless and adds load. For capacity failures the correct response is
+   **admission control / backpressure / shedding**
+   ([13](13-overload-protection.md), [12](12-kv-cache-reliability.md)), not retry.
+3. **Back off exponentially with jitter** to avoid sync and storming.
+4. **Set every timeout** in the hierarchy; add an outer bound.
+5. **Trip the breaker on systemic failure** (e.g. provider 5xx), not on one-off
    request errors.
-5. **Watch retry amplification** as a metric — a rising retry:success ratio is a
+6. **Watch retry amplification** as a metric — a rising retry:success ratio is a
    leading indicator of a brewing storm ([04](04-llm-golden-signals.md)).
-6. **Coordinate with admission control** — reject early rather than retry into
+7. **Coordinate with admission control** — reject early rather than retry into
    a collapsed system ([13](13-overload-protection.md)).
 
 ## Related

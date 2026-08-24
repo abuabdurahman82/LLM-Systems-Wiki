@@ -32,6 +32,16 @@ For a classic M/M/1 queue, mean time in system W = 1/(μ − λ) = 1/(μ(1−ρ)
 the mathematical reason an LLM platform that runs GPUs at 99% can suddenly fall
 off a latency cliff when traffic nudges up.
 
+> **Model caveat (`[I]`):** this is the *directional* lesson to take away — an
+> LLM server is **not** literally an M/M/1 queue. It is multi-resource (compute +
+> HBM + KV blocks), continuously batched, with highly variable service times and
+> scheduler preemption rather than infinite FIFO queuing. So the *exact* formula
+> and the sharp ρ→1 blow-up shape shouldn't be read as a precise prediction for
+> your engine; the durable takeaway is that near-full utilization makes waiting
+> grow steeply and non-linearly, which is why you leave headroom and watch the
+> queue. See `Inference/Production-Serving/04-queueing-theory-80-20.md` for the
+> closer-to-LLM treatment.
+
 ## Little's Law
 
 Little's Law: **L = λW** — the number of things in the system (L) equals the
@@ -41,8 +51,8 @@ Implications:
 
 | Quantity | Little's Law reading |
 |---|---|
-| GPU utilization | high ρ means high L (work resident) but *also* high W (wait) |
-| Queue depth | directly the L that users feel as TTFT/queueing delay |
+| GPU utilization | under M/M/1-style load, high ρ ⟺ high in-system L (`L = ρ/(1−ρ)` corollary) and high wait W |
+| Queue depth (waiting) | the *waiting* part L_q (`L_q ≈ ρ·L` in M/M/1); this is what users feel as queueing delay, distinct from request(s) in service |
 | Tail latency | driven by W distribution; rises steeply as ρ→1 |
 | Autoscaling | you must add capacity (raise μ) *before* ρ hits the cliff |
 | Admission control | reject (drop λ) when ρ is too high → protects W (see [13](13-overload-protection.md)) |

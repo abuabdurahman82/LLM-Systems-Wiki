@@ -53,6 +53,15 @@ formula**. The point is that a quality-degrading change is treated like any
 other error-budget-spending change: it needs an allowance, is measured, and can
 be rolled back when the allowance is spent.
 
+**Measurement cadence (`[I]`, practical):** the quality budget is only
+actionable if you can actually observe quality continuously enough to gate a
+release. In practice run the **golden set** at least per-release and on a
+schedule (e.g. nightly), and feed **sampled production traffic** through judges/
+classifiers on a tight cadence (minutes-to-hourly) so a release can't sail
+through a week before its quality regression is seen. Between eval runs the
+budget is estimated by interpolation/roll-up over the last complete scores —
+less precise, but enough to decide "safe to ship or not."
+
 ## Practical mechanics
 
 1. Compute the availability error budget over the SLO window.
