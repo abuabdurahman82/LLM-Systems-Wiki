@@ -23,6 +23,12 @@ fi
   echo "======== $(date -Is) start ========"
   cd "$WIKI" || exit 1
   git fetch origin --quiet || echo "WARN: git fetch failed"
+  # Always publish main so a checked-out feature branch cannot stall GitHub.
+  if ! git checkout -q main; then
+    echo "ERROR: could not checkout main"
+    exit 1
+  fi
+  git merge --ff-only origin/main >/dev/null 2>&1 || true
   "$WIKI/publish.sh" "Wiki auto-update $(date '+%Y-%m-%d')"
   echo "======== $(date -Is) done (exit $?) ========"
 } >> "$LOG" 2>&1
