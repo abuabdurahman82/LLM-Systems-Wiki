@@ -1,5 +1,12 @@
 # LLM Networking
-`LAST_UPDATED: 2026-08-16` · Status: core section
+`LAST_UPDATED: 2026-08-25` · Status: core section
+
+> **The full communication-stack deep-dive now lives in `../GPU-Communication/`
+> (21 pages, added 2026-08-25):** the three-branch taxonomy, NCCL (2.31.2),
+> NIXL (v1.4.0), UCCL (UC Berkeley/Davis, OSDI'26), the adjacent libraries,
+> RDMA/IB/RoCE/EFA benchmarking, troubleshooting, and the decision guide.
+> This page remains the one-page networking primer; start there, then follow
+> the cross-links below.
 
 ## 30-Second Explanation
 Distributed LLMs are **communication-bound systems**. The model is split across GPUs; every
@@ -57,10 +64,12 @@ parallelism depth (inference).
    head-of-line blocking. [I: networking practice]
 
 ## Related
-`Hardware/README.md` · `Distributed-Inference/README.md` ·
-`Inference/Prefill-Decode-Disaggregation.md`.
+`../GPU-Communication/README.md` (the full 21-page communication-stack section,
+2026-08-25) · `../Hardware/README.md` · `../Distributed-Inference/README.md` ·
+`../Inference/Prefill-Decode-Disaggregation.md`.
 
- NCCL collectives + the multi-GPU/multi-node fabric detail: `GPU-Systems/NCCL.md`.
+ NCCL collectives + the multi-GPU/multi-node fabric detail:
+`../GPU-Systems/NCCL.md` and `../GPU-Communication/04-nccl-deep-dive.md`.
 
 ## Key Takeaways
 Network = the difference between "the model fits" and "the model runs fast." AllReduce

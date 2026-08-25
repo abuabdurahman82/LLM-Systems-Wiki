@@ -391,4 +391,5 @@ independent evaluator over major changed pages → record in `../CHANGELOG.md` w
 `../Inference/Inference-Optimization.md` · `../KV-Cache/README.md` ·
 `../Attention/README.md` · `../Quantization/README.md` ·
 `../Serving-Engines/README.md` · `../Distributed-Inference/README.md` ·
-`../Networking/README.md` · `../Hardware/README.md` · `../Learning-Path/Zero-to-Hero.md`.
+`../Networking/README.md` · `../Hardware/README.md` · `../Learning-Path/Zero-to-Hero.md` ·
+`../GPU-Communication/README.md` (NCCL/NIXL/UCCL communication-stack handbook).
