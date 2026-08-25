@@ -1,5 +1,12 @@
-# Distributed Inference — Parallelism Dimensions
-`LAST_UPDATED: 2026-08-16` · Status: core page
+# Distributed Inference — Parallelism Dimensions & Cluster Platforms
+`LAST_UPDATED: 2026-08-24` · Status: core page
+
+**This section has two layers:** (1) *intra-model* parallelism dimensions (below) —
+how one model is split across GPUs; and (2) the *cluster platform* layer — how a
+fleet of engine instances is routed, scaled, and kept cache-warm: start with
+`Overview.md` (the five cluster jobs + KV-transfer physics), then `NVIDIA-Dynamo.md`
+and `llm-d.md` (deep dives), and `Dynamo-vs-llm-d.md` (head-to-head). Engine layer:
+`../Serving-Engines/Engine-Landscape.md`.
 
 ## 30-Second Explanation
 A model that doesn't fit one GPU (or needs more bandwidth than one GPU has) is split.
@@ -71,6 +78,8 @@ the network pays for.
 | EP | AllToAll | MoE dispatch | experts/GPU ÷ EP | MoE scale | fast fabric |
 
 ## Related
+`Overview.md` (cluster platforms: P/D, KV routing/transfer, routing quality) ·
+`NVIDIA-Dynamo.md` · `llm-d.md` · `Dynamo-vs-llm-d.md` ·
 `Networking/README.md` · `Inference/Prefill-Decode-Disaggregation.md` ·
 `Hardware/README.md` · `Labs/Lab-8` (TP sweep).
 

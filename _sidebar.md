@@ -51,6 +51,10 @@
   - [Context-Compaction](/Context-Engineering/Context-Compaction.md)
   - [Agent-Memory](/Context-Engineering/Agent-Memory.md)
 - **[Distributed-Inference](/Distributed-Inference/README.md)**
+  - [Overview: platforms, P/D, KV transfer](/Distributed-Inference/Overview.md)
+  - [NVIDIA Dynamo](/Distributed-Inference/NVIDIA-Dynamo.md)
+  - [llm-d](/Distributed-Inference/llm-d.md)
+  - [Dynamo vs llm-d](/Distributed-Inference/Dynamo-vs-llm-d.md)
 - **[Evaluation](/Evaluation/README.md)**
 - **[Evaluation-Engineering](/Evaluation-Engineering/README.md)**
   - [Evaluation-Fundamentals](/Evaluation-Engineering/Evaluation-Fundamentals.md)
@@ -309,6 +313,10 @@
 - **[Research-Papers](/Research-Papers/README.md)**
 - **[Safety](/Safety/README.md)**
 - **[Serving-Engines](/Serving-Engines/README.md)**
+  - [Engine Landscape (layer stack)](/Serving-Engines/Engine-Landscape.md)
+  - [Engine Mega-Comparison (7-way)](/Serving-Engines/Engine-Mega-Comparison.md)
+  - [Llama-CPP](/Serving-Engines/Llama-CPP.md)
+  - [NVIDIA NIM](/Serving-Engines/NVIDIA-NIM.md)
   - [SGLang](/Serving-Engines/SGLang.md)
   - [TensorRT-LLM](/Serving-Engines/TensorRT-LLM.md)
   - [vLLM](/Serving-Engines/vLLM.md)
