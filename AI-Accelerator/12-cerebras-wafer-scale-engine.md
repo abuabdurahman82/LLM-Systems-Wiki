@@ -73,9 +73,9 @@ contemporary GPU. The wafer was never a FLOPs machine — it is a **bandwidth ma
 ```
 44 GB SRAM in 48 kB slices inside the cores, one cycle from an FMAC.
 No HBM, no L2, no eviction policy.
-Quoted bandwidth: 21 PB/s aggregate = the SUM of 900,000 local SRAM ports.
+Quoted bandwidth (WSE-3): 21 PB/s aggregate = the SUM of 900,000 local SRAM ports; WSE-2: 20 PB/s [F: Cerebras public specs].
 ```
-That 21 PB/s is an **on-wafer aggregate, not a point-to-point link, and not comparable to an
+Those figures (20/21 PB/s for WSE-2/WSE-3) are **on-wafer aggregate, not a point-to-point link, and not comparable to an
 HBM figure** (the whole point of `03`/`17`). The honest comparison is **bytes per FLOP**:
 the wafer feeds ~1.3 bytes per dense FP16 FLOP, where a B200 gets ~0.002 from HBM [E:
 21e15/15.8e15 = 1.33; 8e12/4.5e15 = 0.0018; ratio ~748×]. On that axis every GPU/TPU is
@@ -105,7 +105,7 @@ transistor jump. The scarcest resource is the one the next node no longer buys. 
   boundaries (pipeline-parallel over Ethernet). Streaming a 70B model's ~136 GB from
   MemoryX per decoded token over ~150 GB/s would cost ~a second per token — fatal. So
   Llama-70B runs on "as few as four" CS-3s, each wafer contributing 44 GB of weight+KV and
-  ~23 kW. [E: 67.8e9×2 = 135.6 GB / ~35 GB effective per wafer ≈ 4 wafers, consistent]
+  ~23 kW. [E: 68.98e9×2 = 137.95 GB / ~35 GB effective per wafer ≈ 3.9 ≈ 4 wafers, consistent]
 
 The speeds are real and independently measured: Artificial Analysis clocked 1,850 tok/s on
 Llama 3.1 8B and 446 on 70B at the 2024 launch, 969 on Llama 405B, 2,522 on Llama 4 Maverick

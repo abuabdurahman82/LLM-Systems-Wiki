@@ -8,7 +8,7 @@ The *center of gravity* of AI engineering has moved *up the stack*: from the *ca
 ```
 card (die + HBM + VRM)          -> the silicon budget (TDP: 700–1,000 W per H100/B200 [F: NVIDIA])
   x 8                           -> the server / GroqBox / UltraServer (the scale-up domain)
-  x N                           -> the rack (the power + cooling boundary: ~120–165 kW/rack for DGX-H100-class [E: p24])
+  x N                           -> the rack (the power + cooling boundary: ~41 kW/rack for DGX-H100-class (4 systems × 10.2 kW) [F: NVIDIA]; newer GB200 NVL72 racks are ~120 kW-class [F: NVIDIA])
   x M                           -> the pod / supercomputer (the scale-up fabric's limit: 4,096–10,440 chips)
   x P                           -> the AI factory (the power budget: 100 MW–10 GW [F: press])
 ```
@@ -31,13 +31,13 @@ card (die + HBM + VRM)          -> the silicon budget (TDP: 700–1,000 W per H1
 *The* *rack* *is where* *power* *and* *cooling* *become the* *constraint:
 | System | Chips per rack [F/I] | Power per rack | Cooling |
 |---|---|---|---|
-| DGX H100 rack (12–16 systems) [I] | ~96–128 H100 | ~120–165 kW [E: 10.2 kW/system] | liquid (front-door) / air (rear) [I] |
+| DGX H100 rack (4 systems, NVIDIA-recommended) [F: NVIDIA] | 32 H100 | ~40.8 kW [E: 4 × 10.2 kW] | liquid (front-door) / air (rear) [I] |
 | Groq rack (ISCA 2022) | 72 TSP [F: ISCA 2022] | not stated (UNVERIFIED) | liquid [I] |
 | Trn2 rack | 64–128 chips [I] | not public (UNVERIFIED) | liquid [I] |
 
 *The* *Groq* *ISCA* *2022* *spec* *gives* *the* *rack* *count* *directly: 145 racks × 72 TSP = 10,440 TSP* [F: ISCA 2022] — *the* *rack* *is a* *first-class* *unit* *in the* *paper's* *topology* *spec. *The* *power* *per rack* *is not stated* *in the* *paper* *I* *verified* (UNVERIFIED), *but* the *2020* *deck* *gives a* *3.3 kW/GroqBox* *figure for the* *8-TSP node* [F: 2020 workshop] *— at* *that* *number, *a* *72-TSP rack is* *~29.7 kW plus* *the* *fabric/switch* *overhead* [E] (*a* *useful order-of-magnitude* *anchor, *not a* *spec).
 
-*The* *first-principles* *read:* **the* *rack* *is the* *power* *boundary.* *A* *100 kW rack* *is a* *~100* *unit* *of the* *AI factory's* *power* *budget; the* *card's* *TDP* *(700–1,000 W)* *matters* *only* *as* *the* *input* *to* the *rack's* *power* *design* [I]. *This* *is* *why* *the* *vendors' 2025–26* *announcements* *(AMD* *6 GW* *OpenAI/Meta* *clusters, *page 11) *are stated* *in GW, *not in* *TFLOPS: the* *binding* *constraint has* *moved up* *to the* *grid.*
+*The* *first-principles* *read:* **the* *rack* *is the* *power* *boundary.* *A* *100 kW rack* *is a* *~100-kW* *unit* *of the* *AI factory's* *power* *budget; the* *card's* *TDP* *(700–1,000 W)* *matters* *only* *as* *the* *input* *to* the *rack's* *power* *design* [I]. *This* *is* *why* *the* *vendors' 2025–26* *announcements* *(AMD* *6 GW* *OpenAI/Meta* *clusters, *page 11) *are stated* *in GW, *not in* *TFLOPS: the* *binding* *constraint has* *moved up* *to the* *grid.*
 
 ## Rack → Pod (the scale-up fabric's limit)
 *The* *pod* *is* *the* *largest N* *that the scale-up fabric* *reaches without a* *scale-out* *hop:
@@ -48,10 +48,10 @@ card (die + HBM + VRM)          -> the silicon budget (TDP: 700–1,000 W per H1
 | Google Ironwood | 9,216 chips [F: p10] | ICI [F] |
 | Google TPU v8 | 9,600-chip superpod [F: p10] | Boardfly [F] |
 | Cerebras CS-3 | 1–4 wafers (RealScale) [F: p12] | on-wafer + RealScale [F] |
-| Groq | 264 TSP (33-node Dragonfly, full connectivity) [F: ISCA 2022]; 10,440 max [F] | scheduled Dragonfly [F] |
+| Groq | 264 TSP (33-node Dragonfly [F: ISCA 2022]); 10,440 max [F] | scheduled Dragonfly [F] |
 | AWS Trn2 | 64 chips (UltraServer) [F: p13] | NeuronLink torus [F] |
 
-*The* *first-principles* *read:* **the* *pod* *defines* *the* *largest model* *that* *behaves* *like* *one* *machine* (page 15, *axis 4). *A* *70B* *model* *at* *FP16* *(135.6 GB)* *fits* *in* *an* *8×H100* *server* *with* *room* *for KV; *a* *400B* *model* *at* *FP8* *(~400 GB)* *needs* *a* *pod, *not* *a* *server* [E]. *The* *pod* *size* *is* *the* *model* *size* *ceiling* *for* *"one machine."
+*The* *first-principles* *read:* **the* *pod* *defines* *the* *largest model* *that* *behaves* *like* *one* *machine* (page 15, *axis 4). *A* *Llama-2-70B* *model* *at* *FP16* *(68.98B params → 137.95 GB [F: p29])* *fits* *in* *an* *8×H100* *server* *(640 GB HBM)* *with* *room* *for KV; *a* *400B* *model* *at* *FP8* *(~400 GB)* *also* *fits* *in* *one* *server's* *640 GB,* *leaving* *~240 GB* *for* *KV* *and* *activations* *before* *a* *pod* *is* *needed* [E]. *The* *pod* *size* *is* *the* *model* *size* *ceiling* *for* *"one machine."
 
 ## Pod → AI factory (the power budget is the spec)
 *The* *factory* *level* *is where* *the* *GW* *number* *is the* *spec. *The* *verified* *anchors:
@@ -66,7 +66,7 @@ card (die + HBM + VRM)          -> the silicon budget (TDP: 700–1,000 W per H1
 |---|---|---|
 | Card | die + HBM (TDP 700–1,000 W [F]) | the per-chip peak, the SRAM/HBM size |
 | Server | the scale-up fabric (NVLink/ICI/NeuronLink/C2C) | the largest model that behaves like one machine (8–64 chips) |
-| Rack | power + cooling (DGX-H100-class ~120–165 kW/rack [E]; Groq-class ~30 kW [E]) | the number of servers, the cooling architecture |
+| Rack | power + cooling (DGX-H100-class ~41 kW/rack [F: NVIDIA]; Groq-class ~30 kW [E]) | the number of servers, the cooling architecture |
 | Pod | the fabric's topology limit (72–10,440 chips [F]) | the largest single-machine model |
 | AI factory | grid power (100 MW–10 GW [F]) | the total compute, the $/token at scale |
 

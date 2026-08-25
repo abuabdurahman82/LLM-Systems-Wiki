@@ -26,13 +26,13 @@
 | TPU v5p: ~459 TFLOPS BF16/chip, 95 GB HBM | Google Cloud announcement 2023-12 (secondary) | **UNVERIFIED against primary** [UNVERIFIED] | p10, p15, p21 |
 | TPU v7 Ironwood: 4,614 TFLOPS FP8/chip, 192 GB HBM, 7.2–7.4 TB/s, 9,216-chip pods, 42.5 ExaFLOPS FP8 | Google "What's new with AI Hypercomputer" + Cloud Next 2025 coverage | **Confirmed (Google announcement)** [F: Google] | p10, p21 |
 | TPU v8: 8t (9,600 chips, 121 ExaFLOPS FP4) / 8i (1,024 chips, Boardfly) | The anchor's own description; Google TPU docs | **UNVERIFIED against primary** [UNVERIFIED] | p10, p26 |
-| AWS Trainium2: 158/316 TFLOPS cFP8 dense/sparse, 96 GiB @ 2.9 TB/s; 64-chip UltraServer at 1.28 TB/s/chip, 83 PetaFLOPS FP8 / 6 TB HBM | AWS Neuron docs; the anchor's own Torus description | **Confirmed** [F: AWS] | p13, p21, p23 |
+| AWS Trainium2: ~1.3 PF/chip dense FP8 (= 8 × 158 core-level cFP8), 96 GiB @ 2.9 TB/s; 64-chip UltraServer = 83.2 PF dense FP8 / 6 TB HBM (the anchor's "158/316 per chip" is the per-core pairing, mis-scaled) | AWS Neuron docs = the anchor's own source | **Confirmed** [F: AWS], with the per-core vs per-chip correction documented | p13, p21, p23 |
 | AWS Trainium3: 144-chip UltraServer, 362 PetaFLOPS FP8, 20.7 TB HBM3e, NeuronSwitch-v1 | AWS Neuron docs; the anchor's description | **Confirmed** [F: AWS] | p13 |
 | AMD MI300X: ~1,307 TFLOPS FP16/BF16 dense/package, 192 GB HBM3 @ 5.3 TB/s, 304 CUs, 256 MB Infinity Cache | AMD MI300X spec; the anchor's own CU-count figure | **Confirmed** [F: AMD spec] | p11, p21, p23 |
 | AMD 6 GW: OpenAI + Meta clusters | press coverage (Oct 2025 / Feb 2026) | **Confirmed** [F: press] | p11, p24 |
 | AMD Helios: 72-GPU rack, 31 TB HBM4, 1.4 PB/s HBM BW, 2.9 ExaFLOPS FP4, 1.4 ExaFLOPS FP8, 260 TB/s scale-up | The anchor's own description (2H 2026) | **UNVERIFIED against primary** [UNVERIFIED] | p11 |
 | NVIDIA–Groq deal: non-exclusive perpetual license, Dec 24 2025; Ross & Maddera to NVIDIA; GroqCloud continues; "NVIDIA Groq 3 LPU" at GTC 2026 | NVIDIA press release 2025-12-24; the GTC 2026 detail is the anchor's own | **Confirmed** [F: press]; GTC 2026 detail UNVERIFIED | p14, p25, p31 |
-| Llama-2-70B: 67.8 B params, 80 layers, d = 8,192, GQA 8 KV heads | Llama-2 paper (arXiv:2307.09288) Table 1 | **Confirmed** [F: arXiv:2307.09288] | p17, p22, p29 |
+| Llama-2-70B: 68.98 B total params, 80 layers, d = 8,192, GQA 8 KV heads | Llama-2 paper (arXiv:2307.09288) Table 1 + HF checkpoint index total_size (137.95 GB FP16) | **Confirmed** [F: arXiv:2307.09288 + HF index] | p17, p22, p29 |
 
 ## The confirmed contradictions (surfaced, not buried)
 *Three* *claims* *in* *the* *anchor* *do* *not* *survive* *the* *primary-source* *check. *None* *is* *trivial; *each* *is* *the* *kind* *of* *error* *a* *seed* *article* *makes* *when* *it* *is* *a* *narrative, *not a* *citation:

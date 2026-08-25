@@ -190,4 +190,4 @@ machine is in the M=1 regime (which is most of a chatbot's serving time).
 - "Attention Is All You Need" (arXiv:1706.03762) — the layer structure
 - "FlashAttention: Fast and Memory-Efficient Exact Attention" (arXiv:2205.14135) [F: bank]
 - Yuan et al. "LLM Inference Unveiled: Survey and Roofline Model Insights" (arXiv:2402.16363) [F: bank]
-- Llama-2 technical report (arXiv:2307.09288) — 70B actual parameter count 67.8B [F]
+- Llama-2 technical report (arXiv:2307.09288); the 70B checkpoint actually totals ~68.98B params (137.95 GB FP16) [F: HF checkpoint index total_size]

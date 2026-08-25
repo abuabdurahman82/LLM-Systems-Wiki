@@ -12,7 +12,7 @@ The *question is not* "which chip is the *best? *It is:* *for* *which* *workload
 - *Edge/on-device* → NPU (Apple, Snapdragon, AMD XDNA; page 26). The *flagships do not compete here* [I].
 
 **Q2. What is the model size, and where do its weights live?** (pages 17, 21)
-- [E] Llama-2-70B: 67.8B params → 67.8 GB INT8 / 135.6 GB FP16. One H100 (80 GB HBM) cannot hold it in FP16; two can (TP2). One Groq node (1.75 GiB SRAM [E: p14]) cannot hold it at all — 574–576 TSPs were needed for the 2023 INT8 deployment [F: Next Platform 2023-11-27, via p14]. *The rule:* [E] chips needed ≥ model_bytes / per_chip_capacity; the *interconnect must carry the all-reduce at decode* (page 18).
+- [E] Llama-2-70B: 68.98B params → 68.98 GB INT8 / 137.95 GB FP16. One H100 (80 GB HBM) cannot hold it in FP16; two can (TP2). One Groq node (1.72 GiB SRAM [E: p14]) cannot hold it at all — 574–576 TSPs were needed for the 2023 INT8 deployment [F: Next Platform 2023-11-27, via p14]. *The rule:* [E] chips needed ≥ model_bytes / per_chip_capacity; the *interconnect must carry the all-reduce at decode* (page 18).
 - *The elimination test:* if your model fits in one HBM stack, you are overpaying for a multi-chip fabric; if it does not fit in any SRAM, Groq is not a single-chip answer (it is a *cluster* answer, and the cluster's cost must be priced at Q5).
 
 **Q3. What is the latency contract?** (page 16, page 22)
@@ -31,7 +31,7 @@ The *question is not* "which chip is the *best? *It is:* *for* *which* *workload
 - *The 80/20 anchor [E: p28]:* for a 70B-class model at batch-4,096 on H100, the HBM3 bandwidth (3.35 TB/s) sets the decode ceiling; for the same model at batch-1, the SRAM regime (Groq) competes on *per-token latency*, not throughput. *Budget follows the regime.*
 
 **Q6. What is the data-center constraint?** (page 24)
-- *Power* (kW/rack): DGX H100-class racks are ~120–165 kW [E, p24]; Groq's 8-TSP box is 3.3 kW [F: 2020 workshop deck, via p24] — the *same tokens at a fraction of the rack power* is the SRAM regime's factory argument (page 24).
+- *Power* (kW/rack): DGX H100-class racks are ~41 kW [F, p24]; Groq's 8-TSP box is 3.3 kW [F: 2020 workshop deck, via p24] — the *same tokens at a fraction of the rack power* is the SRAM regime's factory argument (page 24).
 - *Cooling*: NVL72/GB200-class systems are *liquid-cooled* (the rack power exceeds air-cooling [F/I: NVIDIA, p24]); an air-cooled data center *cannot host* the newest rack-scale systems — a hard physical constraint.
 - *Fiber/fabric*: 10,440-TSP-class or Ironwood-class clusters need the inter-rack fabric sized at page 18; a *fabric-limited* data center cannot add the next rack.
 

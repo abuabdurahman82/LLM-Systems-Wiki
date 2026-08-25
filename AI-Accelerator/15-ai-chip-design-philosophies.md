@@ -42,7 +42,7 @@ Peak values are at the chip's **stated working precision**, **dense** (not 2:4-s
 | Cerebras WSE-2 | FP16 | ~750 TFLOPS (wafer) | [F: Cerebras] |
 | Groq TSP | INT8 (Acc32) | ~737 TOPS/chip [E] (deck ~750) | [F/E] |
 | Groq TSP | FP16 | ~184–188 TFLOPS/chip [E] | [F/E] |
-| AWS Trainium2 | cFP8 | 158 TFLOPS/chip (dense; 316 with sparsity) | [F: AWS, page 13] |
+| AWS Trainium2 | cFP8 | ~1.3 PFLOPS/chip dense FP8 (= 8 NeuronCores × 158 core-level cFP8 TFLOPS); sparse quoted 2–4× (AWS's own sources disagree) [F: AWS, page 13] |
 | AWS Trainium3 | cFP8 | (next-gen; peak not yet primary-source-published) | UNVERIFIED |
 
 **The first-principles read:** the compute ceiling is *necessary but not sufficient*. A Groq TSP at ~187 TFLOPS FP16 looks weak next to a MI300X at ~1,307 TFLOPS FP16 — but the Groq TSP is not trying to win the FP16-throughput race. It is trying to win the *batch-1-latency* race, where the compute ceiling is irrelevant and the *SRAM bandwidth + scheduling* is everything (page 23's roofline makes this precise).
@@ -89,7 +89,7 @@ The largest N of chips that behaves like *one machine* (shared memory / schedule
 | Groq | 8 TSPs (node) / 264 (33-node Dragonfly) / 10,440 (145-rack) | scheduled Dragonfly [F: ISCA 2022] |
 | AWS Trainium | 8 (NeuronLink) / 64 (Trn2) / 128 (Trn3) | NeuronLink [F: AWS] |
 
-**The first-principles read:** the scale-up domain defines the largest model that *behaves like one machine*. A 70B model at FP16 (135.6 GB) fits in one H100-8 (80 GB × 8 = 640 GB) with room for KV cache — so an H100-8 is the natural unit. A 70B model at FP16 does *not* fit in one Groq TSP (220 MiB), so it must be spread across ~576 TSPs (page 14) — and the *scheduled Dragonfly* is what makes that 576-chip spread feel like one machine. The scale-up domain is the load-bearing constraint for any multi-chip model.
+**The first-principles read:** the scale-up domain defines the largest model that *behaves like one machine*. A 70B model at FP16 (137.95 GB) fits in one H100-8 (80 GB × 8 = 640 GB) with room for KV cache — so an H100-8 is the natural unit. A 70B model at FP16 does *not* fit in one Groq TSP (220 MiB), so it must be spread across ~576 TSPs (page 14) — and the *scheduled Dragonfly* is what makes that 576-chip spread feel like one machine. The scale-up domain is the load-bearing constraint for any multi-chip model.
 
 ## Axis 5 — Numerics
 The precision ladder is FP32 → TF32/BF16/FP16 → FP8 → FP6 → FP4, with microscaling (MX) for the low-precision formats. Which format a chip optimizes for is a *bet* about where the accuracy/quality tradeoff lives for the target workload.
@@ -120,17 +120,17 @@ The software path that lets you run a workload the chip wasn't designed for. Thi
 **The first-principles read:** the escape hatch is *inverse* to the determinism bet. A Groq TSP has the smallest escape hatch (you must compile the model, no general-purpose path) *because* it made the most aggressive determinism bet. An NVIDIA GPU has the largest escape hatch (CUDA runs anything) *because* it made no determinism bet. This is the trade you're actually buying when you pick a chip.
 
 ## Worked example: where does a 70B model fit?
-A concrete application of the six axes. Llama-2 70B: 67.8 B params [F: Meta HF].
+A concrete application of the six axes. Llama-2 70B: 68.98 B params [F: HF checkpoint index].
 
-**At FP16 (135.6 GB weights [E]):**
-- **H100-8 (640 GB HBM):** fits with ~500 GB headroom for KV cache. Batch-1 decode is HBM-bandwidth-bound. Under tensor-parallelism each H100 holds [E] 135.6 / 8 = **16.95 GB** of weights, so one decode step streams 16.95 GB at 3.35 TB/s = [E] **5.06 ms/token → ~198 tok/s at 100% HBM efficiency** for the 8-GPU system (all chips stream their shard in parallel; the AllReduce on each layer adds a small overhead [I]). At a realistic ~30–50% HBM utilization for a decode-bound kernel [I], that is **~60–100 tok/s**, which matches published batch-1 numbers for Llama-2-70B on 8×H100 [I].
-- **Groq 576-TSP (132.5 GB aggregate SRAM):** does *not* fit at FP16 (135.6 GB > 132.5 GB) — so it must run at INT8 (67.8 GB), which fits with ~64 GB headroom for KV cache [I]. This is exactly what Next Platform reports (INT8, 512-in/1024-out, > 300 tok/s) [F].
-- **Cerebras WSE-2 (40 GB on-wafer):** does *not* fit at FP16 or INT8 (67.8 GB > 40 GB) — so Cerebras runs 70B models across multiple WSEs in RealScale, or at a lower precision [I].
+**At FP16 (137.95 GB weights [E]):**
+- **H100-8 (640 GB HBM):** fits with ~502 GB headroom for KV cache. Batch-1 decode is HBM-bandwidth-bound. Under tensor-parallelism each H100 holds [E] 137.95 / 8 = **17.24 GB** of weights, so one decode step streams 17.24 GB at 3.35 TB/s = [E] **5.15 ms/token → ~194 tok/s at 100% HBM efficiency** for the 8-GPU system (all chips stream their shard in parallel; the AllReduce on each layer adds a small overhead [I]). At a realistic ~30–50% HBM utilization for a decode-bound kernel [I], that is **~58–97 tok/s**, which matches published batch-1 numbers for Llama-2-70B on 8×H100 [I].
+- **Groq 576-TSP (132.5 GB aggregate SRAM):** does *not* fit at FP16 (137.95 GB > 132.5 GB) — so it must run at INT8 (68.98 GB), which fits with ~63.5 GB headroom for KV cache [I]. This is exactly what Next Platform reports (INT8, 512-in/1024-out, > 300 tok/s) [F].
+- **Cerebras WSE-2 (40 GB on-wafer):** does *not* fit at FP16 or INT8 (68.98 GB > 40 GB) — so Cerebras runs 70B models across multiple WSEs in RealScale, or at a lower precision [I].
 
-**At FP8 (67.8 GB weights [E]):**
+**At FP8 (68.98 GB weights [E]):**
 - **H100-8:** fits with ~570 GB headroom; ~2× the FP16 token rate [E].
 - **Groq 576-TSP:** fits at FP8 with ~64 GB headroom, same as INT8 [E].
-- **Cerebras WSE-2:** *just* fits at FP8 (67.8 GB > 40 GB, still no) — needs RealScale [I].
+- **Cerebras WSE-2:** *just* fits at FP8 (68.98 GB > 40 GB, still no) — needs RealScale [I].
 
 The example shows the six axes working together: the *compute ceiling* (axis 1) is irrelevant for the Groq TSP at batch-1; the *memory architecture* (axis 2) is the deciding factor; the *scale-up domain* (axis 4) determines how many TSPs you need; and the *numerics* (axis 5) determine whether the model fits at all.
 

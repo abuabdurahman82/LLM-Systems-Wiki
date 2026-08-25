@@ -48,7 +48,7 @@ The *first-principles* distinction: **scale-up is *memory*; scale-out is *networ
 - **The first-principles read:** Groq's *Dragonfly* is *not* a *scale-up fabric* (like NVLink or ICI) and *not* a *scale-out network* (like InfiniBand). It is a *compiler-scheduled dataflow* that *straddles* the boundary: the *inter-chip* path is *scheduled* (deterministic, known latency) *and* *scales* to *10,440 TSPs*. This is *why* the *worst-case end-to-end latency* is *< 3 µs* [F: ISCA 2022] — the *scheduler* *chose* the path, and the *path is the latency*.
 
 ## The scale-up/scale-out boundary, quantified
-The *boundary* is *the largest N of chips that behaves like one machine*. Let's quantify it for a *tensor-parallel* 70B model (Llama-2 70B, 67.8 B params [F: Meta HF]).
+The *boundary* is *the largest N of chips that behaves like one machine*. Let's quantify it for a *tensor-parallel* 70B model (Llama-2 70B, 68.98 B params [F: HF checkpoint index]).
 
 **The AllReduce cost per layer (tensor-parallel):**
 In tensor-parallelism, *each* layer does *two* AllReduce operations (one after the *row-parallel* linear, one after the *column-parallel* linear). The *AllReduce* moves *2 × hidden_dim × bytes-per-element × batch* bytes *per chip* (the *reduce-scatter* + *all-gather* halves). For Llama-2 70B (hidden_dim = 8,192, batch-1, FP16):

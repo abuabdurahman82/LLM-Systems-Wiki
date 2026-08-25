@@ -26,7 +26,7 @@
 - *Cerebras* *WSE-2: *high* *on* *2* *(~750 TFLOPS FP16/wafer [F: p12]), *extreme* *on* *3* *(40 GB on-wafer), *zero* *on* *4, *high* *on* *5* *(compiler-placed dataflow), *low* *on* *6* *(the* *wafer* *is* *the* *domain, *RealScale* *for* *more), *high* *on* *7* *(large-model* *inference), *closed* *on* *8* *(CS* *systems) [F: p12].
 - *TPU* *v4/v7: *medium* *on* *2* *(275 TFLOPS v4 BF16 [F: ISCA 2023]; *4,614 TFLOPS v7 FP8 [F: Google]), *high* *on* *4* *(1.2→7.4 TB/s), *high* *on* *6* *(4,096→9,216-chip* *pods), *balanced* *on* *7, *closed-cloud* *on* *8* [F: p10/24].
 - *AMD* *MI300X: *high* *on* *2* *(~1,307 TFLOPS dense/package [F: AMD spec]), *high* *on* *3* *(256 MB Infinity Cache), *high* *on* *4* *(5.3 TB/s), *low* *on* *5, *medium* *on* *6, *open* *on* *8* *(the* *ROCm* *escape* *hatch) [F: p11].
-- *Trainium2: *medium* *on* *2* *(158/316 cFP8 dense/sparse [F: AWS]), *high* *on* *4* *(2.9 TB/s), *high* *on* *6* *(64-chip* *UltraServer), *high* *on* *7* *(the* *$/token* *inference* *regime), *closed-cloud* *on* *8* [F: p13/24].
+- *Trainium2: *medium* *on* *2* *(~1.3 PF FP8 dense/chip = 8 × 158 core-level cFP8 [F: AWS]), *high* *on* *4* *(2.9 TB/s), *high* *on* *6* *(64-chip* *UltraServer), *high* *on* *7* *(the* *$/token* *inference* *regime), *closed-cloud* *on* *8* [F: p13/24].
 
 *The* *six* *points* *do* *not* *rank:* *the* *Groq* *TSP* *is* *"worse"* *on* *axes* *2–4* *and* *"better"* *on* *5–7* *than* *the* *H100, *in* *the* *same* *order. *There* *is* *no* *scalar* *that* *makes* *one* *dominate; *the* *space* *is* *genuinely* *multi-dimensional [I].
 

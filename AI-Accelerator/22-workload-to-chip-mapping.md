@@ -9,18 +9,18 @@ An LLM service is *not one workload* — it is *two*, with *opposite* hardware r
 The *mapping* is: *prefill* → *the HBM/peak* *chip* (NVIDIA, AMD, TPU, Trainium); *batch-1 decode* → *the SRAM/determinism* *chip* (Groq, Cerebras). This page makes the *mapping* *quantitative* (the *arithmetic intensity* of each phase, the *FLOPs/byte* threshold, the *token rate* formula), and shows *why* "*tokens/s*" *is not a* *metric* *without a* *batch size* and a *latency target*.
 
 ## The two phases, quantified
-Take *Llama-2 70B* (67.8 B params, 80 layers, hidden 8,192, 64 heads, 8 KV heads [F: Meta HF]).
+Take *Llama-2 70B* (68.98 B params, 80 layers, hidden 8,192, 64 heads, 8 KV heads [F: HF checkpoint index]).
 
 ### Prefill (prompt of length P, batch B)
-- *FLOPs:* [E] `2 × 67.8e9 × P × B` (the *forward pass* is ~2 FLOPs/param/token). At *P = 4,096, B = 1*: [E] 2 × 67.8e9 × 4,096 ≈ **555 TFLOP**.
-- *Memory moved:* the *weights* (135.6 GB FP16) are *read once* (the *prompt* is *short* vs. the *weights), plus the *KV* *writes*. So *~135.6 GB* *moved* *for* the *entire* *prefill* (the *weights* *dominate).
-- *Arithmetic intensity:* [E] 555e12 FLOP / 135.6e9 byte ≈ **4,100 FLOP/byte**.
+- *FLOPs:* [E] `2 × 68.98e9 × P × B` (the *forward pass* is ~2 FLOPs/param/token). At *P = 4,096, B = 1*: [E] 2 × 68.98e9 × 4,096 ≈ **565 TFLOP**.
+- *Memory moved:* the *weights* (137.95 GB FP16) are *read once* (the *prompt* is *short* vs. the *weights), plus the *KV* *writes*. So *~137.95 GB* *moved* *for* the *entire* *prefill* (the *weights* *dominate).
+- *Arithmetic intensity:* [E] 565e12 FLOP / 137.95e9 byte ≈ **4,100 FLOP/byte**.
 - *The regime:* *far* *above* *the* *roofline* *ridge* point (page 23) → *compute-bound*. The *FLOPs/second* *is* the *limiting* factor; the *HBM* *bandwidth* is *irrelevant*.
 
 ### Decode (one token, batch 1, context C)
-- *FLOPs:* [E] `2 × 67.8e9` = 135.6 GFLOP *per token* (the *weights* are *read* once *per token).
-- *Memory moved:* the *weights* (135.6 GB FP16, sharded) *per token*, plus the *KV read* (~320 KB × C [E], page 17). At *C = 4,096*: *~135.6 GB + 1.28 GB ≈ 136.9 GB*.
-- *Arithmetic intensity:* [E] 135.6e9 / 136.9e9 ≈ **~1 FLOP/byte**.
+- *FLOPs:* [E] `2 × 68.98e9` = 137.95 GFLOP *per token* (the *weights* are *read* once *per token).
+- *Memory moved:* the *weights* (137.95 GB FP16, sharded) *per token*, plus the *KV read* (~320 KiB × C [E], page 17). At *C = 4,096*: *~137.95 GB + 1.34 GB ≈ 139.3 GB*.
+- *Arithmetic intensity:* [E] 137.95e9 / 139.3e9 ≈ **~1 FLOP/byte**.
 - *The regime:* *at* *the* *roofline* *ridge* point *or below* → *bandwidth-bound*. The *HBM* *bandwidth* *is* the *limiting factor; the FLOPs* are *irrelevant* (the *compute* is *idle* *waiting* for the *memory).
 
 *The* *first-principles* *insight:* **the* *same* *model, the *same chip*, runs at *~4,000 FLOP/byte* in *prefill* and *~1 FLOP/byte* in *decode.* The *hardware* *that is* *right* *for one is *wrong* *for the *other* — *and that is* *why* *disaggregated* *systems* (a *prefill* *node* + a *decode* *node) exist [I].
@@ -35,7 +35,7 @@ token rate = HBM-bandwidth / (weights-per-chip × bytes-per-param)   [E]
 2. *the HBM efficiency* (a *decode* *kernel* *hits* *~30–50%* *of* *peak* *bandwidth*, *not* *100%, *because* the *kernel is latency-bound on the GEMV, page 17).
 3. *the batch size* (a *batch-N* *decode* *streams* *the same weights N times per step, so the *per-token* *rate is *the same* but the *throughput* *is N× higher — a *tokens/s* *number* *without a* *batch size is *uninterpretable).
 
-*The* *worked* *example* (page 15): *8×H100*, *Llama-2 70B FP16*, *batch-1*: [E] 3.35 TB/s / 16.95 GB = *198 tok/s at 100% efficiency*, *~60–100 tok/s* *at* *30–50%* efficiency [I]. *That* *range* *(60–198)* *is* *the* *point:* *the* *tokens/s* *number* *is* *a* *range* *until you specify* *the* *efficiency* *and* *the* *batch*.
+*The* *worked* *example* (page 15): *8×H100*, *Llama-2 70B FP16*, *batch-1*: [E] 3.35 TB/s / 17.24 GB = *194 tok/s at 100% efficiency*, *~58–97 tok/s* *at* *30–50%* efficiency [I]. *That* *range* *(58–194)* *is* *the* *point:* *the* *tokens/s* *number* *is* *a* *range* *until you specify* *the* *efficiency* *and* *the* *batch*.
 
 *The* *Groq* *counterpoint:* *the* *Groq 576-TSP* *system* *reports* *> 300 tok/s* *at* *INT8*, *512-in/1024-out* [F: Next Platform]. *That* *number* *is* *meaningful* *because* *the* *precision* *(INT8), *the* *batch* *(1), *and* the *shape* *(512/1024)* *are* *stated*. *Without* *those*, *"> 300 tok/s"* *is* *a* *marketing* *number*, *not* a *metric*.
 

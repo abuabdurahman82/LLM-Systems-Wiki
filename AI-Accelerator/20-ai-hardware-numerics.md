@@ -43,13 +43,13 @@ The *second* *rule* of *low-precision*: you *compute* in *low precision* (FP8, F
 The *single* *most important* *number* for *inference* *cost* is *the bytes-per-param* (bpp):
 | Precision | bpp (weights) | 70B model footprint [E] |
 |---|---|---|
-| FP16 / BF16 | 2 | 135.6 GB |
-| FP8 / INT8 | 1 | 67.8 GB |
-| FP6 | 0.75 | 50.9 GB |
-| FP4 | 0.5 | 33.9 GB |
-| FP4 + microscaling (~25% overhead) | 0.625 [E] | 42.4 GB |
+| FP16 / BF16 | 2 | 137.95 GB |
+| FP8 / INT8 | 1 | 68.98 GB |
+| FP6 | 0.75 | 51.7 GB |
+| FP4 | 0.5 | 34.5 GB |
+| FP4 + microscaling (~25% overhead) | 0.625 [E] | 43.1 GB |
 
-*The rule of thumb:* *halving* the *bpp* *halves* the *memory-wall cost* (page 03) *and doubles* the *compute ceiling* (the *Tensor Core* *does 2× the MACs at half the width). The *accuracy* *cost* is *mostly recovered* by *microscaling* (FP8) or *per-channel quantization* (INT8) [I]. This is *why* the *Groq 576-TSP* system runs *Llama-2 70B at INT8* (page 14): the *FP16* *footprint* (135.6 GB) *exceeds* the *aggregate SRAM* (132.5 GB), but the *INT8* *footprint* (67.8 GB) *fits with 64.7 GB headroom* [E].
+*The rule of thumb:* *halving* the *bpp* *halves* the *memory-wall cost* (page 03) *and doubles* the *compute ceiling* (the *Tensor Core* *does 2× the MACs at half the width). The *accuracy* *cost* is *mostly recovered* by *microscaling* (FP8) or *per-channel quantization* (INT8) [I]. This is *why* the *Groq 576-TSP* system runs *Llama-2 70B at INT8* (page 14): the *FP16* *footprint* (137.95 GB) *exceeds* the *aggregate SRAM* (132.5 GB), but the *INT8* *footprint* (68.98 GB) *fits with 63.5 GB headroom* [E].
 
 ## The precision bet per chip
 | Chip | Optimized precision | Accumulation | Microscaling? |

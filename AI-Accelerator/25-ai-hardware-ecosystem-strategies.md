@@ -47,7 +47,7 @@ The *silicon* *is* *half* *the* *product. *The other* *half* *is* *the ecosystem
 |---|---|---|
 | Open/open (AMD) | the developer, the cloud, the OEM (the widest market) | the per-chip differentiation (the silicon is a commodity; the ROCm parity is the moat, not the chip) [I] |
 | Closed/open (NVIDIA) | the momentum (the CUDA developer is the moat) | the flexibility (the binary stack is slow to add new features; the closedness is a tax on the open-source community) [I] |
-| Closed-cloud (Google/AWS) | the end-to-end optimization (chip→software→cloud→system, the lowest $/token at scale) | the portability (the chip is cloud-locked; the user cannot run it on-premises; the workloads are cloud-shaped) [I] |
+| Closed-cloud (Google/AWS) | the end-to-end optimization (chip→software→cloud→system, the lowest $/token at scale) | the portability (the chip is cloud-locked for most users — Trainium has no on-prem path; TPU has a limited on-prem path via Google Distributed Cloud/TPOD, but the toolchain is GCP-native; the workloads are cloud-shaped) [I] |
 | Service (Groq/Cerebras) | the determinism (the closed compiler + the owned cloud = the known P99) | the market (the service is the product; the silicon is not a product; the scale is limited by the service's capacity) [I] |
 
 *The* *first-principles* *read:* **the* *strategy* *is a* *bet on* *where* *the* *value* *is* (the *silicon, *the* *stack, *the* *cloud, *or the* *token). *The* *silicon* *spec* *is* *the* *same* *question* *in* *all four; *the* *ecosystem* *answers it* *differently, *and the* *answer* *is the* *business model.*

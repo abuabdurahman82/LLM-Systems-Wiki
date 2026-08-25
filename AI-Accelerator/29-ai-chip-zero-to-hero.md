@@ -6,15 +6,15 @@
 
 ## The ten levels
 **Level 1. Binary arithmetic and the FLOP.** (pages 02, 20)
-- *The* *content: the* *FLOP, *the* *MAC, *the* *2×MAC* *identity (a* *dot* *product* *of* *N* *is* *2N* *FLOPs), *and* *the* *matmul* *is* *2×M×N×K* *FLOPs. *The* *deliverable: compute* *the* *FLOPs* *of* *a* *70B* *layer* *(Q/K/V/O + the* *FFN, *d = 8,192): [E] a 70B layer ≈ **1.7 GFLOP/token**; *the* *whole* *model* (80 layers, *Llama-2-70B) → [E] ~137 GFLOP/token. *The* *2-param* *shortcut* (2 × 67.8e9 = 135.6 GFLOP/token, *page* *22) *agrees* *within* *1% — *use* *it.*
+- *The* *content: the* *FLOP, *the* *MAC, *the* *2×MAC* *identity (a* *dot* *product* *of* *N* *is* *2N* *FLOPs), *and* *the* *matmul* *is* *2×M×N×K* *FLOPs. *The* *deliverable: compute* *the* *FLOPs* *of* *a* *70B* *layer* *(Q/K/V/O + the* *FFN, *d = 8,192): [E] a 70B layer ≈ **1.71 GFLOP/token** (the exact 7-GEMM count [E]); *the* *whole* *model* (80 layers, *Llama-2-70B) → [E] ~136.9 GFLOP/token. *The* *2-param* *shortcut* (2 × 68.98e9 = 137.95 GFLOP/token, *page* *22) *agrees* *within* *1%* — *use* *it.*
 - *The* *pages: 02* *(workloads), 20* *(numerics).
 
 **Level 2. The memory footprint.** (pages 03, 17)
-- *The* *content: the* *bytes* *are* *the* *weights (param × bytes), *the* *KV cache (page 17's* *per-token* *formula), *and the* *activations. *The* *deliverable: compute* *the* *Llama-2-70B* *weight* *bytes* *at* *INT8* *and* *FP16:* [E] 67.8e9 × 1 B = **67.8 GB INT8**; 67.8e9 × 2 B = **135.6 GB FP16**; *and* *the* *KV cache* *at* *1,024* *tokens:* [E] 1,024 × 320 KiB/token (GQA 8 KV heads, *head_dim* *128, FP16 [E: p17]) = **4 MiB**.
+- *The* *content: the* *bytes* *are* *the* *weights (param × bytes), *the* *KV cache (page 17's* *per-token* *formula), *and the* *activations. *The* *deliverable: compute* *the* *Llama-2-70B* *weight* *bytes* *at* *INT8* *and* *FP16:* [E] 68.98e9 × 1 B = **68.98 GB INT8**; 68.98e9 × 2 B = **137.95 GB FP16**; *and* *the* *KV cache* *at* *1,024* *tokens:* [E] 1,024 × 320 KiB/token (GQA 8 KV heads, *head_dim* *128, FP16 [E: p17]) = **320 MiB**.
 - *The* *pages: 03* *(memory wall), 17* *(KV cache).
 
 **Level 3. The roofline.** (page 23)
-- *The* *content: the* *ridge, *the* *arithmetic* *intensity, *the* *`min(peak, bandwidth × AI)`* *law. *The* *deliverable: compute* *the* *H100-BF16* *ridge* *and* *the* *decode* *tokens/s:* [E] ridge = 989/3.35 ≈ **295 FLOP/byte**; *decode* *AI* ≈ 1 FLOP/byte (page 22) → *below* *the* *295 ridge* → *bandwidth-bound* → [E] 3.35e12 / 16.95e9 (the ⅛-shard, *page* *15) ≈ **~198 tok/s at 100% efficiency**, *~60–100 at* *30–50% [I] (the *roofline* *prediction, *page 23's *worked example).
+- *The* *content: the* *ridge, *the* *arithmetic* *intensity, *the* *`min(peak, bandwidth × AI)`* *law. *The* *deliverable: compute* *the* *H100-BF16* *ridge* *and* *the* *decode* *tokens/s:* [E] ridge = 989/3.35 ≈ **295 FLOP/byte**; *decode* *AI* ≈ 1 FLOP/byte (page 22) → *below* *the* *295 ridge* → *bandwidth-bound* → [E] 3.35e12 / 17.24e9 (the ⅛-shard, *page* *15) ≈ **~194 tok/s at 100% efficiency**, *~58–97 at* *30–50% [I] (the *roofline* *prediction, *page 23's *worked example).
 - *The* *pages: 23* *(roofline), 22* *(workload mapping).
 
 **Level 4. The memory hierarchy.** (pages 03, 15, 17)
@@ -49,9 +49,9 @@
 *At* *each* *level, *the* *hero* *is* *the* *person* *who* *can* *do the* *deliverable:*
 | Level | The deliverable (the hero's test) |
 |---|---|
-| 1 | [E] the 70B forward pass ≈ 137 GFLOP/token (2-param shortcut: 135.6 GFLOP/token) |
-| 2 | [E] the 67.8 GB INT8 / 135.6 GB FP16; the 320 MB KV at 1,024 tokens |
-| 3 | [E] the 295 FLOP/byte ridge; the ~198 tok/s decode roofline (⅛-shard, 100% efficiency) |
+| 1 | [E] the 70B forward pass ≈ 137.95 GFLOP/token (2-param shortcut) |
+| 2 | [E] the 68.98 GB INT8 / 137.95 GB FP16; the 320 MiB KV at 1,024 tokens |
+| 3 | [E] the 295 FLOP/byte ridge; the ~194 tok/s decode roofline (⅛-shard, 100% efficiency) |
 | 4 | [E] the 6× bandwidth gap; the 347× capacity gap; the 576-TSP reason |
 | 5 | the P99-is-P50 paragraph; the ISCA §5.4 number [F] |
 | 6 | the all-reduce bandwidth paragraph; the 32 → 900 GB/s floor/ceiling [F] |
