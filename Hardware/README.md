@@ -48,7 +48,7 @@ fabric question. [I]
 
 ## Related
 `Networking/README.md` · `Inference/Roofline.md` · `Distributed-Inference/README.md` ·
-`Quantization/README.md`.
+`Quantization/README.md` · `GPU-Communication/README.md`.
 
  GPU-Systems handbook (architecture → CUDA → kernels → engines → multi-GPU): `GPU-Systems/README.md`.
 

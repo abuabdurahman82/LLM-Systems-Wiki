@@ -357,4 +357,5 @@ channel using the slow path.
 `./Multi-GPU.md` · `./Tensor-Parallelism.md` · `./Pipeline-Parallelism.md` ·
 `./MoE-Expert-Parallelism.md` · `./Multi-Node.md` · `./Scale-Up-vs-Scale-Out.md` ·
 `./Topology.md` · `../Networking/README.md` · `../Hardware/README.md` ·
-`Prefill-Decode-Disaggregation.md` · `Distributed-Architectures.md`
+`Prefill-Decode-Disaggregation.md` · `Distributed-Architectures.md` ·
+`../GPU-Communication/README.md` · `../GPU-Communication/04-nccl-deep-dive.md`.

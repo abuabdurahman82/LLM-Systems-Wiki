@@ -81,7 +81,8 @@ the network pays for.
 `Overview.md` (cluster platforms: P/D, KV routing/transfer, routing quality) ·
 `NVIDIA-Dynamo.md` · `llm-d.md` · `Dynamo-vs-llm-d.md` ·
 `Networking/README.md` · `Inference/Prefill-Decode-Disaggregation.md` ·
-`Hardware/README.md` · `Labs/Lab-8` (TP sweep).
+`Hardware/README.md` · `Labs/Lab-8` (TP sweep) ·
+`GPU-Communication/README.md` (NCCL/NIXL/UCCL stack; KV handoff physics).
 
  11 reference distributed architectures + the parallelism decision matrix: `GPU-Systems/Distributed-Architectures.md`.
 

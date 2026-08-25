@@ -143,7 +143,8 @@ GPU's HBM, bypassing host memory — essential for low-latency transfer [F: NVID
 ## Related
 `Load-Balancing.md` · `Distributed-Architectures.md` · `Multi-Node.md` ·
 `Scale-Up-vs-Scale-Out.md` · `NCCL.md` · `../Inference/Prefill-Decode-Disaggregation.md` ·
-`../Inference/Roofline.md` · `../KV-Cache/README.md` · `Case-Studies.md` (CASE 9).
+`../Inference/Roofline.md` · `../KV-Cache/README.md` · `Case-Studies.md` (CASE 9) ·
+`../GPU-Communication/README.md` · `../GPU-Communication/08-nixl-kv-cache-transfer.md`.
 
 ## Key Takeaways
 1. **Prefill (compute) and decode (bandwidth) are opposite workloads** — isolate them.
