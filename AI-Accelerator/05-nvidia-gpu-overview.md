@@ -50,7 +50,7 @@ GPU (one or two reticle-limit dies on Blackwell+, one HBM pool, one L2)
         ├── CUDA cores (FP32/INT32 ALUs, 128/SM on H100, 128 on Blackwell-class)
         ├── Tensor Cores (FP16/BF16/FP8/FP4 MMA; 4th-gen on Ampere, 5th on Hopper+,
         │    tcgen05-class on Blackwell)
-        ├── register file (65,536 × 32-bit/SM = 256 KB; max 64 warps/2048 threads resident)
+        ├── register file (65,536 × 32-bit/SM = 256 KB [E]; max 64 warps/2048 threads resident [E])
         ├── unified L1 / shared memory (up to 228 KB on Hopper SM; partitioned between
         │    L1 cache and programmer-visible SMEM)
         └── TMA (Hopper+: bulk async tensor copies HBM <-> SMEM, no SM instruction cost
@@ -76,7 +76,7 @@ H100 SXM concrete numbers (the wiki's standard constant set, [F: vendor spec]):
 - **Occupancy:** how many of the SM's 64-warp register/scheduler slots are filled with
   resident warps. High occupancy = more independent warps to switch between.
 - **Latency hiding (the GPU's answer to the memory wall):** an HBM access takes ~600+
-  cycles. With ~32–64 warps resident per SM, the scheduler switches to a warp whose data
+  cycles [A]. With ~32–64 warps resident per SM, the scheduler switches to a warp whose data
   is ready while the HBM request for another is in flight. Compute does not wait for
   memory — *other warps fill the gap*. This is the fundamental GPU mechanism and the reason
   occupancy matters: too few resident warps and the HBM latency shows up as bubbles.

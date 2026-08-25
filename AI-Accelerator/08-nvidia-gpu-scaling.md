@@ -7,7 +7,7 @@ NVSwitch — a domain of up to 72 GPUs that behaves like one coherent, high-band
 machine) and **scale-out** (InfiniBand or Spectrum-X Ethernet — the cluster beyond the
 rack). NVLink is ~5–20× faster per GPU than a scale-out NIC; the moment a workload crosses
 the domain boundary, communication latency and per-byte cost jump. That boundary is the
-most important architectural fact about any distributed LLM deployment, and it is why
+most important architectural fact about any distributed LLM deployment, and it is why [I]
 NVIDIA sells *racks*, not chips.
 
 ## The interconnect stack
@@ -47,7 +47,7 @@ with multi-hop diameter; NVIDIA chose the crossbar — more power, more ASIC, bu
 | Property | Scale-up (NVLink domain) | Scale-out (IB/Spectrum-X) |
 |---|---|---|
 | Per-GPU bandwidth | 900 GB/s – 3.6 TB/s | 400 Gbps – 1.6 Tbps = 50 – 200 GB/s |
-| Latency | ~us (one switch hop) | ~5–10 us per hop, RTT higher |
+| Latency | ~us (one switch hop) [A] | ~5–10 us per hop, RTT higher [A] |
 | Memory model | load/store over the fabric (GPUDirect) | message-passing (RDMA) |
 | Domain size | 8 → 72 → 144 → 576 GPUs | 10^3–10^5+ GPUs |
 | Cost | ~20× the NIC's $/GB/s | commodity |

@@ -8,7 +8,7 @@ time by a compiler — down to sharing Google's OpenXLA. What is genuinely Amazo
 and deliberate: **dedicated collective-communication silicon (CC-Cores) bolted onto the
 borrowed core**, plus the vertical integration to price a chip that only has to beat NVIDIA
 *inside AWS*. The anchor tenant is Anthropic — Claude runs on over a million Trainium
-chips (Project Rainier, ~500k Trn2 at late-2025 launch, grown past 1M by early 2026)
+chips (Project Rainier, ~500k Trn2 at late-2025 launch, grown past 1M by early 2026 [A: press-reported scale])
 [F: AWS/press; Peake (secondary cross-check)].
 
 ## Genealogy
@@ -27,7 +27,7 @@ NeuronCore is **not one monolithic matmul engine but a cluster of decoupled, spe
 engines**:
 ```
 NeuronCore
-├── Tensor Engine   (the 128×128 systolic array; GEMM/CONV; the matmul FLOPs)
+├── Tensor Engine   (the 128×128 systolic array; GEMM/CONV; the matmul FLOPs [E: 128×128×2 per cycle])
 ├── Vector Engine   (cross-element reductions: layernorm, softmax, pooling)
 ├── Scalar Engine   (pointwise: activations, GELU — one-in/one-out)
 ├── GPSIMD Engine   (8 × fully-programmable 512-bit vector processors running C;

@@ -40,7 +40,7 @@ t=2:   .   b01 b02 b03            .
       .   .   .   b23                  A values shift RIGHT one cell per clock
 t=n:   every cell (i,j) has seen A[i,:] x B[:,j] accumulated in place
 ```
-After ~2N clocks every output C[i,j] sits at cell (i,j). Cost: O(1) on-chip memory traffic
+After ~2N clocks every output C[i,j] sits at cell (i,j) [E: systolic depth]. Cost: O(1) on-chip memory traffic
 for O(N³) work — that *is* the systolic idea. The TPU v1's array was 256×256 8-bit MACs
 (65,536 MACs, 92 TOPS INT8) [F: arXiv:1704.04760]; v2+ doubled width and precision (128×128
 16-bit, then 256×256 on Trillium [F: Google Cloud docs/blog]); Trillium's 256×256 MXU is
@@ -71,7 +71,7 @@ quotes a pod number (42.5 ExaF, 121 ExaF) it is the vendor's own aggregate — t
 ## Memory: scratchpads vs caches
 ```
 registers -> MXU internal (operands ride the array's wires)
-VMEM      -> software-managed on-chip SRAM (v4 era: ~128 MB+; the "scratchpad");
+VMEM      -> software-managed on-chip SRAM (v4 era: ~128 MB+; the "scratchpad") [A: capacity from v4 paper]  ;
              the COMPILER moves tiles HBM<->VMEM<->MXU explicitly
 HBM       -> v5p: ~95 GB HBM2e @ 2.8 TB/s [F: Peake table, cross-checked];
              Ironwood: 192 GB HBM @ 7.2 TB/s [F: vendor]

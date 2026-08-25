@@ -26,7 +26,7 @@ and why B200 became two dies the moment NVIDIA pressed against it. Cerebras prin
 ~550 mm² die 84 times in a 12×7 grid, then (in a process co-developed with TSMC) lays extra
 high-level metal across the <1 mm scribe lines where the saw would run. The mesh crosses
 each seam on a source-synchronous interface (2,880 GB/s per die on WSE-3); the entire
-inter-die layer costs ~97 W. **To software the seams do not exist: one uniform mesh, one
+inter-die layer costs ~97 W [E: power per layer]. **To software the seams do not exist: one uniform mesh, one
 chip.** [F: Cerebras/Hot Chips]
 
 ## Yield: how you make a 46,000 mm² chip survive defects
@@ -64,7 +64,7 @@ gets from **geometry**: activations never move, so the only operand in flight is
 being multiplied. [F: Cerebras]
 
 ### The FLOPs ledger (read carefully)
-WSE-3's headline **125 PFLOPS is *sparse* FP16** (assumes ~8× zero-skipping on ideally sparse
+WSE-3's headline **125 PFLOPS is *sparse* FP16** (assumes ~8× zero-skipping on ideally sparse [A: vendor's assumed sparsity])
 tensors). **Dense ≈ 15.8 PFLOPS FP16** [E: 900,000 cores × 8-wide × 2 × 1.1 GHz, derived;
 Cerebras publishes no official dense figure]. Per-watt, dense FLOPs lose to every
 contemporary GPU. The wafer was never a FLOPs machine — it is a **bandwidth machine**.

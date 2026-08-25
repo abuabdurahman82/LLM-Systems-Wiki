@@ -90,7 +90,7 @@ Rubin:     ~13 TB/s HBM4 (projected), ~17 PF FP8 dense                   [F: ven
 L2 H100 50 MB; SMEM 228 KB; registers 256 KB/SM                          [F: vendor spec]
 HBM latency ~ hundreds of cycles; L1 hit ~1 cycle; SMEM ~1 cycle         [I: order-of-magnitude]
 ```
-The ~600× spread between an L1 hit and an HBM miss is the whole motivation for the
+The ~600× spread [A: L1-vs-HBM gap estimate] between an L1 hit and an HBM miss is the whole motivation for the
 tile-in-SMEM discipline: a well-tiled GEMM touches HBM ~2–3× (A, B, C) while doing
 thousands of FLOPs per byte.
 

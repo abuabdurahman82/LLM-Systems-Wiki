@@ -84,6 +84,8 @@ Given any chip, you should be able to answer:
   claim-by-claim verification table.
 - `31-the-big-idea-of-ai-chip-architecture.md` — the synthesis: one design space, eight axes,
   no universally optimal chip.
+- `EVALUATION.md` — the external evaluator pass (DeepSeek-V4-Flash) + adjudication record:
+  every confirmed correction with evidence, every refuted flag with reasons, 2026-08-24.
 
 ## Conventions (this section)
 - SHIPPED / ANNOUNCED / PROJECTED are always separated explicitly on spec pages.

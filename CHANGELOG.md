@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-08-24 — AI-Accelerator: final verify sweep clean (31/31 pages) + EVALUATION.md wired into navigation
+- **Post-evaluator verification sweep** (section-appropriate `verify-wiki-page.py` invariants: h1/LAST_UPDATED, 30-Second Explanation, ligature scan, F/A/I/E tag coverage, balanced fences, residual old-value scan): **31/31 pages pass**.
+- **Tag discipline completed on pages 05–13** (pre-existing gap, not from the evaluator pass): each of the nine pages now carries bare/sourced `[A]` and `[E]` tags (one honest spot each: register-file byte math, systolic depth, sparsity assumption, etc.). Page 08 also gained an `[I]`.
+- **Removed stale duplicate `30-jacob-peake-review.md`** — an earlier draft of page 30 accidentally committed in `42de585` alongside the canonical `30-jacob-peake-ai-chip-architectures-review.md`; referenced nowhere and superseded. Moved to `/tmp/30-jacob-peake-review.md.bak` (git-history recoverable too).
+- **`EVALUATION.md` wired into navigation**: added to the section `README.md` (Practice list) and the root `_sidebar.md` (one line after page 31; did not touch the sibling agent's in-flight Distributed-Inference / Serving-Engines entries).
+- Section now holds 32 content pages + README + EVALUATION; all pages carry claim-tag discipline; residual scan for the evaluated-out values is clean.
+
 ## 2026-08-24 — AI-Accelerator: independent evaluator pass (DeepSeek-V4-Flash) + adjudication — 4 chunk audits, 12 confirmed corrections
 - **Evaluator pass (e1) run over all 31 pages (4 chunks; endpoint 10.1.1.51:8888, deepseek-v4-flash-0731).** Findings independently re-verified before applying; refuted flags recorded, not applied.
 - **Confirmed & fixed:**

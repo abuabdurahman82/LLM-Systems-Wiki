@@ -54,7 +54,7 @@ SM
 ├── 4 warp schedulers   (1 instruction issued/cycle each -> up to 4 warp-insn/cycle)
 ├── 128 CUDA cores      (FP32 ALUs; elementwise, control, address math)
 ├── 4 Tensor Cores      (4th-gen on H100; mma.sync FP16/BF16/TF32/INT8, FP8 via wgmma)
-├── register file       (65,536 x 32-bit = 256 KB; max 64 warps / 2048 threads resident)
+├── register file       (65,536 x 32-bit = 256 KB [E]; max 64 warps / 2048 threads resident [E])
 ├── L1 / shared memory  (up to 228 KB, partitioned; SMEM is the tile buffer for MMA)
 └── TMA (Hopper+)       (async bulk HBM<->SMEM copies, descriptor-driven, no per-element SM work)
 ```
@@ -83,7 +83,7 @@ loop:   for each 128x128 output tile (CTA):
 
 ## Tile size, K-loop, and on-chip storage
 - The **tile** must fit in SMEM + registers: bigger tiles reuse operands more (higher AI)
-  but use more on-chip space. The SM's 228 KB L1/SMEM and 256 KB register file set the
+  but use more on-chip space. The SM's 228 KB L1/SMEM and 256 KB register file set the [A: SM capacities from 05]
   ceiling; HBM sets the floor (you must load the tile's K-chunks).
 - **K-loop depth** determines how much the async machinery can overlap: deep K = long
   pipeline = the Tensor Core stays fed. Shallow K (GEMV, M=1 decode) has almost no K-loop

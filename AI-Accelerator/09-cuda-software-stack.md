@@ -85,7 +85,7 @@ Deep dive: `19-ai-chip-software-stacks.md`.
   chip: the same model runs faster on the same GPU under a better engine. The stack is the
   multiplier on the hardware.
 - Portability: a model that runs on NVIDIA via vLLM should in principle run on AMD via
-  vLLM+ROCm; in practice the *fastest* path is vendor-specific kernels. This asymmetry is
+  vLLM+ROCm; in practice the *fastest* path is vendor-specific kernels [A]. This asymmetry is
   the whole "software moat" in one sentence.
 
 ## Key Takeaways
@@ -96,7 +96,7 @@ Deep dive: `19-ai-chip-software-stacks.md`.
    NVIDIA and in months on a closed-compiler machine.
 4. Open stacks (ROCm, Tenstorrent) close the gap on commodity workloads but lag on the
    frontier kernel tail — the moat's real location.
-5. Hardware FLOPs × software-stack maturity = real tokens/s; one zero makes the product.
+5. Hardware FLOPs × software-stack maturity = real tokens/s [E]; one zero makes the product.
 
 ## Related
 - `08-nvidia-gpu-scaling.md` — the fabric the stack runs collectives over

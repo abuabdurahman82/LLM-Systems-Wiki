@@ -33,7 +33,7 @@ and Meta (6 GW, Feb 2026) have both committed to gigawatt-scale MI450/Helios dep
 | LDS (Local Data Share, 64 KB, software-managed) | SMEM (shared memory) |
 | Infinity Fabric (IF) | NVLink-class role |
 
-The wave64 detail matters: a wavefront is 64 lanes across 4×16 SIMDs, and **a half-empty
+The wave64 detail matters: a wavefront is 64 lanes across 4×16 SIMDs [E], and **a half-empty [A: typical utilization]
 wave64 wastes 32 lanes where a half-empty warp32 wastes 16** — the divergence tax of CDNA.
 For uniform control flow it is a small price; for irregular work it hurts. [I: analysis]
 

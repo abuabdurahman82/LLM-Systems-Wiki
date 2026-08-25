@@ -34,6 +34,7 @@
   - [29 AI chip zero-to-hero](/AI-Accelerator/29-ai-chip-zero-to-hero.md)
   - [30 Peake anchor article review](/AI-Accelerator/30-jacob-peake-ai-chip-architectures-review.md)
   - [31 The big idea of AI chip architecture](/AI-Accelerator/31-the-big-idea-of-ai-chip-architecture.md)
+  - [EVALUATION: evaluator pass & adjudication](/AI-Accelerator/EVALUATION.md)
 - **[Agents](/Agents/README.md)**
   - [Agentic-AI-Evolution](/Agents/Agentic-AI-Evolution.md)
   - [Tool-Use](/Agents/Tool-Use.md)
