@@ -32,9 +32,9 @@ GPU
 Rough effective bandwidths (sustained, typical [I: measurements, vendor specs ±10%]):
 HBM 3.35 TB/s → NVLink 900 GB/s → PCIe Gen5 64 GB/s → NDR IB 50 GB/s → 100 GbE
 12.5 GB/s → 25 GbE 3.125 GB/s. A 4.0 GiB KV transfer therefore takes ~4.8 ms over
-NVLink but ~88.7 ms over a 400 Gb/s link and ~343.6 ms over 100 GbE
+NVLink but ~85.9 ms over a 400 Gb/s link and ~343.6 ms over 100 GbE
 [E: 4 GiB ÷ link bandwidth; matches the transfer table in
-`../GPU-Systems/Prefill-Decode-Disaggregation.md`]. **The link choice is a 70×
+`../GPU-Systems/Prefill-Decode-Disaggregation.md`]. **The link choice is a 72×
 decision** — that spread is what the rest of this section is about.
 
 ## 2. Two ways to cross the wire

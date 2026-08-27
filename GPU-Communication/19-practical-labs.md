@@ -21,7 +21,8 @@ make -j MPI=1                 # what: builds all_reduce_perf etc. (+ MPI if MPI=
 # what: sweeps sizes 1K→1G (×4 steps) for AllReduce; -g N = N GPUs
 # expected: a table per run
 # look for: busbw plateauing near the link's effective bandwidth
-#   (NVLink ~900 GB/s-class; PCIe lower); algbw growing with N while busbw stays flat
+#   (NVLink ~900 GB/s-class; PCIe lower); busbw stays flat near the link's
+#   effective bandwidth; algbw shrinks toward busbw/2 as N grows
 # failure: busbw in the single-digit GB/s with 8 GPUs → transport fell back
 #   (check `NCCL_DEBUG=INFO` for "Using network Socket")
 ```
@@ -59,7 +60,8 @@ on a 16-GPU node, or torchrun-style launch [I: nccl-tests launch modes].
 - **busbw** — the *link*-utilization bandwidth: for AllReduce,
   `algbw × 2(N−1)/N` [E: factors from 02 — 1.0 @ N=2, 1.75 @ N=8, 1.969 @ N=64,
   1.998 @ N=1024]. **busbw is the number to compare against the physical link**
-  — algbw grows with N; busbw should not exceed the link
+  — it plateaus near the link's effective bandwidth; algbw shrinks toward
+  busbw/2 as N grows, so busbw is what should not exceed the link
   [F: nccl-tests README; 16 §3].
 - **#wrong** — correctness check (N/A for reduce-none ops).
 The α/β crossover is visible in the table: algbw rises slowly at small sizes
@@ -160,8 +162,8 @@ source scripts/bootstrap.sh     # what: uv + py3.12 venv + dev tools (or conda p
 ## Key Takeaways
 1. nccl-tests is the NCCL lab: build, sweep 1K→1G on 1/2/8 GPUs, then 2-node
    MPI; read **busbw** (link view), not just algbw.
-2. The 2(N−1)/N factor is why busbw stays flat as algbw grows with N
-   [E: 02's table].
+2. The 2(N−1)/N factor is why busbw stays flat near the link's bandwidth while
+   algbw shrinks toward busbw/2 as N grows [E: 02's table].
 3. NIXL lab = agent → register → metadata → post → poll; NIXLBench for
    micro, KVBench for KV-shaped; prefer the repo's official examples.
 4. UCCL lab = run the *same* nccl-tests sweep under UCCL-Tran vs NCCL on the

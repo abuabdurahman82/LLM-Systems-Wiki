@@ -55,7 +55,8 @@ protocol (default vs pinned), and the overlap policy (sync vs async/chunked)
   throughput.
 - **Bus bandwidth (busbw)** — `algbw × 2(N−1)/N` for AllReduce — the *link*
   utilization (each link's share of the total traffic). busbw ≤ physical link
-  bandwidth; algbw grows with N but busbw is N-invariant
+  bandwidth; busbw plateaus near the link's effective bandwidth (N-invariant),
+  so algbw = busbw × N/(2(N−1)) shrinks toward busbw/2 as N grows
   [E: factors from 02 — 1.0/1.75/1.969/1.998 at N=2/8/64/1024; F: nccl-tests
   README].
 - **Goodput** — useful application progress per wall-clock (tok/s, samples/s),

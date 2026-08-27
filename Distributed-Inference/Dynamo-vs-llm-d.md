@@ -1,5 +1,5 @@
 # NVIDIA Dynamo vs llm-d — Distributed Serving Platforms, Head-to-Head
-`LAST_UPDATED: 2026-08-24 · Status: core page` · The one true same-layer rivalry in
+`LAST_UPDATED: 2026-08-26 · Status: core page` · The one true same-layer rivalry in
 this section: **both are distributed inference platforms** that sit *above* engines
 (vLLM/SGLang/TRT-LLM) and implement the same five cluster jobs — route, place, move,
 scale, fail (`Distributed-Inference/Overview.md`). Every cell below is verified
@@ -250,7 +250,9 @@ benchmark" that exists.
 
 ## Related
 `NVIDIA-Dynamo.md` · `llm-d.md` · `Overview.md` (five cluster jobs + KV-transfer
-physics + cluster metrics) · `Inference/Prefill-Decode-Disaggregation.md`
+physics + cluster metrics) · `Implementation/README.md` (PART 2 — how each side's
+mechanisms are built: radix registry vs event index in `05`, NIXL vs UCCL connectors
+in `06`, both routers in `03`) · `Inference/Prefill-Decode-Disaggregation.md`
 (break-even model + DistServe/Splitwise/Mooncake lineage) ·
 `Inference/Deep-Dives/llm-router-signals-deep-dive-2026-08-18.md` (routing signals
 both platforms consume) · `Inference/Production-Serving/14-production-routers-comparison.md`

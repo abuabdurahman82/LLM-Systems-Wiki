@@ -15,7 +15,7 @@ transport layer, arXiv:2504.17307) and *UCCL-EP* (portable expert-parallel
 communication) [F: README bibtex].
 
 > **Do not confuse UCCL with UCC.** "UCC" (Unified Collective Communication, the
-> OpenHPC/LLNL `ucc` project) is a *different* library — a collective-abstraction
+> `ucc` project — openucx/ucc) is a *different* library — a collective-abstraction
 > layer over UCX. UCCL (this page) is the UC Berkeley/Davis GPU stack. The
 > taxonomy in [01](01-why-communication-matters.md) deliberately lists both, on
 > different rows.

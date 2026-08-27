@@ -1,11 +1,15 @@
 # Distributed Inference — Parallelism Dimensions & Cluster Platforms
-`LAST_UPDATED: 2026-08-24` · Status: core page
+`LAST_UPDATED: 2026-08-26` · Status: core page
 
 **This section has two layers:** (1) *intra-model* parallelism dimensions (below) —
 how one model is split across GPUs; and (2) the *cluster platform* layer — how a
 fleet of engine instances is routed, scaled, and kept cache-warm: start with
 `Overview.md` (the five cluster jobs + KV-transfer physics), then `NVIDIA-Dynamo.md`
-and `llm-d.md` (deep dives), and `Dynamo-vs-llm-d.md` (head-to-head). Engine layer:
+and `llm-d.md` (deep dives), and `Dynamo-vs-llm-d.md` (head-to-head). The
+**`Implementation/` sub-area** (PART 2 series, 2026-08-26) goes one level deeper —
+how the five jobs are concretely built: the cluster-wide KV map (`Implementation/05-global-kv-state.md`),
+NIXL transfer (`Implementation/06-nixl-transfer.md`), distributed KV (`01`), offload/tiering (`02`),
+KV-aware routing (`03`) and P/D orchestration (`04`). Engine layer:
 `../Serving-Engines/Engine-Landscape.md`.
 
 ## 30-Second Explanation
@@ -80,6 +84,8 @@ the network pays for.
 ## Related
 `Overview.md` (cluster platforms: P/D, KV routing/transfer, routing quality) ·
 `NVIDIA-Dynamo.md` · `llm-d.md` · `Dynamo-vs-llm-d.md` ·
+`Implementation/README.md` (PART 2 implementation layer: distributed KV, offload,
+KV-aware routing, P/D orchestration, global KV state, NIXL transfer) ·
 `Networking/README.md` · `Inference/Prefill-Decode-Disaggregation.md` ·
 `Hardware/README.md` · `Labs/Lab-8` (TP sweep) ·
 `GPU-Communication/README.md` (NCCL/NIXL/UCCL stack; KV handoff physics).

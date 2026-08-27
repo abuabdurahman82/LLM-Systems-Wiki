@@ -141,7 +141,8 @@ over UCX/UCCL), and expert dispatch/combine for MoE layers (UCCL-EP or DeepEP) �
   `../GPU-Systems/Prefill-Decode-Disaggregation.md` — workload-side detail.
 - `../Distributed-Inference/Overview.md` — Dynamo/llm-d landscape.
 - **Naming trap:** UCCL (UC Berkeley/Davis GPU stack, this section) ≠ UCC
-  (Unified Collective Communication, the OpenHPC/LLNL `ucc` collective layer) —
+  (Unified Collective Communication, the `ucc` collective layer —
+  openucx/ucc) —
   both appear in the taxonomy on purpose; see
   [11 UCX/RCCL/UCC/NVSHMEM/DeepEP](11-ucx-rccl-ucc-nvshmem-deepep.md).
 

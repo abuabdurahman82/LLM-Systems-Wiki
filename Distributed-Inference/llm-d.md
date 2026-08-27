@@ -1,5 +1,5 @@
 # llm-d — Kubernetes-Native Distributed LLM Inference Architecture Deep Dive
-`LAST_UPDATED: 2026-08-24 · Status: core page` · llm-d is a **Kubernetes-native,
+`LAST_UPDATED: 2026-08-26 · Status: core page` · llm-d is a **Kubernetes-native,
 high-performance distributed inference serving stack** — "state-of-the-art
 orchestration and optimizations **above model servers** like vLLM and SGLang" [F:
 llm-d/llm-d README, v0.8 badge, fetched 2026-08-24]. It is a **CNCF Sandbox project**
@@ -266,7 +266,11 @@ All context-specific; none is a universal claim (performance-claim rule,
 
 ## Related
 `Overview.md` (cluster-layer framing + KV-transfer physics + P/D break-even) ·
-`NVIDIA-Dynamo.md` · `Dynamo-vs-llm-d.md` ·
+`NVIDIA-Dynamo.md` · `Dynamo-vs-llm-d.md` · **`Implementation/`** (PART 2 — how the
+five jobs are built: `Implementation/05-global-kv-state.md` for the event-driven global
+index, `Implementation/03-kv-aware-routing.md` for Proxy+EPP + latency predictor,
+`Implementation/02-offload-and-tiering.md` for tiered KV offload, `Implementation/04-pd-orchestration.md`
+for Variants + WVA) ·
 `Inference/Prefill-Decode-Disaggregation.md` ·
 `Inference/Deep-Dives/llm-router-signals-deep-dive-2026-08-18.md` ·
 `Inference/Production-Serving/08-cache-aware-routing.md` ·

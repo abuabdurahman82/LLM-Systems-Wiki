@@ -1,5 +1,5 @@
 # NVIDIA Dynamo — Distributed Inference Architecture Deep Dive
-`LAST_UPDATED: 2026-08-24 · Status: core page` · Dynamo is NVIDIA's **open-source,
+`LAST_UPDATED: 2026-08-26 · Status: core page` · Dynamo is NVIDIA's **open-source,
 datacenter-scale distributed inference stack** — the orchestration layer *above*
 inference engines. It "doesn't replace SGLang, TensorRT-LLM, or vLLM — it turns them
 into a coordinated multi-node inference system" [F: ai-dynamo/dynamo README, main
@@ -326,7 +326,7 @@ Wiki-lab results: **none yet** — reproduce with the cluster-metric set in
    [F: llm-d README] [I: comparison judgment].
 3. **Vendor benchmark gravity** — most headline numbers are vendor/partner;
    independent replication is the reader's job (performance-claim rule,
-   `Engine-Landscape.md`).
+   `Serving-Engines/Engine-Landscape.md`).
 4. **SGLang KVBM in progress** as of 2026-08-24 [F: README matrix] — check current
    matrix.
 5. **K8s optional but the story is datacenter** — not a local/edge tool.
@@ -364,7 +364,10 @@ Wiki-lab results: **none yet** — reproduce with the cluster-metric set in
 
 ## Related
 `Overview.md` (cluster-layer framing + KV-transfer physics) · `llm-d.md` ·
-`Dynamo-vs-llm-d.md` · `Inference/Prefill-Decode-Disaggregation.md` ·
+`Dynamo-vs-llm-d.md` · **`Implementation/`** (PART 2 — how the five jobs are built:
+`Implementation/05-global-kv-state.md` for KVBM + radix registry, `Implementation/06-nixl-transfer.md`
+for NIXL, `Implementation/04-pd-orchestration.md` for P/D, `Implementation/03-kv-aware-routing.md`
+for the router) · `Inference/Prefill-Decode-Disaggregation.md` ·
 `Inference/Deep-Dives/pd-disaggregation-deep-dive-2026-08-17.md` ·
 `Inference/Deep-Dives/llm-router-signals-deep-dive-2026-08-18.md` ·
 `Inference/Production-Serving/09-pd-disaggregated-routing.md` ·

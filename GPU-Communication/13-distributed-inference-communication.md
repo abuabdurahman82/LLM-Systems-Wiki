@@ -41,8 +41,8 @@ names.
                 Next Layer
 ```
 - Two AllReduces per layer (attention output projection; MLP output projection)
-  — activation-sized (h×b×2B; for h=8192, b=1: 32 KiB each, ~56 KiB ring
-  traffic per layer [E: 2(N−1)/N × 32 KiB at N=8, see 05 §8]), microseconds on
+  — activation-sized (h×b×2B; for h=8192, b=1: 16 KiB each, ~56 KiB ring
+  traffic per layer [E: two AllReduces × 2(N−1)/N × 16 KiB at N=8, see 05 §8]), microseconds on
   NVLink → TP is *cheap when intra-node* and *expensive cross-node* (the
   classic argument against cross-node TP)
   [../GPU-Systems/Tensor-Parallelism.md].

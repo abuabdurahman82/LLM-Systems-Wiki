@@ -11,7 +11,8 @@ placement table.
 |---|---|---|---|
 | **RCCL** | Collectives | AMD's NCCL-equivalent: same collective API family for AMD GPUs (RCP/ROCm ecosystem) | active (ROCm TheRock builds ship UCCL alongside; RCCL remains the ROCm default) [I: ecosystem posture] |
 | **UCX** | P2P / transport | Lower-level *unified communication framework*: abstract primitives over RDMA (IB & RoCE), TCP, GPU, shared memory, network atomics; the "how does data move" layer | active (openucx/ucx, ~1.7k★, pushed 2026-08-25; tested at 1.22.x under NIXL) [F] |
-| **UCC** | Collectives (abstraction) | Unified Collective Communication *Library*: plugin-based collective layer over UCX, HPC-origin (OpenHPC/LLNL; part of OpenUCX org) — **not** UCCL | active (openucx/ucc, ~312★, pushed 2026-08-20) [F] |
+| **UCC** | Collectives (abstraction) | Unified Collective Communication *Library*: plugin-based collective layer over UCX, HPC-origin,
+   part of the OpenUCX org (openucx/ucc) — **not** UCCL | active (openucx/ucc, ~312★, pushed 2026-08-20) [F] |
 | **NVSHMEM** | P2P / one-sided | OpenSHMEM-based PGAS for GPUs: symmetric memory, one-sided put/get/atomics/signals **from within CUDA kernels**; host+kernel+stream interfaces | active (Apache-2.0; docs at docs.nvidia.com/nvshmem) [F] |
 | **DeepEP** | Expert Parallel | DeepSeek's EP comm library: high-throughput + low-latency all-to-all dispatch/combine kernels, FP8 support, JIT; V2 switched from NVSHMEM to **NCCL Gin** backend; 0-SM PP/CP/Engram modes | active (V2; EP up to 2048; pushed 2026-08-20, ~10k★) [F] |
 | **MSCCL** / **MSCCL++** | Collectives (programmable) | MSCCL: user-defined collective schedules on NCCL (paper-era). **MSCCL++**: GPU-driven communication stack — programmable, device-side collectives/P2P | active (microsoft/mscclpp, pushed 2026-08-25; CUDA + ROCm test pipelines) [F] |
@@ -49,8 +50,9 @@ softening into "AMD ⇒ RCCL or UCCL" for new heterogeneous workloads
 
 ## 3. UCC — the collective abstraction layer
 **What:** Unified Collective Communication Library — plugin-based collectives
-*over UCX* transports, HPC heritage (OpenHPC/LLNL), part of the OpenUCX org
-[F: openucx/ucc repo, fetched 2026-08-25].
+*over UCX* transports, HPC heritage, part of the OpenUCX org
+   (openucx/ucc)
+   [F: openucx/ucc repo, fetched 2026-08-25].
 **When:** HPC-style collectives where you want the abstraction to pick among UCX
 transports (SHM, verbs, …) per topology.
 **The trap:** UCC ≠ UCCL. Same letters, different projects, different shapes:

@@ -10,6 +10,9 @@ Scope map inside this section:
   stack, KV-transfer physics, P/D break-even, cluster metrics
 - `NVIDIA-Dynamo.md` · `llm-d.md` — the two platform deep dives
 - `Dynamo-vs-llm-d.md` — the head-to-head (same-layer rivalry)
+- **`Implementation/`** — PART 2 (2026-08-26): how the five jobs are built — global KV
+  map (05), NIXL transfer (06), distributed KV (01), offload/tiering (02), KV-aware
+  routing (03), P/D orchestration (04)
 - Single-instance engine internals: `Serving-Engines/Engine-Landscape.md` and
   `GPU-Systems/`
 
@@ -190,7 +193,7 @@ token → router (gate) → expert selection → AllToAll dispatch → expert GE
 Two routing signals dominate (full treatment:
 `Inference/Deep-Dives/llm-router-signals-deep-dive-2026-08-18.md` and
 `Inference/Production-Serving/08-cache-aware-routing.md`,
-`09-pd-disaggregated-routing.md`):
+`Inference/Production-Serving/09-pd-disaggregated-routing.md`):
 1. **KV cache overlap** — how much of this request's prefix is already cached on which
    replica. Sending it there saves prefill compute and (in P/D) the KV transfer.
    Dynamo's router: "routes based on worker load and KV cache overlap" [F: README];
@@ -258,7 +261,9 @@ in the P/D page). Finding all three is the content of a platform benchmark [I].
 
 ## Related
 `README.md` (parallelism dimensions) · `NVIDIA-Dynamo.md` · `llm-d.md` ·
-`Dynamo-vs-llm-d.md` · `Inference/Prefill-Decode-Disaggregation.md` (break-even model +
+`Dynamo-vs-llm-d.md` · `Implementation/README.md` (PART 2 — how the five jobs are
+built: global KV state, NIXL transfer, distributed KV, offload, routing, P/D) ·
+`Inference/Prefill-Decode-Disaggregation.md` (break-even model +
 research lineage: DistServe/Splitwise/Mooncake) ·
 `Inference/Deep-Dives/pd-disaggregation-deep-dive-2026-08-17.md` ·
 `Inference/Deep-Dives/llm-router-signals-deep-dive-2026-08-18.md` ·

@@ -243,7 +243,8 @@ transfer"; NIXL tree].
    library; "NIXL replaces NCCL" is a category error
    ([15](15-nccl-vs-nixl-vs-uccl.md)).
 2. The NB/SB split is the design: apps use buffer lists + one-sided
-   READ/WRITE; plugins implement the SB API (14 upstream plugins today).
+   READ/WRITE; plugins implement the SB API (13 upstream plugins today: the 12 in
+   the §2 list + UCCL).
 3. Metadata exchange (point-to-point or via ETCD/KV) is what makes topology
    *dynamic* — elastic serving's enabler.
 4. Heterogeneity is the product: HBM↔HBM, HBM↔DRAM, HBM↔NVMe, HBM↔object store
