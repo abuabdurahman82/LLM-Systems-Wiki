@@ -29,6 +29,8 @@ post-training (2024+) adds long CoT via RL on verifiable tasks.
 7. **Distillation:** teacher → student (logit or sequence level); GPT-3→GPT-4-class
    knowledge distillation; also used for **reasoning distillation** (DeepSeek-R1
    distilled Qwen/Llama "R1-distill" models [F: DeepSeek-R1 arXiv:2501.12948]).
+   **Full treatment: `Distillation/README.md` (first-class section, 2026-08-27)** —
+   classical KD → taxonomy → reasoning distillation → on-policy/GKD → production.
 
 ## Why post-training matters (the research result)
 Same base, different post-training → wildly different alignment/safety/verbosity

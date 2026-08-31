@@ -115,7 +115,8 @@ agentic: environment reward), drop human preferences entirely:
 
 ## Related
 `README.md` (post-training index) · `Reasoning/README.md` (test-time scaling, RLVR
-lineage) · `Post-Training/Distillation.md` (expand) · `Safety/README.md` ·
+lineage) · `Distillation/README.md` (first-class distillation section: classical KD →
+reasoning → on-policy/GKD → production, 2026-08-27) · `Safety/README.md` ·
 `Inference/Inference-Metrics.md` (cost of thinking tokens) · `Labs/Lab-9` (expand).
 
 ## Key Takeaways
