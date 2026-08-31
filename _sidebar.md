@@ -435,7 +435,15 @@
   - [SGLang](/Serving-Engines/SGLang.md)
   - [TensorRT-LLM](/Serving-Engines/TensorRT-LLM.md)
   - [vLLM](/Serving-Engines/vLLM.md)
-- **[Speculative-Decoding](/Speculative-Decoding/README.md)**
+- **[Speculative-Decoding](/Speculative-Decoding/README.md)** (draft-verify handbook, 2026-08-27)
+  - [00 Section landing](/Speculative-Decoding/README.md)
+  - [01 Why speculative decoding](/Speculative-Decoding/01-why-speculative-decoding.md)
+  - [02 Draft and verify](/Speculative-Decoding/02-draft-and-verify.md)
+  - [03 Acceptance and verification](/Speculative-Decoding/03-acceptance-and-verification.md)
+  - [04 Taxonomy](/Speculative-Decoding/04-speculative-decoding-taxonomy.md)
+  - [05 Classical speculative decoding](/Speculative-Decoding/05-classical-speculative-decoding.md)
+  - [06 Retrieval and self-speculation](/Speculative-Decoding/06-retrieval-and-self-speculative.md)
+  - [07 SpecInfer and tree verification](/Speculative-Decoding/07-specinfer-tree-decoding.md)
 - **[Timeline](/Timeline/README.md)**
 - **[Training](/Training/README.md)**
 - **[Training-Engineering](/Training-Engineering/README.md)**
@@ -446,3 +454,7 @@
   - [Scaling-1-to-10k](/Training-Engineering/Scaling-1-to-10k.md)
   - [Interaction](/Training-Engineering/Interaction.md)
 - **[Transformer](/Transformer/README.md)**
+- **[Triton](/Triton/README.md)** (GPU kernel language, 2026-08-27)
+  - [00 Section landing](/Triton/README.md)
+  - [01 What is Triton](/Triton/01-what-is-triton.md)
+  - [FACTS pack](/Triton/FACTS.md)
