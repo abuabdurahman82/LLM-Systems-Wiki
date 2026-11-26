@@ -134,6 +134,7 @@
   - [NVIDIA Dynamo](/Distributed-Inference/NVIDIA-Dynamo.md)
   - [llm-d](/Distributed-Inference/llm-d.md)
   - [Dynamo vs llm-d](/Distributed-Inference/Dynamo-vs-llm-d.md)
+  - [Platforms Capstone (history→decision framework)](/Distributed-Inference/Platforms-Capstone.md)
   - **Implementation** (PART 2, 2026-08-26: how the five jobs are built)
     - [Implementation README](/Distributed-Inference/Implementation/README.md)
     - [01 Distributed KV](/Distributed-Inference/Implementation/01-distributed-kv.md)

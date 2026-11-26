@@ -1,11 +1,14 @@
 # Distributed Inference — Parallelism Dimensions & Cluster Platforms
-`LAST_UPDATED: 2026-08-26` · Status: core page
+`LAST_UPDATED: 2026-09-06` · Status: core page
 
 **This section has two layers:** (1) *intra-model* parallelism dimensions (below) —
 how one model is split across GPUs; and (2) the *cluster platform* layer — how a
 fleet of engine instances is routed, scaled, and kept cache-warm: start with
 `Overview.md` (the five cluster jobs + KV-transfer physics), then `NVIDIA-Dynamo.md`
-and `llm-d.md` (deep dives), and `Dynamo-vs-llm-d.md` (head-to-head). The
+and `llm-d.md` (deep dives), and `Dynamo-vs-llm-d.md` (head-to-head), and
+**`Platforms-Capstone.md`** (PART 3, 2026-09-06: history/timeline, P/D + KV-transfer
+worked math, networking requirements, K8s reference architectures, failure modes,
+benchmark methodology, decision framework — the section capstone). The
 **`Implementation/` sub-area** (PART 2 series, 2026-08-26) goes one level deeper —
 how the five jobs are concretely built: the cluster-wide KV map (`Implementation/05-global-kv-state.md`),
 NIXL transfer (`Implementation/06-nixl-transfer.md`), distributed KV (`01`), offload/tiering (`02`),

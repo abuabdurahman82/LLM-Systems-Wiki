@@ -1,5 +1,46 @@
 # CHANGELOG
 
+## 2026-09-06 — GPU-Systems/CUDA-From-Zero.md: verification pass + 13 adjudicated fixes
+- **Task:** "CUDA Basics chapter" re-invoked (2026-09-06 reply-to; original prompt lost in the
+  2026-08-27 session's compression failure, only the ~500-char Telegram quote survives). The
+  chapter already existed as `CUDA-From-Zero.md` (2026-08-21); this pass ran the standard
+  verification pipeline on it instead of duplicating it.
+- **[E] recomputation (Python, this session): 20/22 confirmed** — grid 3907 / 64 live / 31,250
+  warps / 236.7 per SM; naive GEMM 8.59 GB + AI 0.25; tiled 272.6 MB ≈ 31.5× (~1/T); shared
+  8 KB; copy examples 0.63 s / 12 ms / 0.19 ms / 3.6 µs; AI 0.1667; tree 8 steps; RMSNorm
+  48 KB/row; 2L = 64 norms. Fixes: HBM/PCIe ratio "~50×" → **52×** (3.35 TB/s ÷ 64 GB/s, 3 sites);
+  diagram caption "64 blocks → scheduled across ~132 SMs" → "≤64 of 132 SMs busy (68 idle)";
+  "236/SM … plenty in flight" → "236/SM of work (≤64 resident)".
+- **Evaluator pass** (deepseek endpoint @10.1.1.51:8888, now serving GLM-5.3-Flash-EXL3 — same
+  model family as the drafting model; independence caveat noted): VERDICT REVISE @ 88%, 9 flags
+  (3 major, 6 minor, 0 critical). **9/9 accepted after independent re-verification; 0 refuted.**
+  Majors: 16×16-block diagram labeled rows 0–15 as "warp 15" → warp 7 (16×16 = 8 warps);
+  "not a multiple of 32 → launch fails" dropped (non-multiples launch fine, just waste lanes;
+  only blockDim > 1024 fails); naive-GEMM "A[i*K+k] coalesced" → broadcast (i,k uniform across
+  lanes; only B is strided). Minors: reduction "first 5 levels free with shuffles" → last 5
+  (s = 16…1; s = 128/64/32 cross warps) + "one warp/level" dropped (4/2/1 warps); tiled GEMM
+  got the missing `if (i < M && j < N)` guard (+ explicit M,N,K % T == 0 note); §6–8 helpers
+  annotated as needing a **broadcast** of sm[0] (§5's tree leaves the result in thread 0);
+  "every kernel argument is a device pointer" → array args (scalars by value); CPU GEMM
+  "vectorizes along k" → along j (k walks B with stride N, a gather).
+- **Citations live-verified (2026-09-06, arXiv abs-page meta titles):** 2205.14135 FlashAttention,
+  1910.07467 RMSNorm, 2302.13971 LLaMA, 2412.15115 Qwen2.5 Technical Report — all exact matches.
+  CUDA C Programming Guide URL cited as docs link. UNVERIFIED count: 0.
+- **Checker:** verify-wiki-page.py OK (419 lines, within the 180–420 cap after compression of
+  four Profile/Why bullets); two `### How to measure` headings normalized to `### How to measure
+  it`; ligature scan clean; fences balanced; tag census F=12 / A=2 / I=8 / E=14 (bare+sourced).
+- **Scope/commit note:** page + this entry only. **Not committed** — working tree carries
+  intermingled sibling work (Distillation/Distributed-Inference + Platforms-Capstone) from the
+  interrupted 2026-08-27 session; shared-file commits stay on hold per the 2026-08-26 precedent.
+
+## 2026-09-06 — Distributed-Inference: Platforms Capstone + 2026-09-06 refresh of the platform pages
+- **New: `Distributed-Inference/Platforms-Capstone.md`** (PART 3, ~875 lines) — the llm-d + NVIDIA Dynamo capstone: executive overview + status-class table (documented/experimental/roadmap) · serving-stack history & timeline (Orca→vLLM→SGLang→Sarathi→DistServe/Splitwise/Mooncake→Dynamo/llm-d) · why-distributed-is-hard taxonomy · P/D disaggregation · llm-d v0.9 architecture + EPP scheduling doctrine · llm-d↔vLLM responsibility split · Dynamo v1.4.x architecture (router cost model, multi-DC KV Relay, cache-salt tenancy) · distributed runtime · Dynamo KV/KVBM · NIXL current state (v1.4.x, 14 plugins, NIXL-EP) · engine responsibility matrix (vLLM/SGLang/TRT-LLM) · head-to-head summary · control/data-plane split · networking requirements (KV-production-rate rule + transfer tables, TCP-vs-RDMA 200–500×) · 70B/32K KV-transfer worked example · long-context 128K→1M table · MoE serving · K8s reference architectures (DGDR + InferencePool snippets) · observability metric inventory · failure-mode/recovery table · benchmark methodology (6 tests, bottleneck order) · 2×DGX Spark P/D home-lab design · enterprise reference architecture · 80/20 guide · 7 misconceptions · decision framework.
+- **Version anchors re-verified live (2026-09-06)**: Dynamo stable **v1.4.2** (2026-08-29; Enterprise SKU; v1.4.0 GA 2026-08-14 multi-DC KV Relay + cache-salt; no stable 1.5.0 — dev snapshots only), llm-d **v0.9.0** (2026-08-17; "Hardened for Scale": router HA, KEDA foundation, sticky-until-saturated default routing, P2P KV sharing, FMA/IPP, E/P/D GPU+XPU), NIXL v1.4.1 + 14 buildable plugins, vLLM disagg = experimental with 9 connectors ("DOES NOT improve throughput"), SGLang PD disagg (NIXL/Mooncake/NVLink transport), TRT-LLM disagg 1.7–6.11× (vendor blog).
+- **Refreshed pages**: `Distributed-Inference/llm-d.md` (v0.9.0 anchors + delta note), `Distributed-Inference/NVIDIA-Dynamo.md` (v1.4.2/1.4.0 anchors + delta note), `Distributed-Inference/Dynamo-vs-llm-d.md` (2026-09-06 refresh note pointing into the capstone), `Distributed-Inference/Overview.md` + section `README.md` (capstone wiring + current anchors), `_sidebar.md` (capstone entry).
+- **New arithmetic this session (Python-verified, in the capstone)**: KV/token table (8B/70B/405B GQA + DeepSeek-V3 MLA 68.6 KiB); 70B@32K = 10 GiB/session; transfer times across 25G→800G→NVLink; KV-production-rate table per model class with the ~8× hide rule (~296–533 Gb/s for 7–70B at 32K); recompute-vs-transfer ratio (TP8+400 GbE ≈ 6×; 100 GbE ≈ 12×); 70B TP8 decode TPOT-vs-batch table; long-context FLOPs/KV table (attention overtakes projections ≈53K); MoE EP decode rooflines; 8B Spark lab transfer-vs-recompute table. Citations: 5 new arXiv IDs live-title-verified (KVDirect 2501.14743, FlowKV 2504.03775, TraCT 2512.18194, SAC 2606.19746, KV-Internet survey 2608.01526); research dossiers in `~/llmd-dynamo-research/`.
+- **Status**: evaluator audit pending → will be appended to `Platforms-Capstone.md` header + this file on completion.
+
+
 ## 2026-08-31 — Changelog + homepage: RAG, Speculative-Decoding, Triton, Distillation
 - Root `README.md` (`LAST_UPDATED: 2026-08-31`): Distillation, Speculative-Decoding, and first-class `Triton/` in What's new, the layout tree, and reading guides.
 - `_sidebar.md`: Distillation 00–20; Speculative-Decoding 00–07; Triton landing + `01-what-is-triton` + `FACTS`. `GPU-Systems/Triton.md` stays the single-page overview.

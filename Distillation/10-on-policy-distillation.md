@@ -53,7 +53,11 @@ The Tinker/Thinking-Machines formulation made this practical and popularized it
 - **Implementation:** a one-line change on top of an RL trainer — swap the reward/ KL
   regularizer for teacher reverse-KL.
 - **Results (their replication of the Qwen3 method):** Qwen3-8B AIME'24 60→70 in ~150
-  steps; **≈9–30× cheaper than RL** for equivalent reasoning-benchmark gains; also used
+  steps; **≈9–30× cheaper than RL for equivalent gains** (TML Table "CE vs SFT-2M":
+  9× in FLOPs with the SFT dataset given, ≈18× in GPU-hours, ≈30× including the
+  teacher sampling cost; Qwen3's own run: AIME'24 74.4% at 1,800 GPU-h vs RL 67.6%
+  at 17,920 GPU-h — 10× cheaper *and* higher [F: thinkingmachines.ai/blog/
+  on-policy-distillation, Oct 2025; Qwen3 TR arXiv:2505.09388]); also used
   for personalization with a few hundred prompts.
 - **Context:** extends Agarwal et al. (GKD), MiniLLM, and the Qwen3 team's use of
   strong-model logit distillation to build small models [F: arXiv:2505.09388 reports

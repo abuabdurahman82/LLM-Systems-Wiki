@@ -1,5 +1,5 @@
 # CUDA Programming for LLM Engineers
-`LAST_UPDATED: 2026-08-21 · Status: core page` · PART II of the GPU-systems zero-to-hero
+`LAST_UPDATED: 2026-09-06 · Status: core page` · PART II of the GPU-systems zero-to-hero
 path. Claims tagged [F] primary source (CUDA C Programming Guide, arXiv bank) / [A]
 engineering assumption / [I] inference / [E] hand-derived arithmetic.
 
@@ -53,9 +53,9 @@ the split, then make the memory pattern right.
  │B0,0  │B1,0  │  ...     │                    │ T0,0 T0,1 ... T0,15    │← warp 0 (2
  ├──────┼──────┼──────────┤                    │ T1,0 T1,1 ... T1,15    │  rows × 16)
  │B0,1  │B1,1  │          │   block B3,4       │  ...                    │
- │ ...  │ ...  │          │   covers C rows    │ T15,0 ... T15,15       │← warp 15
+ │ ...  │ ...  │          │   covers C rows    │ T15,0 ... T15,15       │← warp 7
  └──────┴──────┴──────────┘   C[64..79]         └───────────────────────────┘
- 64 blocks → scheduled across ~132 SMs [F: H100 spec]
+ 64 blocks → ≤64 of 132 SMs busy (68 idle) [F: H100 spec]
 ```
 
 ### When
@@ -75,22 +75,22 @@ tiny → **launch-bound**, not bandwidth-bound — hence CUDA Graphs + fusion
 
 ### Example [E]
 vec-add over n = 10⁶, block = 256 → grid = ⌈10⁶/256⌉ = **3907 blocks** (last block:
-64 live, 192 idle); 31,250 warps ≈ 236/SM on a 132-SM H100 [E] — plenty in flight.
+64 live, 192 idle); 31,250 warps ≈ 236/SM of work (≤64 resident) [E] — plenty in flight.
 
 ### Failure modes
 - Missing `if (i < n)` → OOB write in the last block (silent corruption).
-- Block > 1024 or not a multiple of 32 → launch fails; check `cudaGetLastError()`.
+- Block > 1024 (or 0) → launch fails; non-multiple-of-32 just wastes lanes; check `cudaGetLastError()`.
 - 1D indexing a 2D array → strided warp accesses → 4–32× HBM cost [I].
 
-### How to measure
+### How to measure it
 `ncu` (Nsight Compute): occupancy, warp stalls, sectors/request; `nsys` (Nsight
 Systems): launch rate (kernels/s) when suspecting launch-bound.
 
 ## Memory: Host ↔ Device, and Synchronization
 
 ### What
-HBM is **not** CPU-addressable; every kernel argument is a **device pointer** — data
-crosses the PCIe boundary only through explicit copies:
+HBM is **not** CPU-addressable; array kernel arguments are **device pointers** (small
+scalars pass by value) — data crosses the PCIe boundary only through explicit copies:
 
 ```
  HOST (CPU RAM)                        GPU (HBM)
@@ -107,8 +107,8 @@ Core calls [F: CUDA programming guide]: `cudaMalloc`/`cudaFree`,
 `cudaDeviceSynchronize` / `cudaStreamSynchronize` / `cudaEvent*`.
 
 ### Why
-HBM reads are ~50× faster than moving the same bytes over PCIe (H100: 3.35 TB/s HBM
-vs ~64 GB/s PCIe 5.0 x16 [F: NVIDIA specs, ../Hardware/README.md]) — so copy **once**
+HBM reads are ~52× faster than moving the same bytes over PCIe (3.35 TB/s HBM ÷
+64 GB/s PCIe 5.0 x16 [F: NVIDIA specs, ../Hardware/README.md]) — so copy **once**
 at load, live on-chip forever, copy out only what you need (logits).
 
 ### How
@@ -122,11 +122,9 @@ cudaDeviceSynchronize();                                           // wait
 cudaMemcpy(z_h, z_d, n * sizeof(float), cudaMemcpyDeviceToHost);   // D2H
 cudaFree(x_d); cudaFree(y_d); cudaFree(z_d);
 ```
-- **Default stream:** launches + sync copies from one host thread run **in order** —
-  the simplest correct model.
-- **Streams:** named FIFOs; same-stream work is ordered, different-stream work may
-  **overlap** (a copy engine + SMs at once). Engines overlap KV movement with compute;
-  CUDA Graphs replay a whole graph in one launch (Kernel-Life.md).
+- **Default stream:** launches + sync copies from one host thread run **in order** — simplest correct model.
+- **Streams:** named FIFOs; same-stream ordered, different-stream may **overlap**
+  (copy engine + SMs at once); CUDA Graphs replay a graph in one launch (Kernel-Life.md).
 - **Pinned host memory:** `cudaHostAlloc` pages let `cudaMemcpyAsync` DMA directly;
   pageable RAM forces a staging copy + implicit sync [F].
 
@@ -145,14 +143,14 @@ per-token cost is HBM reads, not PCIe (../Inference/The-Life-of-a-Token.md).
 ### Example [E]
 n = 10⁶ floats: 4 MB/tensor; 3 copies = 12 MB over PCIe ≈ 0.19 ms [E: 12e6 ÷ 64e9]
 vs the kernel moving the same 12 MB in HBM ≈ 3.6 µs [E: 12e6 ÷ 3.35e12] — same bytes,
-~50× slower per copy: load once, compute forever.
+~52× slower per copy: load once, compute forever.
 
 ### Failure modes
 - Host pointer in a kernel (or device pointer on host) → illegal address, crash.
 - Reading results before `cudaDeviceSynchronize` → stale/garbage host data.
 - `cudaMemcpyAsync` from pageable memory → silently syncs; no `cudaFree` → OOM.
 
-### How to measure
+### How to measure it
 `nsys` timeline (copy vs kernel phases; gaps = sync stalls), `ncu` (`dram__throughput`),
 `nvidia-smi` / DCGM PCIe counters for copy saturation.
 
@@ -203,12 +201,12 @@ __global__ void matAdd(const float* A, const float* B, float* C, int M, int N) {
 ```
 
 ### 3. Naive GEMM: `C[i,j] = Σ_k A[i,k]·B[k,j]` (one thread per output)
-- **CPU:** triple loop i,j,k with k innermost; compiler vectorizes along k.
+- **CPU:** triple loop i,j,k, k innermost; k walks B with stride N (a gather) → vectorize along j.
 - **GPU change:** same math; each (i,j) is a thread, k-loop runs serially in
   that thread's registers.
 - **Threads:** 2D grid exactly like §2.
-- **Access:** `A[i*K+k]` coalesced across lanes (contiguous k), but `B[k*N+j]` is
-  **strided by N** across lanes → 32 separate cache lines per warp [I].
+- **Access:** `A[i*K+k]` hits the same address on all 32 lanes (i, k uniform → broadcast,
+  one sector), while `B[k*N+j]` is **strided by N** → 32 separate cache lines per warp [I].
 - **Bottleneck:** HBM re-reads: A fetched N times, B M times (ignoring L2).
   M=N=K=1024: ≈ 2·1024³·4 B ≈ **8.6 GB** for 2.15 GFLOP → AI ≈ 0.25 FLOP/B [E] —
   far below the roofline.
@@ -259,7 +257,7 @@ __global__ void gemmTiled(const float* A, const float* B, float* C,
       acc += As[threadIdx.y][k] * Bs[k][threadIdx.x];
     __syncthreads();                       // done reading before overwrite
   }
-  C[i*N + j] = acc;
+  if (i < M && j < N) C[i*N + j] = acc;  // edge tiles; loads assume M, N, K % T == 0
 }
 // host: gemmTiled<<<dim3(N/T, M/T), dim3(T, T)>>>(A_d, B_d, C_d, M, N, K);
 ```
@@ -284,9 +282,10 @@ __global__ void gemmTiled(const float* A, const float* B, float* C,
 - **CPU:** serial accumulate; no parallelism without extra work.
 - **GPU change:** hierarchical sum — each thread grid-strides a chunk → **block tree**
   in shared memory → one value per block → `atomicAdd` (or a second small kernel).
-- **Threads:** 1D blocks of 256; the first 5 tree levels are "free" with warp shuffles
-  — `__shfl_down_sync` moves lanes' values with no shared memory, no sync [F: guide].
-- **Access:** coalesced global reads; the tree is log₂(256) = 8 steps, one warp/level.
+- **Threads:** 1D blocks of 256; the last 5 tree levels (s = 16…1) are "free" with warp
+  shuffles — `__shfl_down_sync` moves lanes' values with no shared memory, no sync [F: guide].
+- **Access:** coalesced global reads; log₂(256) = 8 steps: s = 128/64/32 activate
+  4/2/1 warps through shared memory, s ≤ 16 stays within one warp (shuffles).
 - **Bottleneck:** not bandwidth but **tree latency + the cross-block step**; large n
   is bandwidth-bound, small n is latency-bound [I].
 - **Profile/Improve:** `ncu` → `stalled_barrier`, shared-mem throughput; shuffles for
@@ -307,6 +306,8 @@ __global__ void blockReduce(const float* x, float* out, int n) {
   }
   if (tid == 0) atomicAdd(out, sm[0]);     // cross-block
 }
+// §6–8 reuse this tree, but their helper must also BROADCAST sm[0] to every thread
+// (one sync + all-lane read); a thread-0-only result leaves the other threads stale.
 ```
 
 ### 6. Softmax (per-row): `y[r,j] = exp(x[r,j]−m_r) / Σ_k exp(x[r,k]−m_r)`
@@ -316,10 +317,9 @@ __global__ void blockReduce(const float* x, float* out, int n) {
 - **Access:** coalesced along j; passes 2–3 re-read the row — for d = 4096 it stays in
   L1/L2 between passes [I], so re-reads are cheap.
 - **Bottleneck:** bandwidth plus SFU load from `expf`.
-- **Profile/Improve:** `ncu` → `sm__inst_executed_pipe_xu`, L2 hit on re-reads; single-pass
-  online softmax, or stash exp in shared memory; in LLMs softmax lives **inside**
-  attention, where FlashAttention folds it in and never materializes S×S [F: arXiv:2205.14135;
-  ../Attention/README.md].
+- **Profile/Improve:** `ncu` → `sm__inst_executed_pipe_xu`, L2 hit on re-reads; online
+  softmax; in LLMs softmax lives **inside** attention — FlashAttention folds it in and
+  never materializes S×S [F: arXiv:2205.14135; ../Attention/README.md].
 - Pseudo: `m = rowmax(x); l = Σ exp(x−m); y = exp(x−m)/l` (3 row-wise passes)
 
 ```cuda
@@ -345,10 +345,9 @@ __global__ void rowSoftmax(const float* x, float* y, int d) {
 - **Access:** coalesced; the row is read ~2–3× (stats + normalize) unless held in
   registers.
 - **Bottleneck:** bandwidth — ~4·d·4 B per row FP32 [E]; FLOPs are trivial.
-- **Profile/Improve:** `ncu` → `dram__bytes` vs the 3–4×-of-minimum ideal, L2 hits;
-  hold the row in **registers** (d = 4096, block = 128 → 32 floats/thread, fits) so
-  re-reads cost nothing; fuse the residual add into the kernel (Fused-Kernels.md) —
-  production engines do exactly this.
+- **Profile/Improve:** `ncu` → `dram__bytes` vs the 3–4×-of-minimum ideal; hold the row
+  in **registers** (d = 4096, block = 128 → 32 floats/thread) so re-reads cost nothing;
+  fuse the residual add in (Fused-Kernels.md) — production engines do this.
 - Pseudo: `μ=mean(x); σ²=var(x); y=(x−μ)/√(σ²+ε)*g+b` (row-wise, 2–3 passes)
 
 ```cuda
@@ -373,14 +372,12 @@ __global__ void rowLayerNorm(const float* x, const float* g, const float* b,
 - **Access:** coalesced; 2–3 reads of the row (Σx², then x·g) unless register-resident.
 - **Bottleneck:** bandwidth: 3 arrays × d × 4 B = **48 KB/row** at d = 4096 FP32 [E];
   at small batch the kernel is tiny, so **launch overhead** dominates, not bytes [I].
-- **Profile/Improve:** `nsys` / torch profiler — count norm launches per step (2×L per
-  token!); fuse residual add + RMSNorm (`x = h + x; y = rms(x)` — one fewer HBM
-  round-trip + one fewer launch, Fused-Kernels.md); register-resident row; capture the
-  step in CUDA Graphs at decode batch (Kernel-Life.md).
+- **Profile/Improve:** `nsys`/torch profiler — count norm launches/step (2×L per token!);
+  fuse residual + RMSNorm (one fewer HBM round-trip + launch, Fused-Kernels.md);
+  register-resident row; CUDA Graphs at decode batch (Kernel-Life.md).
 - **Why it matters for LLMs:** pre-norm decoders run `x' = x + Attn(RMSNorm(x))`,
-  `y = x' + MLP(RMSNorm(x'))` [F: RMSNorm arXiv:1910.07467; LLaMA arXiv:2302.13971;
-  Qwen2.5 arXiv:2412.15115] → **2L RMSNorm kernels per token** (64 at L = 32); each is
-  tiny — the real cost is launches + HBM footprint, what fusion/graphs attack.
+  `y = x' + MLP(RMSNorm(x'))` [F: arXiv:1910.07467, 2302.13971, 2412.15115] → 2L RMSNorm
+  kernels/token (64 at L = 32) — real cost is launches + footprint → fusion/graphs.
 - Pseudo: `ss = Σ x²; rstd = 1/√(ss/d + ε); y = x * rstd * g`
 
 ```cuda
@@ -417,6 +414,6 @@ Next: `./Fused-Kernels.md` (§7+§8 fused with the residual add), `./GEMM.md` (�
 ## Key Takeaways
 1. A kernel = one function + a launch config; you choose the split, hardware schedules warps.
 2. `i = blockIdx.x * blockDim.x + threadIdx.x` + bounds check + coalesced access is 80% of writing correct fast CUDA.
-3. HBM and PCIe differ ~50× per byte → copy once, compute on-chip, sync explicitly.
+3. HBM and PCIe differ ~52× per byte → copy once, compute on-chip, sync explicitly.
 4. Shared-memory tiling cuts GEMM HBM traffic ~1/T — the core idea of advanced kernels.
 5. Norms/reductions are tiny; their cost is **launch overhead + HBM footprint** — what fusion + CUDA Graphs target.

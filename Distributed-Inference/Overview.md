@@ -1,5 +1,9 @@
 # Distributed Inference — Overview (Cluster Layer: Platforms, P/D, KV Transfer)
-`LAST_UPDATED: 2026-08-24 · Status: core page (section landing)` · This section covers
+`LAST_UPDATED: 2026-09-06 · Status: core page (section landing)` · 2026-09-06
+refresh: version anchors re-verified (Dynamo stable v1.4.2, v1.5.0-dev only; llm-d
+v0.9.0 GA) and the section capstone added — `Platforms-Capstone.md` (history,
+networking math, K8s reference architectures, failure modes, decision framework);
+this page's physics and metric tables are unchanged and current. · This section covers
 the **cluster layer** of LLM serving: coordinating many engine instances across nodes —
 routing, prefill/decode disaggregation, KV-cache state at cluster scale, and the two
 platforms that implement it (**NVIDIA Dynamo**, **llm-d**).
@@ -10,6 +14,11 @@ Scope map inside this section:
   stack, KV-transfer physics, P/D break-even, cluster metrics
 - `NVIDIA-Dynamo.md` · `llm-d.md` — the two platform deep dives
 - `Dynamo-vs-llm-d.md` — the head-to-head (same-layer rivalry)
+- **`Platforms-Capstone.md`** — PART 3 (2026-09-06): the section capstone — serving-stack
+  history/timeline, why-distributed-is-hard taxonomy, the full P/D + networking +
+  KV-transfer worked math, current-state platform architecture (Dynamo v1.4.x, llm-d
+  v0.9), K8s reference architectures, observability inventory, failure modes,
+  benchmark methodology, home-lab design, decision framework
 - **`Implementation/`** — PART 2 (2026-08-26): how the five jobs are built — global KV
   map (05), NIXL transfer (06), distributed KV (01), offload/tiering (02), KV-aware
   routing (03), P/D orchestration (04)
@@ -233,11 +242,16 @@ in the P/D page). Finding all three is the content of a platform benchmark [I].
 
 ## The Two Platforms (pointers)
 - **`NVIDIA-Dynamo.md`** — components (frontend, router, planner, KVBM, workers),
+  **2026-09-06: stable v1.4.2 (Enterprise SKU); v1.4.0 multi-DC KV Relay +
+  cache-salt tenancy; KVBM re-scoped "in progress across all combinations";**
+
   Rust core, two routing topologies (Dynamo-native vs Gateway API + EPP), P/D,
   KVBM tiers, ModelExpress, K8s operator, key results, deployment paths.
 - **`llm-d.md`** — K8s-native architecture (Gateway API, router, tiered prefix cache,
   P/D, wide-EP, autoscaling, batch gateway), CNCF governance, accelerator matrix,
-  well-lit paths, performance highlights.
+  well-lit paths, performance highlights. **2026-09-06**: v0.9.0 GA ("Hardened for
+  Scale") — router HA, KEDA foundation, sticky-until-saturated default routing,
+  P2P KV sharing; see `Platforms-Capstone.md` §5.
 - **`Dynamo-vs-llm-d.md`** — the full comparison table + philosophical difference
   (vendor OSS Rust core vs CNCF K8s-native) + when each wins.
 

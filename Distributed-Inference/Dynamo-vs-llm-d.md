@@ -1,11 +1,16 @@
 # NVIDIA Dynamo vs llm-d — Distributed Serving Platforms, Head-to-Head
-`LAST_UPDATED: 2026-08-26 · Status: core page` · The one true same-layer rivalry in
+`LAST_UPDATED: 2026-09-06 · Status: core page` · The one true same-layer rivalry in
 this section: **both are distributed inference platforms** that sit *above* engines
 (vLLM/SGLang/TRT-LLM) and implement the same five cluster jobs — route, place, move,
-scale, fail (`Distributed-Inference/Overview.md`). Every cell below is verified
-against primary sources on **2026-08-24**: Dynamo main-branch README (v1.4.x
-containers) + Dynamo v0.8.0 design docs; llm-d README (v0.8) + llm-d.ai v0.9
-architecture docs. Where a claim could not be verified, it is marked `[A]` or
+scale, fail (`Distributed-Inference/Overview.md`). The table below was verified
+against primary sources on **2026-08-24** (Dynamo main-branch README + v0.8.0 design
+docs; llm-d README + llm-d.ai v0.9 architecture docs) and carries a **2026-09-06
+refresh note** here; row-level updates were not re-diffed cell-by-cell on 2026-09-06
+— the authoritative current-state deltas live in `Platforms-Capstone.md` §13
+(Dynamo v1.4.2: multi-DC KV Relay, cache-salt tenancy, router cost model, KVBM
+re-scoped to "in progress across all combinations"; llm-d v0.9.0: router HA,
+sticky-until-saturated default routing, KEDA foundation, P2P KV sharing, IPP,
+E/P/D mixed GPU+XPU). Where a claim could not be verified, it is marked `[A]` or
 `UNVERIFIED`.
 
 ## 30-Second Explanation

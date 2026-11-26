@@ -50,7 +50,7 @@ this session (see `15-systems-and-infrastructure.md` §Memory and `05` §Storage
                        (VRAM, latency, power, $/1M tokens, edge feasibility)
 
    SIMPLEST (2026 meaning of "distillation" in most product posts):
-        Teacher ─▶ generate high-quality data ─▶ student SFT      [F: R1 §4]
+        Teacher ─▶ generate high-quality data ─▶ student SFT      [F: R1 App. F]
 
    DEEPER (classical KD):
         Teacher logits ─▶ distribution matching (KL, T-scaled) ─▶ student

@@ -41,7 +41,7 @@ Every position of every stored sequence needs a full vocabulary distribution:
 - Vocabulary V = 150,000; sequence length S = 4,096; N = 1M training sequences.
 - **[E]** Full logits per token @FP32 = 150,000 × 4 B = **0.57 MiB** (@FP16: 0.29 MiB).
 - **[E]** One 4K sequence @FP16 = 0.29 MiB × 4,096 ≈ **1.14 GiB**.
-- **[E]** 1M such sequences ≈ **1.14 PiB-equivalent** (1,144,000 GiB ≈ 1,117 TiB) —
+- **[E]** 1M such sequences ≈ **1.09 PiB** (1,144,700 GiB ≈ 1,118 TiB; ÷1,048,576 GiB/PiB) —
   clearly impractical to store, let alone stream through a training dataloader.
 
 (Computed with the storage block in `15-systems-and-infrastructure.md`; same numbers

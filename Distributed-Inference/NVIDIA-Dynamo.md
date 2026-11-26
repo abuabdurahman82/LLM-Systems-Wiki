@@ -1,14 +1,33 @@
 # NVIDIA Dynamo — Distributed Inference Architecture Deep Dive
-`LAST_UPDATED: 2026-08-26 · Status: core page` · Dynamo is NVIDIA's **open-source,
+`LAST_UPDATED: 2026-09-06 · Status: core page` · Dynamo is NVIDIA's **open-source,
 datacenter-scale distributed inference stack** — the orchestration layer *above*
 inference engines. It "doesn't replace SGLang, TensorRT-LLM, or vLLM — it turns them
-into a coordinated multi-node inference system" [F: ai-dynamo/dynamo README, main
-branch, v1.4.x line, fetched 2026-08-24]. Built **in Rust for performance, Python for
-extensibility**, fully open-source (Apache-2.0, OSS-first) [F: README + docs].
-Repo: `github.com/ai-dynamo/dynamo` (note: the *ai-dynamo* org, not `NVIDIA/`).
-Version anchors (2026-08-24): main-branch containers `*:1.4.1`; docs detail
-below pinned to the published v0.8.0 design docs (the architecture is stable across
-1.x; see §Recent Changes).
+into a coordinated multi-node inference system" [F: ai-dynamo/dynamo README,
+refetched 2026-09-06]. Built **in Rust for performance, Python for extensibility**,
+fully open-source (Apache-2.0, OSS-first) [F: README + docs]. Repo:
+`github.com/ai-dynamo/dynamo` (note: the *ai-dynamo* org, not `NVIDIA/`).
+Version anchors (**2026-09-06**: stable **v1.4.2** (2026-08-29, introduces
+**Dynamo Enterprise** support artifacts + fixes a NIXL loader-path bug); v1.4.0 GA
+2026-08-14 ("17th feature release", 640 PRs/127 contributors); **no stable 1.5.0**
+— only model-specific dev snapshots (DeepSeek-V4-Pro-0813, Inkling, Gemma-4,
+Nemotron-3.5) [F: releases page]). Release cadence ≈ monthly GA + patch since 1.0
+(Mar 2026); N-2 mixed-version support window [F: compatibility docs].
+
+**2026-09-06 refresh** (details in `Platforms-Capstone.md` §8–§12): v1.4.0 headline
+= **multi-datacenter KV routing** (DC-scoped Relay + lossy Cuckoo-filter projection
+across ≤16 DC lanes; reservation replay), **cache-salt KV isolation** for multi-tenant
+caches (`x-tenant-id`/`nvext.cache_salt`), cross-replica session affinity,
+decode-affinity + ISL-based pool routing, `device-aware-weighted` router mode,
+documented **router cost model** with per-tier overlap credits (device 1.0 / host
+0.75 / disk 0.25 / shared 0.5), CRTC compressed radix indexer (13.49M block-ops/s
+micro-bench), `/inference/v1/generate` token endpoint (experimental), vLLM-Omni NIXL
+RDMA multimodal AR→DIT disaggregation, **Spica/AISimulate** in-repo capacity
+simulation, standalone EPP + GAIE-with-vanilla-vLLM onramp, Volcano support, full
+docs rebuild + zh-CN [F: v1.4.0 notes]. Feature matrix now reads: vLLM 14/15,
+SGLang 9/15, TRT-LLM 9/15, and **KVBM "work in progress across all combinations"**
+(the earlier per-backend ✅/🚧 split is retired — check the offloading support
+matrix for current tier truth) [F: feature matrix, fetched 2026-09-06]. The v0.8.0
+architecture below is stable across the 1.x line.
 
 ## 30-Second Explanation
 An inference engine optimizes *one instance*. Dynamo optimizes *the fleet*: it

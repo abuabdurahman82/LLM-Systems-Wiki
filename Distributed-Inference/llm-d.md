@@ -1,15 +1,28 @@
 # llm-d — Kubernetes-Native Distributed LLM Inference Architecture Deep Dive
-`LAST_UPDATED: 2026-08-26 · Status: core page` · llm-d is a **Kubernetes-native,
+`LAST_UPDATED: 2026-09-06 · Status: core page` · llm-d is a **Kubernetes-native,
 high-performance distributed inference serving stack** — "state-of-the-art
 orchestration and optimizations **above model servers** like vLLM and SGLang" [F:
-llm-d/llm-d README, v0.8 badge, fetched 2026-08-24]. It is a **CNCF Sandbox project**
+llm-d/llm-d README, refetched 2026-09-06]. It is a **CNCF Sandbox project**
 (joined March 2026), founded by **Red Hat, Google Cloud, IBM Research, CoreWeave, and
 NVIDIA**, with support from AMD, Cisco, Hugging Face, Intel, Lambda, Mistral AI, UC
 Berkeley, and the University of Chicago [F: README]. Repo: `github.com/llm-d/llm-d`;
-docs: `llm-d.ai`. Apache-2.0. Version anchors (2026-08-24): README badge **v0.8**;
-docs "latest" branch **v0.9** (component details below are from the v0.9
-architecture docs; v0.8 notes: multimodal, batch & flow-control graduated to
-production, broader accelerator support, initial RL [F: docs banner]).
+docs: `llm-d.ai`. Apache-2.0. Version anchors (**2026-09-06**: latest GitHub release
+**v0.9.0, tagged 2026-08-17**; release blog "Hardened for Scale" 2026-08-28; the
+README badge still reads `0.8` — known lag, do not read it as the live version [F:
+releases API + raw README]).
+
+**2026-09-06 refresh** (details in `Platforms-Capstone.md` §5–§6): v0.9.0 hardened
+the router — multi-EPP HA (standbys route instead of 503) + `--drain-timeout`,
+Alpha/Beta/Stable plugin lifecycle, bounded flow-control defaults with a 503-vs-429
+status split, **KEDA as the autoscaling foundation** (replacing Prometheus Adapter),
+**sticky-until-saturated/token-aware routing as the default** (replacing the 4-signal
+weighted blend), P/D rolling-update safety (revision-aware DisaggregatedSet routing),
+topology-aware routing + proportional KV pull-source selection, GPU-utilization-aware
+scoring (DCGM), session affinity, E2E OTel tracing, and new well-lit paths: P2P KV
+sharing, Fast Model Actuation, IPP multi-model routing, diffusion/image-gen routing,
+E/P/D on mixed GPU+XPU, GB200/GB300 DRA overlays, TPU v7 P/D. RL integrations +
+GPU time-slicing are incubation (v0.10 targets a standardized model-server interface)
+[F: v0.9 blog + release notes]. Component details below remain the v0.9 architecture.
 
 **The category point** (restated from `Serving-Engines/Engine-Landscape.md`): llm-d is
 *not* "another inference engine." It contains no model-execution code — its model

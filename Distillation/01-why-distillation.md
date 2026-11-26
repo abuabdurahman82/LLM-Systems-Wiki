@@ -122,10 +122,11 @@ You can — but a small model trained only on the same data as a big model is wo
 small model trained on a big model's *outputs*, because the teacher's outputs encode
 what the teacher learned from all its data — the "dark knowledge" of relative
 similarities and plausible-but-wrong alternatives (→ `02-classical-knowledge-distillation.md`).
-DeepSeek-R1's distill study states the empirical finding directly: models trained on
-high-quality teacher outputs consistently outperform those trained directly on
-human-generated data [F: arXiv:2501.12948 §4]. Distillation is also usually far cheaper
-than RL for the same capability gain (→ `10`, `12`).
+DeepSeek-R1's distill study shows the empirical shape directly: a small model
+trained on high-quality teacher reasoning traces beats the same-class model built
+with RL (AIME: R1-Distill-Qwen-32B 72.6 vs Qwen3-32B-RL 47.0), while RL is more
+effective for larger models [F: arXiv:2501.12948 App. F.1]. Distillation is also
+usually far cheaper than RL for the same capability gain (→ `10`, `12`).
 
 ## The capacity gap (why a 1.5B student ≠ 671B teacher)
 
